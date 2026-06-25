@@ -42,6 +42,14 @@ export default buildConfig({
     }),
   ],
   i18n: {
-    supportedLanguages: { en: undefined, fr: undefined },
+    supportedLanguages: {
+      en: { dateFNSKey: 'en-US', translations: {} as any },
+      fr: { dateFNSKey: 'fr', translations: {} as any },
+    },
+  },
+  localization: {
+    locales: ['fr', 'en'],
+    defaultLocale: 'fr',
+    fallback: true,
   },
 })
