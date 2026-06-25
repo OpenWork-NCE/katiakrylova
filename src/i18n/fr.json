@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "projects": "Projects",
+    "portfolio": "Portfolio",
+    "about": "About",
+    "journal": "Journal",
+    "contact": "Contact"
+  },
+  "home": {
+    "enter": "Entrer",
+    "tagline": "Réalisatrice · Artiste visuelle"
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "Pour toute proposition, collaboration ou prise de rendez-vous :",
+    "book": "Réserver un appel"
+  },
+  "footer": {
+    "built": "Site construit avec soin"
+  },
+  "notFound": {
+    "title": "Cette page n'existe pas",
+    "back": "Retour à l'accueil"
+  }
+}
