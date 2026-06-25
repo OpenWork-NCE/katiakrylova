@@ -4,7 +4,7 @@ import { getContact } from '@/lib/payload'
 
 export async function Footer({ locale }: { locale: string }) {
   const t = await getTranslations('footer')
-  const contact = await getContact(locale)
+  const contact = await getContact(locale as 'fr' | 'en')
   const year = new Date().getFullYear()
 
   return (
