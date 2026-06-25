@@ -9,6 +9,12 @@ import { Media } from './collections/Media'
 import { Projects } from './collections/Projects'
 import { PortfolioCategories } from './collections/PortfolioCategories'
 import { Portfolio } from './collections/Portfolio'
+import { Journal } from './collections/Journal'
+import { MakingOf } from './collections/MakingOf'
+import { About } from './globals/About'
+import { Contact } from './globals/Contact'
+import { Home } from './globals/Home'
+import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -17,7 +23,8 @@ export default buildConfig({
   admin: {
     user: 'users',
   },
-  collections: [Users, Media, Projects, PortfolioCategories, Portfolio],
+  collections: [Users, Media, Projects, PortfolioCategories, Portfolio, Journal, MakingOf],
+  globals: [About, Contact, Home, SiteSettings],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || 'dev-secret-change-me',
   typescript: {
