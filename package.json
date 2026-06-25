@@ -19,6 +19,7 @@
     "@payloadcms/ui": "^3.0.0",
     "autoprefixer": "^10.5.1",
     "next": "^15.0.0",
+    "next-intl": "^4.13.0",
     "payload": "^3.0.0",
     "postcss": "^8.5.15",
     "react": "^19.0.0",

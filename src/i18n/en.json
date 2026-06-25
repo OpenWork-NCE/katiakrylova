@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "projects": "Projects",
+    "portfolio": "Portfolio",
+    "about": "About",
+    "journal": "Journal",
+    "contact": "Contact"
+  },
+  "home": {
+    "enter": "Enter",
+    "tagline": "Filmmaker · Visual artist"
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "For any inquiry, collaboration or meeting:",
+    "book": "Book a call"
+  },
+  "footer": {
+    "built": "Site crafted with care"
+  },
+  "notFound": {
+    "title": "This page does not exist",
+    "back": "Back to home"
+  }
+}
