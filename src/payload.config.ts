@@ -15,6 +15,7 @@ import { About } from './globals/About'
 import { Contact } from './globals/Contact'
 import { Home } from './globals/Home'
 import { SiteSettings } from './globals/SiteSettings'
+import { env } from './lib/env'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,19 +27,19 @@ export default buildConfig({
   collections: [Users, Media, Projects, PortfolioCategories, Portfolio, Journal, MakingOf],
   globals: [About, Contact, Home, SiteSettings],
   editor: lexicalEditor({}),
-  secret: process.env.PAYLOAD_SECRET || 'dev-secret-change-me',
+  secret: env.PAYLOAD_SECRET,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || '',
+      connectionString: env.DATABASE_URI,
     },
   }),
   plugins: [
     vercelBlobStorage({
       collections: { media: true },
-      token: process.env.BLOB_READ_WRITE_TOKEN || '',
+      token: env.BLOB_READ_WRITE_TOKEN || '',
     }),
   ],
   i18n: {
