@@ -59,6 +59,7 @@ export async function getPortfolio(locale: Locale = 'fr') {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: 'portfolio',
+    depth: 1,
     locale: locale === 'all' ? 'all' : locale,
     sort: 'order',
     limit: 1000,
