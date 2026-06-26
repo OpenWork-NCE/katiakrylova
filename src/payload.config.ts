@@ -28,6 +28,7 @@ export default buildConfig({
   globals: [About, Contact, Home, SiteSettings],
   editor: lexicalEditor({}),
   secret: env.PAYLOAD_SECRET,
+  sharp: (await import('sharp')).default,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
