@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { FilmGrain } from '@/components/ui/FilmGrain'
+import { DiaphragmTransition } from '@/components/3d/DiaphragmTransition'
 
 const locales = ['fr', 'en'] as const
 
@@ -12,7 +13,9 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   return (
     <>
       <Header locale={locale} />
-      <main className="pt-16">{children}</main>
+      <main className="pt-16">
+        <DiaphragmTransition>{children}</DiaphragmTransition>
+      </main>
       <Footer locale={locale} />
       <FilmGrain />
     </>
