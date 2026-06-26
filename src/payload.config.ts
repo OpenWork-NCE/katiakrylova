@@ -1,6 +1,7 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { buildConfig } from 'payload'
+import sharp from 'sharp'
+import { buildConfig, type SharpDependency } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
@@ -28,7 +29,7 @@ export default buildConfig({
   globals: [About, Contact, Home, SiteSettings],
   editor: lexicalEditor({}),
   secret: env.PAYLOAD_SECRET,
-  sharp: (await import('sharp')).default,
+  sharp: sharp as unknown as SharpDependency,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
