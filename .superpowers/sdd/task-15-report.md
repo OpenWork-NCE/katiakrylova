@@ -88,4 +88,5 @@ ExitCode: 0
 ```
 
 ### Commit
+- SHA: `ddca722`
 - Message: `fix: respect prefers-reduced-motion in PlanSequence`
