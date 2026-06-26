@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getPayloadClient } from '@/lib/payload'
+import { getPortfolioBySlug } from '@/lib/payload'
 import { Section } from '@/components/ui/Section'
 import { ProjectGallery } from '@/components/projects/ProjectGallery'
 
@@ -9,14 +9,7 @@ type Props = { params: Promise<{ locale: string; slug: string }> }
 
 export default async function PortfolioItemPage({ params }: Props) {
   const { locale, slug } = await params
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'portfolio',
-    where: { slug: { equals: slug } },
-    locale: locale as 'fr' | 'en',
-    limit: 1,
-  })
-  const item = docs[0] as any
+  const item = await getPortfolioBySlug(slug, locale as 'fr' | 'en')
   if (!item) notFound()
 
   const cover = typeof item.coverImage === 'object' ? item.coverImage?.url : null

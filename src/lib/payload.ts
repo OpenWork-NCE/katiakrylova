@@ -67,6 +67,18 @@ export async function getPortfolio(locale: Locale = 'fr') {
   return docs as Portfolio[]
 }
 
+export async function getPortfolioBySlug(slug: string, locale: Locale = 'fr') {
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'portfolio',
+    where: { slug: { equals: slug } },
+    depth: 1,
+    locale: locale === 'all' ? 'all' : locale,
+    limit: 1,
+  })
+  return (docs[0] as Portfolio | undefined) ?? null
+}
+
 export async function getPortfolioCategories(locale: Locale = 'fr') {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
