@@ -68,7 +68,7 @@ async function run() {
     { slug: 'presentation-teresa-1', title: 'TERESA Présentation', year: 2021, format: 'Documentaire', description: 'TERESA VIESTI, présentation' },
     { slug: 'teresa-viesti', title: 'DÉFILÉ MODE', year: 2021, format: 'Documentaire', description: "Défilé pour l'école de Stylisme. Présentation de quatre pièces. Teresa Viesti Collection." },
     { slug: 'light-vador', title: 'LIGHT VADOR', year: 2016, format: 'Court-métrage', description: "La journée extraordinaire d'un héros ordinaire. Scénario, réalisation et montage." },
-    { slug: 'la-petite-faucheuse', title: 'LA PETITE FAUCHEUSE', year: 2015, format: 'Court-métrage', description: "«LA PETITE FAUCHEUSE» court-métrage de KATIA FONTAINE Aurore, belle jeune femme de 28 ans, Victor son mari, 35 ans et leur petit garçon de 6 ans, Antoine, vivent heureux et sans histoires dans un monde …" },
+    { slug: 'la-petite-faucheuse', title: 'LA PETITE FAUCHEUSE', year: 2015, format: 'Court-métrage', description: "«LA PETITE FAUCHEUSE» court-métrage de KATIA KRYLOVA Aurore, belle jeune femme de 28 ans, Victor son mari, 35 ans et leur petit garçon de 6 ans, Antoine, vivent heureux et sans histoires dans un monde …" },
     { slug: 'strangers', title: 'STRANGERS', year: 2014, format: 'Making Of', description: 'Making Of, photos de plateau et affiche Premier court-métrage de Philippe Geus.' },
     { slug: 'seconde-papillon', title: 'SECONDE PAPILLON', year: 2014, format: 'Performance', description: "Vidéo Performance autour de l'œuvre de la plasticienne Sylvie Pichrist sur la thématique des Métamorphoses." },
     { slug: 'paphius', title: 'MIRAGE', year: 2013, format: 'Clip', description: 'Making Of et photos de plateau Clip musical du nouveau groupe « JOY » de Marc Huyghens.' },
