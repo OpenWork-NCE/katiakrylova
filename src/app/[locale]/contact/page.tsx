@@ -1,9 +1,10 @@
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getContact } from '@/lib/payload'
 import { Section } from '@/components/ui/Section'
 
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
+  setRequestLocale(locale)
   const [t, contact] = await Promise.all([
     getTranslations('contact'),
     getContact(locale as 'fr' | 'en'),
