@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 type Cat = { id: string; name: string; slug: string }
@@ -7,10 +6,9 @@ type Cat = { id: string; name: string; slug: string }
 export function CategoryFilter({ categories }: { categories: Cat[] }) {
   const router = useRouter()
   const params = useSearchParams()
-  const [active, setActive] = useState(params.get('cat') || 'all')
+  const active = params.get('cat') || 'all'
 
   const select = (slug: string) => {
-    setActive(slug)
     const q = slug === 'all' ? '' : `?cat=${slug}`
     router.push(q)
   }
