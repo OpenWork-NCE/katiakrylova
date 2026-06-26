@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test('signature flow: home â†’ projects â†’ project page', async ({ page }) => {
+test('signature flow: home → projects → project page', async ({ page }) => {
   // 1. Home loads with hero
   await page.goto('/fr')
   await expect(page).toHaveTitle(/Katia Krylova/)
@@ -21,5 +21,5 @@ test('signature flow: home â†’ projects â†’ project page', async ({ pa
   await page.goto('/fr/projects/la-tache-noire')
 
   // 5. Project page renders
-  await expect(page.locator('h1')).toContainText('La TÃ¢che Noire')
+  await expect(page.locator('h1')).toContainText('La Tâche Noire')
 })
