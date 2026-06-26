@@ -1,6 +1,8 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { en } from '@payloadcms/translations/languages/en'
+import { fr } from '@payloadcms/translations/languages/fr'
 import { buildConfig, type SharpDependency } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -22,8 +24,12 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  serverURL: env.NEXT_PUBLIC_SERVER_URL,
   admin: {
     user: 'users',
+    importMap: {
+      baseDir: path.resolve(dirname),
+    },
   },
   collections: [Users, Media, Projects, PortfolioCategories, Portfolio, Journal, MakingOf],
   globals: [About, Contact, Home, SiteSettings],
@@ -45,10 +51,8 @@ export default buildConfig({
     }),
   ],
   i18n: {
-    supportedLanguages: {
-      en: { dateFNSKey: 'en-US', translations: {} as any },
-      fr: { dateFNSKey: 'fr', translations: {} as any },
-    },
+    fallbackLanguage: 'fr',
+    supportedLanguages: { en, fr },
   },
   localization: {
     locales: ['fr', 'en'],
