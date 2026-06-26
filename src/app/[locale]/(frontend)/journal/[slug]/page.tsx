@@ -13,7 +13,7 @@ export default async function JournalDetail({ params }: Props) {
 
   return (
     <Section>
-      <Link href={`/${locale}/journal`} className="text-sm uppercase tracking-widest text-text-muted hover:text-accent">â† Retour</Link>
+      <Link href={`/${locale}/journal`} className="text-sm uppercase tracking-widest text-text-muted hover:text-accent">← Retour</Link>
       <article className="mt-xl max-w-prose mx-auto">
         <p className="text-text-muted text-xs uppercase tracking-widest">
           {new Date(entry.createdAt).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })}
