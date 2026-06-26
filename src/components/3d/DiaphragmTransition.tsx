@@ -17,7 +17,7 @@ function detectWebGL(): boolean {
 export function DiaphragmTransition({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
   const [reduced, setReduced] = useState(false)
-  const [webgl, setWebgl] = useState<boolean | null>(null)
+  const [webgl, setWebgl] = useState<boolean | null>(true)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
