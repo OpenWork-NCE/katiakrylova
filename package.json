@@ -10,6 +10,11 @@
     "typecheck": "tsc --noEmit",
     "payload": "payload",
     "generate:types": "node --experimental-strip-types --no-warnings scripts/gen-types.mjs",
+    "migrate:create": "node --experimental-strip-types --no-warnings scripts/migrate.mjs migrate:create",
+    "migrate": "node --experimental-strip-types --no-warnings scripts/migrate.mjs migrate",
+    "migrate:status": "node --experimental-strip-types --no-warnings scripts/migrate.mjs migrate:status",
+    "migrate:fresh": "node --experimental-strip-types --no-warnings scripts/migrate.mjs migrate:fresh",
+    "patch:migrations": "node scripts/patch-migration-imports.mjs",
     "test:e2e": "playwright test"
   },
   "dependencies": {
