@@ -4,6 +4,11 @@ export const Projects: CollectionConfig = {
   slug: 'projects',
   admin: { useAsTitle: 'title' },
   access: { read: () => true },
+  versions: {
+    drafts: {
+      autosave: false,
+    },
+  },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
     {
