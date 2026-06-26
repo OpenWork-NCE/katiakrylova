@@ -24,6 +24,11 @@ Site: http://localhost:3000 · Admin: http://localhost:3000/admin
 - `pnpm build` — build production
 - `pnpm typecheck` — TypeScript check
 - `pnpm test:e2e` — tests Playwright
+- `pnpm generate:types` — regénère `src/payload-types.ts`
+- `pnpm migrate:create` — crée une migration Payload (patche automatiquement les `import type` requis par Node `--experimental-strip-types`)
+- `pnpm migrate` — applique les migrations sur `DATABASE_URI`
+- `pnpm migrate:status` — état des migrations
+- `pnpm migrate:fresh` — drop + recrée la DB (⚠ destructif)
 
 ## Utilisation du CMS
 1. Aller sur `/admin`
