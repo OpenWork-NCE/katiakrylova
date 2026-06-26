@@ -27,9 +27,12 @@ function CameraRig({ scrollProgress }: { scrollProgress: { current: number } }) 
 export function PlanSequence({ projects, locale }: { projects: Project[]; locale: string }) {
   const router = useRouter()
   const [supportsWebGL, setSupportsWebGL] = useState(true)
+  const [reduced, setReduced] = useState(false)
   const scrollProgress = useRef({ current: 0 })
 
   useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setReduced(mq.matches)
     try {
       const c = document.createElement('canvas')
       setSupportsWebGL(!!(c.getContext('webgl') || c.getContext('experimental-webgl')))
@@ -45,7 +48,7 @@ export function PlanSequence({ projects, locale }: { projects: Project[]; locale
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  if (!supportsWebGL) return <FallbackGrid projects={projects} locale={locale} />
+  if (reduced || !supportsWebGL) return <FallbackGrid projects={projects} locale={locale} />
 
   return (
     <div className="fixed inset-0">
