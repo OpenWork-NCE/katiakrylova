@@ -1,11 +1,12 @@
 import Image from 'next/image'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getHome } from '@/lib/payload'
 import { getMediaUrl } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
+  setRequestLocale(locale)
   const [t, home] = await Promise.all([
     getTranslations('home'),
     getHome(locale as 'fr' | 'en'),
