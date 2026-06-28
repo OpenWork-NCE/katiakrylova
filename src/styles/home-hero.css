@@ -1,0 +1,76 @@
+@keyframes home-ken-burns {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.12) translate3d(-1.2%, -0.6%, 0);
+  }
+}
+
+.home-hero__parallax {
+  will-change: transform;
+}
+
+.home-hero__image {
+  animation: home-ken-burns 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.home-hero__vignette {
+  background: radial-gradient(
+    ellipse 72% 68% at 50% 46%,
+    transparent 0%,
+    rgba(10, 10, 10, 0.18) 52%,
+    rgba(10, 10, 10, 0.72) 100%
+  );
+}
+
+.home-hero__role,
+.home-hero__subtitle,
+.home-hero__cta,
+.home-hero__hint {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 900ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 900ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home-hero--ready .home-hero__role {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 200ms;
+}
+
+.home-hero--ready .home-hero__subtitle {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 420ms;
+}
+
+.home-hero--ready .home-hero__cta {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 640ms;
+}
+
+.home-hero--ready .home-hero__hint {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 860ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero__image {
+    animation: none;
+  }
+
+  .home-hero__role,
+  .home-hero__subtitle,
+  .home-hero__cta,
+  .home-hero__hint {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
