@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getProjectBySlug, getAdjacentProjects } from '@/lib/payload'
 import { Section } from '@/components/ui/Section'
 import { ProjectGallery } from '@/components/projects/ProjectGallery'
@@ -14,7 +15,11 @@ type Props = { params: Promise<{ locale: string; slug: string }> }
 
 export default async function ProjectPage({ params }: Props) {
   const { locale, slug } = await params
-  const project = await getProjectBySlug(slug, locale as 'fr' | 'en')
+  setRequestLocale(locale)
+  const [t, project] = await Promise.all([
+    getTranslations('projects'),
+    getProjectBySlug(slug, locale as 'fr' | 'en'),
+  ])
   if (!project) notFound()
 
   const { prev, next } = await getAdjacentProjects(project.order, locale as 'fr' | 'en')
@@ -31,7 +36,7 @@ export default async function ProjectPage({ params }: Props) {
               href={`/${locale}/projects`}
               className="text-sm uppercase tracking-widest text-text-muted transition hover:text-accent"
             >
-              ← Retour aux projets
+              {t('backToProjects')}
             </Link>
             {primaryVideo?.platform && (
               <span className="text-xs uppercase tracking-widest text-text-muted">{primaryVideo.platform}</span>
@@ -83,7 +88,7 @@ export default async function ProjectPage({ params }: Props) {
 
       {secondaryVideos.length > 0 && (
         <Section>
-          <h2 className="text-sm uppercase tracking-widest text-text-muted mb-md">Vidéos</h2>
+          <h2 className="text-sm uppercase tracking-widest text-text-muted mb-md">{t('videos')}</h2>
           <div className="flex flex-col gap-xl">
             {secondaryVideos.map((link, i) =>
               parseVideoUrl(link.url, link.platform ?? undefined) ? (

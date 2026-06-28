@@ -1,9 +1,10 @@
-import { getLocale, getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations, setRequestLocale } from 'next-intl/server'
 import { Section } from '@/components/ui/Section'
 import { Button } from '@/components/ui/Button'
 
 export default async function NotFound() {
   const locale = await getLocale()
+  setRequestLocale(locale)
   const t = await getTranslations('notFound')
   return (
     <Section className="text-center">

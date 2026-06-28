@@ -19,13 +19,13 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
         <div className="space-y-md text-lg">
           {contact?.email && (
             <div>
-              <span className="text-text-muted text-sm uppercase tracking-widest">Email · </span>
+              <span className="text-text-muted text-sm uppercase tracking-widest">{t('email')} · </span>
               <a href={`mailto:${contact.email}`} className="hover:text-accent">{contact.email}</a>
             </div>
           )}
           {contact?.phone && (
             <div>
-              <span className="text-text-muted text-sm uppercase tracking-widest">Tél · </span>
+              <span className="text-text-muted text-sm uppercase tracking-widest">{t('phone')} · </span>
               <a href={`tel:${contact.phone}`} className="hover:text-accent">{contact.phone}</a>
             </div>
           )}

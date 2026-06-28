@@ -1,14 +1,19 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 export function MobileMenu({ items }: { items: { href: string; label: string }[] }) {
   const [open, setOpen] = useState(false)
-  const locale = useLocale()
+  const t = useTranslations('common')
+
   return (
     <>
-      <button onClick={() => setOpen(!open)} className="md:hidden text-text-primary" aria-label="Menu">
+      <button
+        onClick={() => setOpen(!open)}
+        className="md:hidden text-text-primary"
+        aria-label={open ? t('close') : t('menu')}
+      >
         {open ? '✕' : '☰'}
       </button>
       {open && (

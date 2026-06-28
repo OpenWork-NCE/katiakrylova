@@ -1,25 +1,28 @@
-import '../globals.css'
 import type { Metadata, Viewport } from 'next'
 import { notFound } from 'next/navigation'
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages, setRequestLocale } from 'next-intl/server'
+import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ConditionalFooter } from '@/components/layout/ConditionalFooter'
 import { FilmGrain } from '@/components/ui/FilmGrain'
-import { DiaphragmTransition } from '@/components/3d/DiaphragmTransition'
+import { PageTransitionProvider } from '@/components/transitions/PageTransitionProvider'
 
 const locales = ['fr', 'en'] as const
-
-export const metadata: Metadata = {
-  title: 'Katia Krylova',
-  description: 'Réalisatrice / artiste visuelle',
-}
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'meta' })
+  return {
+    title: t('title'),
+    description: t('description'),
+  }
 }
 
 export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
@@ -32,14 +35,14 @@ export default async function LocaleLayout({ children, params }: { children: Rea
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <Header locale={locale} />
-          <main className="pt-16">
-            <DiaphragmTransition>{children}</DiaphragmTransition>
-          </main>
-          <ConditionalFooter locale={locale}>
-            <Footer locale={locale} />
-          </ConditionalFooter>
-          <FilmGrain />
+          <PageTransitionProvider>
+            <Header locale={locale} />
+            <main className="pt-16">{children}</main>
+            <ConditionalFooter locale={locale}>
+              <Footer locale={locale} />
+            </ConditionalFooter>
+            <FilmGrain />
+          </PageTransitionProvider>
         </NextIntlClientProvider>
       </body>
     </html>
