@@ -24,4 +24,7 @@ export type CorridorDimensions = {
   frameCenterY: number
   peekOffset: number
   wallInset: number
+  presentXPull: number
+  presentRotPull: number
+  cameraPanRatio: number
 }

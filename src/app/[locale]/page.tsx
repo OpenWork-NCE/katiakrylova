@@ -15,6 +15,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <HomeHero
+      locale={locale}
       heroUrl={heroUrl}
       role={t('role')}
       subtitle={home?.tagline || t('subtitle')}

@@ -14,6 +14,11 @@
     "tagline": "Réalisatrice · Artiste visuelle",
     "scrollHint": "Découvrir les projets"
   },
+  "projects": {
+    "scrollNavLabel": "Navigation de la galerie",
+    "goToStart": "Aller au début",
+    "goToEnd": "Aller à la fin"
+  },
   "contact": {
     "title": "Contact",
     "intro": "Pour toute proposition, collaboration ou prise de rendez-vous :",

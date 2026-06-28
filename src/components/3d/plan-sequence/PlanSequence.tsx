@@ -9,6 +9,8 @@ import { getMediaUrl } from '@/lib/utils'
 import { GalleryCorridor } from './GalleryCorridor'
 import { CorridorHUD } from './CorridorHUD'
 import { CorridorScrollProgress } from './CorridorScrollProgress'
+import { CorridorScrollNav } from './CorridorScrollNav'
+import type { CorridorScrollHandle } from './corridor-scroll'
 import { CAMERA_EYE_Y, FOG_COLOR, SCROLL_DAMPING, SCROLL_PAGES_PER_PROJECT } from './corridor-constants'
 import '@/styles/corridor-scroll.css'
 
@@ -17,7 +19,9 @@ export function PlanSequence({ projects, locale }: { projects: Project[]; locale
   const [reduced, setReduced] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const [showHint, setShowHint] = useState(true)
+  const [scrollOffset, setScrollOffset] = useState(0)
   const scrollProgressRef = useRef<HTMLDivElement>(null)
+  const scrollHandleRef = useRef<CorridorScrollHandle | null>(null)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -37,7 +41,7 @@ export function PlanSequence({ projects, locale }: { projects: Project[]; locale
 
   return (
     <>
-      <div className="plan-sequence-viewport fixed inset-x-0 top-16 bottom-0 z-0">
+      <div className="plan-sequence-viewport fixed inset-x-0 top-16 z-0 h-[calc(100dvh-4rem)] min-h-[calc(100svh-4rem)]">
         <Canvas
           camera={{ position: [0, CAMERA_EYE_Y, 9], fov: 50 }}
           gl={{ antialias: true }}
@@ -61,11 +65,26 @@ export function PlanSequence({ projects, locale }: { projects: Project[]; locale
               onActiveIndexChange={setActiveIndex}
               onDismissHint={() => setShowHint(false)}
               scrollProgressRef={scrollProgressRef}
+              scrollHandleRef={scrollHandleRef}
+              onScrollOffsetChange={setScrollOffset}
             />
           </ScrollControls>
         </Canvas>
 
         <CorridorScrollProgress progressRef={scrollProgressRef} />
+
+        <CorridorScrollNav
+          atStart={scrollOffset < 0.02}
+          atEnd={scrollOffset > 0.98}
+          onGoToStart={() => {
+            scrollHandleRef.current?.goToStart()
+            setShowHint(false)
+          }}
+          onGoToEnd={() => {
+            scrollHandleRef.current?.goToEnd()
+            setShowHint(false)
+          }}
+        />
 
         {activeProject && (
           <CorridorHUD
@@ -91,7 +110,7 @@ export function PlanSequence({ projects, locale }: { projects: Project[]; locale
 
 function FallbackGrid({ projects, locale }: { projects: Project[]; locale: string }) {
   return (
-    <div className="grid grid-cols-2 gap-md p-md md:grid-cols-3">
+    <div className="grid grid-cols-1 gap-md p-md min-[420px]:grid-cols-2 md:grid-cols-3">
       {projects.map((p) => {
         const cover = getMediaUrl(p.coverImage)
         return (

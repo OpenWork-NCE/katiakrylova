@@ -23,9 +23,15 @@ export function HeaderBar({ locale, items }: Props) {
         isHome ? 'bg-transparent' : 'bg-bg-primary/80 backdrop-blur'
       }`}
     >
-      <Container className="flex items-center justify-between py-md">
-        <Link href={`/${locale}`}>
-          <Image src="/images/katia_krylova.png" alt="Katia Krylova" width={120} height={32} />
+      <Container className="flex items-center justify-between py-sm sm:py-md">
+        <Link href={`/${locale}`} className="shrink-0">
+          <Image
+            src="/images/katia_krylova.png"
+            alt="Katia Krylova"
+            width={120}
+            height={32}
+            className="h-auto w-[clamp(5.25rem,30vw,7.5rem)]"
+          />
         </Link>
         <nav
           className={`hidden md:flex items-center gap-lg text-sm transition-opacity duration-500 ${

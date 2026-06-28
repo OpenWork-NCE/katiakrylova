@@ -1,5 +1,5 @@
 'use client'
-import { useMemo, useRef, type RefObject } from 'react'
+import { useMemo, useRef, type MutableRefObject, type RefObject } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useScroll } from '@react-three/drei'
 import type { Project } from '@/payload-types'
@@ -7,6 +7,7 @@ import { CorridorCamera } from './CorridorCamera'
 import { CorridorEnvironment } from './CorridorEnvironment'
 import { GalleryFrame } from './GalleryFrame'
 import { CorridorScrollBridge } from './CorridorScrollBridge'
+import type { CorridorScrollHandle } from './corridor-scroll'
 import { HINT_DISMISS_OFFSET } from './corridor-constants'
 import { buildFrameSlots, getCorridorDimensions, pickActiveIndexFromScroll } from './corridor-math'
 
@@ -30,16 +31,29 @@ type Props = {
   onActiveIndexChange: (index: number) => void
   onDismissHint: () => void
   scrollProgressRef: RefObject<HTMLDivElement | null>
+  scrollHandleRef: MutableRefObject<CorridorScrollHandle | null>
+  onScrollOffsetChange?: (offset: number) => void
 }
 
-export function GalleryCorridor({ projects, activeIndex, onActiveIndexChange, onDismissHint, scrollProgressRef }: Props) {
+export function GalleryCorridor({
+  projects,
+  activeIndex,
+  onActiveIndexChange,
+  onDismissHint,
+  scrollProgressRef,
+  scrollHandleRef,
+  onScrollOffsetChange,
+}: Props) {
   const { viewport, size } = useThree()
   const scroll = useScroll()
   const focusZRef = useRef(0)
   const activeIndexRef = useRef(activeIndex)
   const isMobile = size.width < 768
 
-  const dims = useMemo(() => getCorridorDimensions(viewport.width, isMobile), [viewport.width, isMobile])
+  const dims = useMemo(
+    () => getCorridorDimensions(viewport.width, isMobile, size.width),
+    [viewport.width, isMobile, size.width],
+  )
   const slots = useMemo(() => buildFrameSlots(projects.length, dims), [projects.length, dims])
 
   useFrame(() => {
@@ -53,8 +67,12 @@ export function GalleryCorridor({ projects, activeIndex, onActiveIndexChange, on
   return (
     <>
       <ScrollWatcher onDismissHint={onDismissHint} />
-      <CorridorScrollBridge progressRef={scrollProgressRef} />
-      <CorridorCamera slots={slots} dims={dims} focusZRef={focusZRef} />
+      <CorridorScrollBridge
+        progressRef={scrollProgressRef}
+        scrollHandleRef={scrollHandleRef}
+        onOffsetChange={onScrollOffsetChange}
+      />
+      <CorridorCamera slots={slots} dims={dims} focusZRef={focusZRef} activeIndexRef={activeIndexRef} />
       <CorridorEnvironment
         projectCount={projects.length}
         halfWidth={dims.halfWidth}
@@ -74,6 +92,8 @@ export function GalleryCorridor({ projects, activeIndex, onActiveIndexChange, on
           activeIndexRef={activeIndexRef}
           frameWidth={dims.frameWidth}
           frameHeight={dims.frameHeight}
+          presentXPull={dims.presentXPull}
+          presentRotPull={dims.presentRotPull}
         />
       ))}
     </>
