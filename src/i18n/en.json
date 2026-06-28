@@ -8,7 +8,11 @@
   },
   "home": {
     "enter": "Enter",
-    "tagline": "Filmmaker · Visual artist"
+    "enterGallery": "Enter the gallery",
+    "role": "Director · Visual artist",
+    "subtitle": "Portal to the marvellous",
+    "tagline": "Filmmaker · Visual artist",
+    "scrollHint": "Discover the projects"
   },
   "contact": {
     "title": "Contact",

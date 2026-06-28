@@ -8,7 +8,11 @@
   },
   "home": {
     "enter": "Entrer",
-    "tagline": "Réalisatrice · Artiste visuelle"
+    "enterGallery": "Entrer dans la galerie",
+    "role": "Réalisatrice · Artiste visuelle",
+    "subtitle": "Portail vers le merveilleux",
+    "tagline": "Réalisatrice · Artiste visuelle",
+    "scrollHint": "Découvrir les projets"
   },
   "contact": {
     "title": "Contact",

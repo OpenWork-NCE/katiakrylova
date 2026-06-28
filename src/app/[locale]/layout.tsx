@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { ConditionalFooter } from '@/components/layout/ConditionalFooter'
 import { FilmGrain } from '@/components/ui/FilmGrain'
 import { DiaphragmTransition } from '@/components/3d/DiaphragmTransition'
 
@@ -29,7 +30,9 @@ export default async function LocaleLayout({ children, params }: { children: Rea
           <main className="pt-16">
             <DiaphragmTransition>{children}</DiaphragmTransition>
           </main>
-          <Footer locale={locale} />
+          <ConditionalFooter locale={locale}>
+            <Footer locale={locale} />
+          </ConditionalFooter>
           <FilmGrain />
         </NextIntlClientProvider>
       </body>
