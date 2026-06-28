@@ -1,14 +1,9 @@
 'use client'
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { TransitionOverlay } from './TransitionOverlay'
-import { PageTransitionContext, type TransitionPhase } from './PageTransitionContext'
-import {
-  TRANSITION_IN_MS,
-  TRANSITION_OUT_MS,
-  TRANSITION_POPSTATE_OUT_MS,
-} from './constants'
-import { isTransitionableHref, normalizePath } from './transition-utils'
+import { PageTransitionContext } from './PageTransitionContext'
+import { FADE_MS } from './constants'
+import { isImmersiveRoute, isTransitionableHref, normalizePath } from './transition-utils'
 import '@/styles/page-transition.css'
 
 type Props = {
@@ -18,29 +13,23 @@ type Props = {
 export function PageTransitionProvider({ children }: Props) {
   const router = useRouter()
   const pathname = usePathname()
-  const [phase, setPhase] = useState<TransitionPhase>('closed')
+  const [fading, setFading] = useState(false)
   const [reduced, setReduced] = useState(false)
 
   const pathnameRef = useRef(pathname)
   const initiatedRef = useRef(false)
   const busyRef = useRef(false)
-  const initialOpenDoneRef = useRef(false)
-  const timersRef = useRef<number[]>([])
+  const timerRef = useRef<number | null>(null)
 
-  const clearTimers = useCallback(() => {
-    timersRef.current.forEach((id) => window.clearTimeout(id))
-    timersRef.current = []
+  const immersive = isImmersiveRoute(pathname)
+  const animate = !immersive && !reduced
+
+  const clearTimer = useCallback(() => {
+    if (timerRef.current !== null) {
+      window.clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
   }, [])
-
-  const schedule = useCallback((fn: () => void, ms: number) => {
-    const id = window.setTimeout(fn, ms)
-    timersRef.current.push(id)
-  }, [])
-
-  const startOpening = useCallback(() => {
-    setPhase('opening')
-    schedule(() => setPhase('open'), TRANSITION_IN_MS)
-  }, [schedule])
 
   const navigate = useCallback(
     (href: string) => {
@@ -54,23 +43,24 @@ export function PageTransitionProvider({ children }: Props) {
 
       if (target === current || busyRef.current) return
 
-      if (reduced) {
+      const targetPath = target.split('?')[0].split('#')[0]
+
+      if (reduced || isImmersiveRoute(targetPath)) {
         router.push(href)
         return
       }
 
       busyRef.current = true
       initiatedRef.current = true
-      clearTimers()
+      clearTimer()
+      setFading(true)
 
-      setPhase('closing')
-
-      schedule(() => {
-        setPhase('closed')
+      timerRef.current = window.setTimeout(() => {
+        timerRef.current = null
         router.push(href)
-      }, TRANSITION_OUT_MS)
+      }, FADE_MS)
     },
-    [clearTimers, pathname, reduced, router, schedule],
+    [clearTimer, pathname, reduced, router],
   )
 
   useEffect(() => {
@@ -82,41 +72,14 @@ export function PageTransitionProvider({ children }: Props) {
   }, [])
 
   useEffect(() => {
-    if (initialOpenDoneRef.current) return
-
-    if (reduced) {
-      initialOpenDoneRef.current = true
-      setPhase('open')
-      return
-    }
-
-    initialOpenDoneRef.current = true
-    schedule(() => startOpening(), 60)
-  }, [reduced, schedule, startOpening])
-
-  useEffect(() => {
     if (pathname === pathnameRef.current) return
 
     pathnameRef.current = pathname
-    clearTimers()
-
-    if (initiatedRef.current) {
-      initiatedRef.current = false
-      busyRef.current = false
-      startOpening()
-      return
-    }
-
-    if (reduced) return
-
-    busyRef.current = true
-    setPhase('closing')
-
-    schedule(() => {
-      startOpening()
-      busyRef.current = false
-    }, TRANSITION_POPSTATE_OUT_MS)
-  }, [clearTimers, pathname, reduced, schedule, startOpening])
+    clearTimer()
+    busyRef.current = false
+    initiatedRef.current = false
+    setFading(false)
+  }, [clearTimer, pathname])
 
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
@@ -146,18 +109,13 @@ export function PageTransitionProvider({ children }: Props) {
     return () => document.removeEventListener('click', onClick, { capture: true })
   }, [navigate])
 
-  useEffect(() => () => clearTimers(), [clearTimers])
+  useEffect(() => () => clearTimer(), [clearTimer])
 
   return (
-    <PageTransitionContext.Provider value={{ phase, navigate }}>
-      <div
-        className={`page-transition-content ${phase === 'closing' ? 'page-transition-content--closing' : ''} ${
-          phase === 'opening' ? 'page-transition-content--opening' : ''
-        }`}
-      >
+    <PageTransitionContext.Provider value={{ phase: fading ? 'closing' : 'open', navigate }}>
+      <div className={`page-transition-content${animate && fading ? ' page-transition-content--fade-out' : ''}`}>
         {children}
       </div>
-      {!reduced && <TransitionOverlay phase={phase} />}
     </PageTransitionContext.Provider>
   )
 }

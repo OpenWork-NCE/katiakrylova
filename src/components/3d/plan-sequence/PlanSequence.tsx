@@ -41,7 +41,7 @@ export function PlanSequence({ projects, locale }: { projects: Project[]; locale
 
   return (
     <>
-      <div className="plan-sequence-viewport fixed inset-x-0 top-16 z-0 h-[calc(100dvh-4rem)] min-h-[calc(100svh-4rem)]">
+      <div className="plan-sequence-viewport fixed inset-x-0 top-16 z-10 h-[calc(100dvh-4rem)] min-h-[calc(100svh-4rem)]">
         <Canvas
           camera={{ position: [0, CAMERA_EYE_Y, 9], fov: 50 }}
           gl={{ antialias: true }}

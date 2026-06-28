@@ -8,6 +8,11 @@ export function normalizePath(path: string): string {
   }
 }
 
+/** Fullscreen 3D routes — skip transition overlay and content transforms */
+export function isImmersiveRoute(pathname: string): boolean {
+  return /\/projects$/.test(pathname.replace(/\/$/, ''))
+}
+
 export function isTransitionableHref(href: string | null): href is string {
   if (!href) return false
   if (href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return false

@@ -1,7 +1,7 @@
 'use client'
 import { createContext } from 'react'
 
-export type TransitionPhase = 'open' | 'closing' | 'closed' | 'opening'
+export type TransitionPhase = 'open' | 'closing'
 
 export type PageTransitionContextValue = {
   phase: TransitionPhase
