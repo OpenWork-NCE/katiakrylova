@@ -9,8 +9,10 @@ export const ACTIVE_SCROLL_BACK = 0.42
 export const PRESENT_CENTER_Z = 0.08
 /** How much of the way toward corridor center (0 = wall, 1 = full center) */
 export const PRESENT_X_PULL = 0.26
+export const PRESENT_X_PULL_MOBILE = 0.62
 /** Half rotation toward camera when presented */
 export const PRESENT_ROT_PULL = 0.5
+export const PRESENT_ROT_PULL_MOBILE = 0.72
 
 /** MathUtils.damp lambda — lower = slower; gentle arrive */
 export const PRESENT_DAMP_IN = 4.2

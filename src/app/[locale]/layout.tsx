@@ -1,5 +1,5 @@
 import '../globals.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { notFound } from 'next/navigation'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
@@ -14,6 +14,12 @@ const locales = ['fr', 'en'] as const
 export const metadata: Metadata = {
   title: 'Katia Krylova',
   description: 'Réalisatrice / artiste visuelle',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 }
 
 export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {

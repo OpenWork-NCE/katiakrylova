@@ -16,8 +16,6 @@ import {
   PRESENT_CENTER_Z,
   PRESENT_DAMP_IN,
   PRESENT_DAMP_OUT,
-  PRESENT_ROT_PULL,
-  PRESENT_X_PULL,
   WALL_EMBED_DEPTH,
   WALL_RECESS_Z,
 } from './corridor-constants'
@@ -30,6 +28,8 @@ type InnerProps = {
   activeIndexRef: MutableRefObject<number>
   frameWidth: number
   frameHeight: number
+  presentXPull: number
+  presentRotPull: number
 }
 
 function GalleryFrameInner({
@@ -38,6 +38,8 @@ function GalleryFrameInner({
   activeIndexRef,
   frameWidth,
   frameHeight,
+  presentXPull,
+  presentRotPull,
 }: InnerProps) {
   const frameRef = useRef<Group>(null)
   const imageMeshRef = useRef<Mesh>(null)
@@ -85,9 +87,9 @@ function GalleryFrameInner({
       frameRef.current.position.set(slot.wallX, wallY, wallZ)
       frameRef.current.rotation.set(0, slot.rotation[1], 0)
     } else {
-      const presentX = MathUtils.lerp(slot.wallX, 0, p * PRESENT_X_PULL)
+      const presentX = MathUtils.lerp(slot.wallX, 0, p * presentXPull)
       const targetZ = MathUtils.lerp(wallZ, wallZ + PRESENT_CENTER_Z, p)
-      const targetRotY = lerpAngle(slot.rotation[1], 0, p * PRESENT_ROT_PULL)
+      const targetRotY = lerpAngle(slot.rotation[1], 0, p * presentRotPull)
       frameRef.current.position.set(presentX, wallY, targetZ)
       frameRef.current.rotation.set(0, targetRotY, 0)
     }

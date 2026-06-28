@@ -8,7 +8,7 @@ type Props = {
 export function CorridorScrollProgress({ progressRef }: Props) {
   return (
     <div
-      className="pointer-events-none absolute bottom-0 right-0 top-16 z-10 hidden w-5 md:block"
+      className="pointer-events-none absolute bottom-0 right-0 top-16 z-10 hidden w-5 lg:block"
       aria-hidden
     >
       <div className="absolute bottom-xl right-3 top-md w-px bg-white/8" />

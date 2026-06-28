@@ -4,6 +4,10 @@ import {
   CAMERA_EYE_Y,
   FOCUS_PLANE_OFFSET,
   FRAME_CENTER_Y,
+  PRESENT_ROT_PULL,
+  PRESENT_ROT_PULL_MOBILE,
+  PRESENT_X_PULL,
+  PRESENT_X_PULL_MOBILE,
 } from './corridor-constants'
 import type { CorridorDimensions, FrameSlot, WallSide } from './types'
 
@@ -35,28 +39,39 @@ export function easeInOutCubic(t: number) {
   return c < 0.5 ? 4 * c * c * c : 1 - Math.pow(-2 * c + 2, 3) / 2
 }
 
-export function getCorridorDimensions(viewportWidth: number, isMobile: boolean): CorridorDimensions {
+export function getCorridorDimensions(
+  viewportWidth: number,
+  isMobile: boolean,
+  pixelWidth = 1024,
+): CorridorDimensions {
+  const narrow = pixelWidth < 400
   const halfWidth = isMobile
-    ? Math.min(2.6, Math.max(1.8, viewportWidth * 0.32))
-    : Math.min(3.2, Math.max(2.4, viewportWidth * 0.28))
+    ? Math.min(1.85, Math.max(1.4, viewportWidth * 0.24))
+    : Math.min(2.95, Math.max(2.2, viewportWidth * 0.26))
 
   const frameHeight = isMobile
-    ? Math.min(1.18, Math.max(0.84, viewportWidth / 10.5))
+    ? narrow
+      ? Math.min(1, Math.max(0.74, pixelWidth / 380))
+      : Math.min(1.12, Math.max(0.82, viewportWidth / 11))
     : Math.min(1.36, Math.max(1, viewportWidth / 13.5))
 
-  const frameSpacingZ = isMobile ? 4.8 : 5.4
+  const frameSpacingZ = isMobile ? (narrow ? 4.4 : 4.6) : 5.4
+  const wallInsetFactor = isMobile ? (narrow ? 0.5 : 0.58) : 0.975
 
   return {
     halfWidth,
     frameSpacingZ,
     frameHeight,
     frameWidth: frameHeight * (16 / 9),
-    viewingDistance: isMobile ? 3.4 : 4,
+    viewingDistance: isMobile ? (narrow ? 2.75 : 2.95) : 4,
     startZ: 5,
     eyeY: CAMERA_EYE_Y,
     frameCenterY: FRAME_CENTER_Y,
     peekOffset: 0,
-    wallInset: halfWidth * 0.975,
+    wallInset: halfWidth * wallInsetFactor,
+    presentXPull: isMobile ? PRESENT_X_PULL_MOBILE : PRESENT_X_PULL,
+    presentRotPull: isMobile ? PRESENT_ROT_PULL_MOBILE : PRESENT_ROT_PULL,
+    cameraPanRatio: isMobile ? (narrow ? 0.5 : 0.46) : 0,
   }
 }
 

@@ -10,6 +10,7 @@ html, body {
   color: var(--text-primary);
   font-family: var(--font-body);
   line-height: 1.7;
+  overflow-x: hidden;
 }
 
 html {
