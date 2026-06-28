@@ -1,6 +1,6 @@
 'use client'
 import { useRef, type MutableRefObject } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, type ThreeEvent } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import { Group, MathUtils, Mesh, MeshBasicMaterial, PointLight } from 'three'
 import type { Project } from '@/payload-types'
@@ -30,6 +30,7 @@ type InnerProps = {
   frameHeight: number
   presentXPull: number
   presentRotPull: number
+  onSelect?: () => void
 }
 
 function GalleryFrameInner({
@@ -40,6 +41,7 @@ function GalleryFrameInner({
   frameHeight,
   presentXPull,
   presentRotPull,
+  onSelect,
 }: InnerProps) {
   const frameRef = useRef<Group>(null)
   const imageMeshRef = useRef<Mesh>(null)
@@ -53,7 +55,26 @@ function GalleryFrameInner({
   const presentAmount = useRef(0)
   const opacityRef = useRef(0.5)
   const lightIntensity = useRef(0)
+  const hoverBoost = useRef(0)
   const texture = useTexture(coverUrl)
+
+  const handleClick = (event: ThreeEvent<MouseEvent>) => {
+    event.stopPropagation()
+    if (activeIndexRef.current !== slot.index || !onSelect) return
+    onSelect()
+  }
+
+  const handlePointerOver = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation()
+    if (activeIndexRef.current === slot.index) {
+      document.body.style.cursor = 'pointer'
+    }
+  }
+
+  const handlePointerOut = () => {
+    document.body.style.cursor = ''
+    hoverBoost.current = 0
+  }
 
   const border = 0.055
   const outerW = frameWidth + border * 2
@@ -94,7 +115,7 @@ function GalleryFrameInner({
       frameRef.current.rotation.set(0, targetRotY, 0)
     }
 
-    const targetOpacity = MathUtils.lerp(0.58, 0.94, p)
+    const targetOpacity = MathUtils.lerp(0.58, 0.94, p) + hoverBoost.current * 0.06
     const targetLight = p * 0.4
     const frameSmooth = isActive ? FRAME_DAMP_ACTIVE : FRAME_DAMP_IDLE
 
@@ -141,7 +162,16 @@ function GalleryFrameInner({
         <meshBasicMaterial ref={matteMatRef} color={MATTE_COLOR} transparent opacity={0} toneMapped={false} depthWrite={false} />
       </mesh>
 
-      <mesh ref={imageMeshRef} position={[0, 0, WALL_RECESS_Z]}>
+      <mesh
+        ref={imageMeshRef}
+        position={[0, 0, WALL_RECESS_Z]}
+        onClick={handleClick}
+        onPointerOver={(e) => {
+          handlePointerOver(e)
+          if (activeIndexRef.current === slot.index) hoverBoost.current = 1
+        }}
+        onPointerOut={handlePointerOut}
+      >
         <planeGeometry args={[frameWidth, frameHeight]} />
         <meshBasicMaterial
           ref={imageMatRef}

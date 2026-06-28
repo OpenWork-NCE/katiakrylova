@@ -1,7 +1,8 @@
 'use client'
 import { Canvas } from '@react-three/fiber'
 import { ScrollControls } from '@react-three/drei'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { usePageTransition } from '@/components/transitions/usePageTransition'
 import { Fog } from 'three'
 import Link from 'next/link'
 import type { Project } from '@/payload-types'
@@ -22,6 +23,14 @@ export function PlanSequence({ projects, locale }: { projects: Project[]; locale
   const [scrollOffset, setScrollOffset] = useState(0)
   const scrollProgressRef = useRef<HTMLDivElement>(null)
   const scrollHandleRef = useRef<CorridorScrollHandle | null>(null)
+  const { navigate } = usePageTransition()
+
+  const handleProjectSelect = useCallback(
+    (slug: string) => {
+      navigate(`/${locale}/projects/${slug}`)
+    },
+    [locale, navigate],
+  )
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -34,7 +43,9 @@ export function PlanSequence({ projects, locale }: { projects: Project[]; locale
     }
   }, [])
 
-  if (reduced || !supportsWebGL) return <FallbackGrid projects={projects} locale={locale} />
+  if (reduced || !supportsWebGL) {
+    return <FallbackGrid projects={projects} locale={locale} />
+  }
 
   const activeProject = projects[activeIndex]
   const scrollPages = Math.max(1.5, projects.length * SCROLL_PAGES_PER_PROJECT)
@@ -64,6 +75,7 @@ export function PlanSequence({ projects, locale }: { projects: Project[]; locale
               activeIndex={activeIndex}
               onActiveIndexChange={setActiveIndex}
               onDismissHint={() => setShowHint(false)}
+              onProjectSelect={handleProjectSelect}
               scrollProgressRef={scrollProgressRef}
               scrollHandleRef={scrollHandleRef}
               onScrollOffsetChange={setScrollOffset}

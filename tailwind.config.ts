@@ -20,6 +20,7 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-body)'],
         hand: ['var(--font-hand)'],
+        display: ['var(--font-hand)'],
       },
       spacing: {
         xs: '4px',

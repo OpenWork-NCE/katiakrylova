@@ -1,6 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&family=Special+Elite&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Special+Elite&display=swap');
 
 :root {
-  --font-hand: 'Mrs Saint Delafield', cursive;
+  --font-hand: 'EB Garamond', Georgia, 'Times New Roman', serif;
   --font-body: 'Special Elite', monospace;
+}
+
+/* Titres — ligatures et crénage typographique */
+.font-hand {
+  font-weight: 500;
+  font-feature-settings: 'liga' 1, 'dlig' 1, 'kern' 1;
+  font-variant-ligatures: common-ligatures discretionary-ligatures;
+  letter-spacing: 0.01em;
 }
