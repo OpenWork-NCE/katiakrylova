@@ -37,16 +37,32 @@ Site: http://localhost:3000 · Admin: http://localhost:3000/admin
 4. Tout changement déclenche un redéploiement automatique
 
 ## Workflow de migration de contenu
-Le script `scripts/migrate-content.ts` importe le contenu initial (catégories du portfolio, projets) depuis les sources existantes. Le contenu est créé en mode **brouillon** (`draft: true`) afin de ne pas apparaître publiquement tant qu'il n'a pas été relu.
 
-Étapes :
-1. Lancer la migration : `pnpm tsx scripts/migrate-content.ts`
-   Les projets et catégories sont insérés comme brouillons.
-2. Aller sur `/admin`, se connecter, puis ouvrir chaque entrée brouillon.
-3. Téléverser la couverture (cover) et la galerie d'images pour chaque projet.
-4. Une fois le média en place, **publier** chaque brouillon (bouton « Publish ») pour le rendre visible sur le site.
+Migration automatisée depuis l'ancien site (`previousWebsite/` + scrape live du portfolio).
 
-Tant qu'un brouillon n'est pas publié, il n'apparaît pas dans les lectures publiques du site.
+### Préparation (une fois)
+
+```bash
+node scripts/extract-portfolio-manifest.mjs   # 100 items portfolio depuis l'ancien site
+node scripts/download-portfolio-assets.mjs    # télécharge les images portfolio (HTTP)
+node scripts/parse-site-map.mjs               # manifest projets + globals + journal
+node scripts/copy-assets.mjs                  # copie images vers public/
+```
+
+### Import Payload
+
+```bash
+pnpm migrate                                  # schéma DB à jour
+pnpm migrate:content                          # import complet
+```
+
+Options :
+- `--dry-run` — simule sans écrire dans Payload
+- `--only=globals|portfolio|projects|journal` — section ciblée
+
+Le script importe : globals (home, about, contact), 4 catégories portfolio, 100 réalisations images, 19 projets (covers + galeries + crédits, publiés), 1 article journal.
+
+Idempotent : relancer le script ignore les entrées déjà présentes (slug existant).
 
 ## Scores Lighthouse (mesurés le 2026-06-25)
 - Performance: à mesurer

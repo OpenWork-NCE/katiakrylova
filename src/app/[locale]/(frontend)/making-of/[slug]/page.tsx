@@ -5,6 +5,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { Section } from '@/components/ui/Section'
 import { ProjectGallery } from '@/components/projects/ProjectGallery'
+import { getMediaUrl } from '@/lib/utils'
 
 type Props = { params: Promise<{ locale: string; slug: string }> }
 
@@ -20,7 +21,7 @@ locale: locale as 'fr' | 'en',
   const item = docs[0] as any
   if (!item) notFound()
 
-  const cover = typeof item.coverImage === 'object' ? item.coverImage?.url : null
+  const cover = getMediaUrl(item.coverImage)
 
   return (
     <article>

@@ -10,16 +10,17 @@ test('signature flow: home → projects → project page', async ({ page }) => {
   await page.click('text=Projects')
   await expect(page).toHaveURL(/\/fr\/projects/)
 
-  // 3. Wait for 3D canvas to render
+  // 3. Wait for 3D canvas and scroll invite
   const canvas = page.locator('canvas')
   await expect(canvas).toBeVisible({ timeout: 10_000 })
+  await expect(page.getByText(/Scroller pour découvrir/i)).toBeVisible()
 
-  // 4. Click a project card (3D pick or fallback link)
-  // The first project card has the featured project; clicking anywhere on the canvas
-  // might not be deterministic. For E2E we verify the canvas exists and URL pattern.
-  // Then we navigate directly to a known project.
+  // 4. Click CTA opens project detail
+  await page.getByRole('link', { name: /Voir le projet/i }).click()
+  await expect(page).toHaveURL(/\/fr\/projects\//)
+
+  // 5. Project page with video embed
   await page.goto('/fr/projects/la-tache-noire')
-
-  // 5. Project page renders
   await expect(page.locator('h1')).toContainText('La Tâche Noire')
+  await expect(page.locator('iframe[src*="youtube"]')).toBeVisible()
 })

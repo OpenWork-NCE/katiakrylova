@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-type Adj = { slug: string; title: string; coverImage?: { url?: string } }
+type Adj = { slug: string; title: string; coverImage?: { url?: string | null } }
 
 export function ProjectNav({ prev, next, locale }: { prev?: Adj; next?: Adj; locale: string }) {
   return (

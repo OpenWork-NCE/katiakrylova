@@ -12,5 +12,37 @@ html, body {
   line-height: 1.7;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 46, 46, 0.35) transparent;
+}
+
+html::-webkit-scrollbar {
+  width: 6px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: rgba(139, 46, 46, 0.4);
+  border-radius: 999px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 72, 72, 0.55);
+}
+
 a { color: inherit; text-decoration: none; }
 ::selection { background: var(--accent); color: var(--text-primary); }
