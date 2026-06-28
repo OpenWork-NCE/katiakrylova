@@ -30,6 +30,7 @@ type Props = {
   activeIndex: number
   onActiveIndexChange: (index: number) => void
   onDismissHint: () => void
+  onProjectSelect: (slug: string) => void
   scrollProgressRef: RefObject<HTMLDivElement | null>
   scrollHandleRef: MutableRefObject<CorridorScrollHandle | null>
   onScrollOffsetChange?: (offset: number) => void
@@ -40,6 +41,7 @@ export function GalleryCorridor({
   activeIndex,
   onActiveIndexChange,
   onDismissHint,
+  onProjectSelect,
   scrollProgressRef,
   scrollHandleRef,
   onScrollOffsetChange,
@@ -94,6 +96,7 @@ export function GalleryCorridor({
           frameHeight={dims.frameHeight}
           presentXPull={dims.presentXPull}
           presentRotPull={dims.presentRotPull}
+          onSelect={() => onProjectSelect(project.slug)}
         />
       ))}
     </>
