@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import type { Project } from '@/payload-types'
 
 type Props = {
@@ -11,6 +12,8 @@ type Props = {
 }
 
 export function CorridorHUD({ project, locale, index, total, showHint }: Props) {
+  const t = useTranslations('projects')
+
   const hudBottom = showHint
     ? 'pb-[calc(3.75rem+env(safe-area-inset-bottom,0px))] sm:pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))]'
     : 'pb-[max(1.25rem,env(safe-area-inset-bottom,0px))] sm:pb-0'
@@ -30,7 +33,7 @@ export function CorridorHUD({ project, locale, index, total, showHint }: Props) 
           href={`/${locale}/projects/${project.slug}`}
           className="pointer-events-auto mt-sm inline-block text-xs uppercase tracking-[0.18em] text-text-primary transition duration-500 hover:text-accent sm:mt-md sm:text-sm sm:tracking-widest"
         >
-          Voir le projet →
+          {t('viewProject')}
         </Link>
       </div>
 
@@ -41,7 +44,7 @@ export function CorridorHUD({ project, locale, index, total, showHint }: Props) 
       {showHint && (
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[9] bg-accent/90 px-4 py-sm pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] text-center sm:py-md">
           <p className="animate-pulse text-[0.65rem] uppercase tracking-[0.16em] text-text-primary sm:text-sm sm:tracking-[0.25em]">
-            ↓ Scroller pour découvrir la galerie
+            {t('scrollHint')}
           </p>
         </div>
       )}

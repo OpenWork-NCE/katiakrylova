@@ -1,6 +1,7 @@
 'use client'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import type { PortfolioSlide } from './portfolio-slides'
 import { preloadImage, workThumbIndices } from './portfolio-slides'
 
@@ -18,6 +19,7 @@ const MAX_ZOOM = 4
 const ZOOM_STEP = 0.35
 
 export function PortfolioViewer({ open, slides, index, onClose, onIndexChange }: Props) {
+  const t = useTranslations('portfolio')
   const [visible, setVisible] = useState(false)
   const [activeIndex, setActiveIndex] = useState(index)
   const [contentVisible, setContentVisible] = useState(true)
@@ -208,7 +210,7 @@ export function PortfolioViewer({ open, slides, index, onClose, onIndexChange }:
       className={`fixed inset-0 z-[120] transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'}`}
       role="dialog"
       aria-modal="true"
-      aria-label={`Visionneuse — ${slide.title}`}
+      aria-label={t('viewerLabel', { title: slide.title })}
       aria-busy={loading}
     >
       <div className="absolute inset-0 bg-[#050505]" />
@@ -229,7 +231,7 @@ export function PortfolioViewer({ open, slides, index, onClose, onIndexChange }:
         type="button"
         onClick={onClose}
         className="absolute right-md top-[calc(4rem+0.5rem)] z-20 flex h-10 w-10 items-center justify-center border border-white/10 bg-bg-primary/40 text-sm uppercase tracking-widest text-text-primary backdrop-blur-md transition hover:border-accent/50 hover:text-accent"
-        aria-label="Fermer"
+        aria-label={t('close')}
       >
         ×
       </button>
@@ -244,7 +246,7 @@ export function PortfolioViewer({ open, slides, index, onClose, onIndexChange }:
           onClick={zoomIn}
           disabled={zoom >= MAX_ZOOM}
           className="flex h-9 w-9 items-center justify-center border border-white/10 bg-bg-primary/40 text-text-primary backdrop-blur-md transition hover:border-accent/40 disabled:opacity-30"
-          aria-label="Zoomer"
+          aria-label={t('zoomIn')}
         >
           +
         </button>
@@ -253,7 +255,7 @@ export function PortfolioViewer({ open, slides, index, onClose, onIndexChange }:
           onClick={zoomOut}
           disabled={zoom <= MIN_ZOOM}
           className="flex h-9 w-9 items-center justify-center border border-white/10 bg-bg-primary/40 text-text-primary backdrop-blur-md transition hover:border-accent/40 disabled:opacity-30"
-          aria-label="Dézoomer"
+          aria-label={t('zoomOut')}
         >
           −
         </button>
@@ -274,7 +276,7 @@ export function PortfolioViewer({ open, slides, index, onClose, onIndexChange }:
             type="button"
             onClick={goPrev}
             className="absolute left-md top-1/2 z-20 hidden -translate-y-1/2 border border-white/10 bg-bg-primary/30 px-sm py-lg text-text-primary backdrop-blur-md transition hover:border-accent/40 hover:text-accent md:block"
-            aria-label="Précédent"
+            aria-label={t('prev')}
           >
             ←
           </button>
@@ -282,7 +284,7 @@ export function PortfolioViewer({ open, slides, index, onClose, onIndexChange }:
             type="button"
             onClick={goNext}
             className="absolute right-md top-1/2 z-20 hidden -translate-y-1/2 border border-white/10 bg-bg-primary/30 px-sm py-lg text-text-primary backdrop-blur-md transition hover:border-accent/40 hover:text-accent md:block"
-            aria-label="Suivant"
+            aria-label={t('next')}
           >
             →
           </button>
@@ -360,7 +362,7 @@ export function PortfolioViewer({ open, slides, index, onClose, onIndexChange }:
               className={`relative shrink-0 overflow-hidden border transition duration-500 ${
                 active ? 'border-accent opacity-100' : 'border-white/10 opacity-45 hover:opacity-80'
               }`}
-              aria-label={`${thumb.title} — ${thumb.categoryName}`}
+              aria-label={t('thumbLabel', { title: thumb.title, category: thumb.categoryName })}
               aria-current={active}
             >
               <div className="relative h-14 w-20">

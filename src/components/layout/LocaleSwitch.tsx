@@ -1,24 +1,43 @@
 'use client'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useLocale } from 'next-intl'
+import { usePageTransition } from '@/components/transitions/usePageTransition'
 
 export function LocaleSwitch() {
   const locale = useLocale()
-  const router = useRouter()
   const pathname = usePathname()
+  const { navigate } = usePageTransition()
 
   const switchTo = (target: 'fr' | 'en') => {
     if (target === locale) return
     const segments = pathname.split('/')
     segments[1] = target
-    router.push(segments.join('/'))
+    navigate(segments.join('/'))
   }
 
   return (
     <div className="flex items-center gap-2 text-sm">
-      <button onClick={() => switchTo('fr')} className={locale === 'fr' ? 'text-accent' : 'text-text-muted'}>FR</button>
-      <span className="text-text-muted">|</span>
-      <button onClick={() => switchTo('en')} className={locale === 'en' ? 'text-accent' : 'text-text-muted'}>EN</button>
+      <button
+        type="button"
+        onClick={() => switchTo('fr')}
+        className={locale === 'fr' ? 'text-accent' : 'text-text-muted'}
+        aria-label="Français"
+        aria-current={locale === 'fr' ? 'true' : undefined}
+      >
+        FR
+      </button>
+      <span className="text-text-muted" aria-hidden>
+        |
+      </span>
+      <button
+        type="button"
+        onClick={() => switchTo('en')}
+        className={locale === 'en' ? 'text-accent' : 'text-text-muted'}
+        aria-label="English"
+        aria-current={locale === 'en' ? 'true' : undefined}
+      >
+        EN
+      </button>
     </div>
   )
 }

@@ -1,17 +1,22 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getMakingOfEntries } from '@/lib/payload'
 import { Section } from '@/components/ui/Section'
 import { getMediaUrl } from '@/lib/utils'
 
 export default async function MakingOfPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const items = await getMakingOfEntries(locale as 'fr' | 'en')
+  setRequestLocale(locale)
+  const [t, items] = await Promise.all([
+    getTranslations('makingOf'),
+    getMakingOfEntries(locale as 'fr' | 'en'),
+  ])
 
   return (
     <Section>
-      <h1 className="font-hand text-5xl mb-xl">Making Of</h1>
-      {items.length === 0 && <p className="text-text-muted">Aucun contenu pour l'instant.</p>}
+      <h1 className="font-hand text-5xl mb-xl">{t('title')}</h1>
+      {items.length === 0 && <p className="text-text-muted">{t('empty')}</p>}
       <div className="grid md:grid-cols-2 gap-xl">
         {items.map((item: any) => {
           const cover = getMediaUrl(item.coverImage)

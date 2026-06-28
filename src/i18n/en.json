@@ -1,4 +1,8 @@
 {
+  "meta": {
+    "title": "Katia Krylova",
+    "description": "Director / visual artist"
+  },
   "nav": {
     "projects": "Projects",
     "portfolio": "Portfolio",
@@ -15,14 +19,51 @@
     "scrollHint": "Discover the projects"
   },
   "projects": {
+    "title": "Projects",
+    "viewProject": "View project →",
+    "scrollHint": "↓ Scroll to explore the gallery",
+    "galleryLabel": "Gallery",
+    "backToProjects": "← Back to projects",
+    "videos": "Videos",
     "scrollNavLabel": "Gallery navigation",
     "goToStart": "Go to start",
     "goToEnd": "Go to end"
   },
+  "projectNav": {
+    "prev": "← Previous",
+    "next": "Next →"
+  },
+  "portfolio": {
+    "title": "Portfolio",
+    "all": "All",
+    "loading": "Loading…",
+    "viewerLabel": "Viewer — {title}",
+    "close": "Close",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "prev": "Previous",
+    "next": "Next",
+    "thumbLabel": "{title} — {category}"
+  },
+  "about": {
+    "title": "About"
+  },
+  "journal": {
+    "title": "Journal",
+    "empty": "No entries yet.",
+    "back": "← Back"
+  },
+  "makingOf": {
+    "title": "Making Of",
+    "empty": "No content yet.",
+    "back": "← Back"
+  },
   "contact": {
     "title": "Contact",
     "intro": "For any inquiry, collaboration or meeting:",
-    "book": "Book a call"
+    "book": "Book a call",
+    "email": "Email",
+    "phone": "Phone"
   },
   "footer": {
     "built": "Site crafted with care"
@@ -30,5 +71,10 @@
   "notFound": {
     "title": "This page does not exist",
     "back": "Back to home"
+  },
+  "common": {
+    "menu": "Menu",
+    "close": "Close",
+    "back": "← Back"
   }
 }

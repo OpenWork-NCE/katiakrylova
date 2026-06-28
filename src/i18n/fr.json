@@ -1,8 +1,12 @@
 {
+  "meta": {
+    "title": "Katia Krylova",
+    "description": "Réalisatrice / artiste visuelle"
+  },
   "nav": {
-    "projects": "Projects",
+    "projects": "Projets",
     "portfolio": "Portfolio",
-    "about": "About",
+    "about": "À propos",
     "journal": "Journal",
     "contact": "Contact"
   },
@@ -15,14 +19,51 @@
     "scrollHint": "Découvrir les projets"
   },
   "projects": {
+    "title": "Projets",
+    "viewProject": "Voir le projet →",
+    "scrollHint": "↓ Scroller pour découvrir la galerie",
+    "galleryLabel": "Galerie",
+    "backToProjects": "← Retour aux projets",
+    "videos": "Vidéos",
     "scrollNavLabel": "Navigation de la galerie",
     "goToStart": "Aller au début",
     "goToEnd": "Aller à la fin"
   },
+  "projectNav": {
+    "prev": "← Précédent",
+    "next": "Suivant →"
+  },
+  "portfolio": {
+    "title": "Portfolio",
+    "all": "Tous",
+    "loading": "Chargement…",
+    "viewerLabel": "Visionneuse — {title}",
+    "close": "Fermer",
+    "zoomIn": "Zoomer",
+    "zoomOut": "Dézoomer",
+    "prev": "Précédent",
+    "next": "Suivant",
+    "thumbLabel": "{title} — {category}"
+  },
+  "about": {
+    "title": "À propos"
+  },
+  "journal": {
+    "title": "Journal",
+    "empty": "Aucun article pour l'instant.",
+    "back": "← Retour"
+  },
+  "makingOf": {
+    "title": "Making Of",
+    "empty": "Aucun contenu pour l'instant.",
+    "back": "← Retour"
+  },
   "contact": {
     "title": "Contact",
     "intro": "Pour toute proposition, collaboration ou prise de rendez-vous :",
-    "book": "Réserver un appel"
+    "book": "Réserver un appel",
+    "email": "Email",
+    "phone": "Tél"
   },
   "footer": {
     "built": "Site construit avec soin"
@@ -30,5 +71,10 @@
   "notFound": {
     "title": "Cette page n'existe pas",
     "back": "Retour à l'accueil"
+  },
+  "common": {
+    "menu": "Menu",
+    "close": "Fermer",
+    "back": "← Retour"
   }
 }
