@@ -16,6 +16,7 @@ export async function getProjects(locale: Locale = 'fr') {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: 'projects',
+    depth: 1,
     locale: locale === 'all' ? 'all' : locale,
     sort: 'order',
     limit: 1000,
@@ -28,6 +29,7 @@ export async function getProjectBySlug(slug: string, locale: Locale = 'fr') {
   const { docs } = await payload.find({
     collection: 'projects',
     where: { slug: { equals: slug } },
+    depth: 1,
     locale: locale === 'all' ? 'all' : locale,
     limit: 1,
   })
@@ -40,6 +42,7 @@ export async function getAdjacentProjects(order: number, locale: Locale = 'fr') 
     payload.find({
       collection: 'projects',
       where: { order: { less_than: order } },
+      depth: 1,
       sort: '-order',
       locale: locale === 'all' ? 'all' : locale,
       limit: 1,
@@ -47,6 +50,7 @@ export async function getAdjacentProjects(order: number, locale: Locale = 'fr') 
     payload.find({
       collection: 'projects',
       where: { order: { greater_than: order } },
+      depth: 1,
       sort: 'order',
       locale: locale === 'all' ? 'all' : locale,
       limit: 1,

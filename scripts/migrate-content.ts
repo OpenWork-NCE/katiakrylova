@@ -1,132 +1,326 @@
 import 'dotenv/config'
+import { readFile } from 'fs/promises'
+import { existsSync } from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { getPayload } from 'payload'
 import config from '../src/payload.config'
+import { uploadMedia, clearMediaCache } from './lib/upload-media'
+import { textToLexical } from './lib/lexical'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const root = path.resolve(__dirname, '..')
+const dataDir = path.join(root, 'scripts/data')
+const imagesRoot = path.join(root, 'public/images')
+
+type PortfolioManifest = {
+  items: Array<{
+    order: number
+    category: string
+    categorySlug: string
+    title: string
+    slug: string
+    filename: string
+    localPath: string
+    year: number
+  }>
+}
+
+type ProjectsManifest = {
+  projects: Array<{
+    slug: string
+    title: string
+    year: number
+    format: string
+    description: string
+    order: number
+    coverImage: string | null
+    gallery: string[]
+    credits: Array<{ role: string; name: string }>
+    externalLinks: Array<{ platform: 'Vimeo' | 'YouTube'; url: string }>
+  }>
+}
+
+type GlobalsManifest = {
+  home: { heroImage: string; tagline: string }
+  about: { photo: string; bio: string }
+  contact: { email: string; phone: string; calComUrl: string }
+  journal: {
+    title: string
+    slug: string
+    excerpt: string
+    coverImage: string
+    content: string
+  }
+}
+
+const args = process.argv.slice(2)
+const dryRun = args.includes('--dry-run')
+const only = args.find((a) => a.startsWith('--only='))?.split('=')[1]
+
+function shouldRun(section: string) {
+  return !only || only === section
+}
+
+async function loadJson<T>(name: string): Promise<T> {
+  const p = path.join(dataDir, name)
+  return JSON.parse(await readFile(p, 'utf8')) as T
+}
+
+async function findBySlug(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  collection: 'portfolio' | 'portfolio-categories' | 'projects' | 'journal-entries',
+  slug: string,
+) {
+  const { docs } = await payload.find({
+    collection,
+    where: { slug: { equals: slug } },
+    limit: 1,
+  })
+  return docs[0] ?? null
+}
+
+async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, globals: GlobalsManifest) {
+  const heroId = await uploadMedia(
+    payload,
+    path.join(imagesRoot, globals.home.heroImage),
+    'Hero Katia Krylova',
+    dryRun,
+  )
+  const aboutPhotoId = await uploadMedia(
+    payload,
+    path.join(imagesRoot, globals.about.photo),
+    'About Katia Krylova',
+    dryRun,
+  )
+
+  if (!dryRun) {
+    await payload.updateGlobal({
+      slug: 'home',
+      data: {
+        heroImage: heroId ?? undefined,
+        tagline: globals.home.tagline,
+      },
+      locale: 'fr',
+    })
+
+    await payload.updateGlobal({
+      slug: 'about',
+      data: {
+        bio: textToLexical(globals.about.bio),
+        photo: aboutPhotoId ?? undefined,
+      },
+      locale: 'fr',
+    })
+
+    await payload.updateGlobal({
+      slug: 'contact',
+      data: globals.contact,
+      locale: 'fr',
+    })
+  }
+
+  console.log('✓ Globals: home, about, contact')
+}
+
+async function migrateCategories(payload: Awaited<ReturnType<typeof getPayload>>) {
+  const categories = ['Collage', 'Gravure', 'Identity', 'Letter']
+  const ids: Record<string, number> = {}
+
+  for (let i = 0; i < categories.length; i++) {
+    const name = categories[i]
+    const slug = name.toLowerCase()
+    const existing = await findBySlug(payload, 'portfolio-categories', slug)
+    if (existing) {
+      ids[slug] = existing.id
+      continue
+    }
+    if (dryRun) {
+      ids[slug] = -1
+      continue
+    }
+    const doc = await payload.create({
+      collection: 'portfolio-categories',
+      data: { name, slug, order: i },
+      locale: 'fr',
+    })
+    ids[slug] = doc.id
+  }
+
+  console.log(`✓ Portfolio categories: ${categories.length}`)
+  return ids
+}
+
+async function migratePortfolio(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  manifest: PortfolioManifest,
+  categoryIds: Record<string, number>,
+) {
+  let created = 0
+  let skipped = 0
+
+  for (const item of manifest.items) {
+    const existing = await findBySlug(payload, 'portfolio', item.slug)
+    if (existing) {
+      skipped += 1
+      continue
+    }
+
+    const filePath = path.join(imagesRoot, item.localPath)
+    const coverId = await uploadMedia(payload, filePath, item.title, dryRun)
+    if (!coverId && !dryRun) {
+      console.warn(`  ⚠ Skipping portfolio ${item.slug}: no cover image`)
+      continue
+    }
+
+    if (!dryRun) {
+      await payload.create({
+        collection: 'portfolio',
+        data: {
+          title: item.title,
+          slug: item.slug,
+          year: item.year,
+          category: categoryIds[item.categorySlug],
+          coverImage: coverId!,
+          order: item.order,
+        },
+        locale: 'fr',
+      })
+    }
+    created += 1
+  }
+
+  console.log(`✓ Portfolio: ${created} created, ${skipped} skipped`)
+}
+
+async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, manifest: ProjectsManifest) {
+  let created = 0
+  let skipped = 0
+
+  for (const p of manifest.projects) {
+    const existing = await findBySlug(payload, 'projects', p.slug)
+    if (existing) {
+      skipped += 1
+      continue
+    }
+
+    let coverId: number | null = null
+    if (p.coverImage) {
+      coverId = await uploadMedia(
+        payload,
+        path.join(imagesRoot, p.coverImage),
+        p.title,
+        dryRun,
+      )
+    }
+
+    const galleryIds: Array<{ image: number }> = []
+    for (const file of p.gallery) {
+      const id = await uploadMedia(payload, path.join(imagesRoot, file), `${p.title} — ${file}`, dryRun)
+      if (id) galleryIds.push({ image: id })
+    }
+
+    if (!coverId && !dryRun) {
+      console.warn(`  ⚠ Skipping project ${p.slug}: no cover image`)
+      continue
+    }
+
+    if (!dryRun) {
+      await payload.create({
+        collection: 'projects',
+        data: {
+          title: p.title,
+          slug: p.slug,
+          year: p.year,
+          format: p.format as 'Court-métrage' | 'Clip' | 'Performance' | 'Documentaire' | 'Essai expérimental' | 'Making Of',
+          description: p.description,
+          order: p.order,
+          coverImage: coverId!,
+          gallery: galleryIds,
+          credits: p.credits,
+          externalLinks: p.externalLinks,
+        },
+        locale: 'fr',
+        draft: false,
+      })
+    }
+    created += 1
+  }
+
+  console.log(`✓ Projects: ${created} created, ${skipped} skipped`)
+}
+
+async function migrateJournal(payload: Awaited<ReturnType<typeof getPayload>>, globals: GlobalsManifest) {
+  const j = globals.journal
+  const existing = await findBySlug(payload, 'journal-entries', j.slug)
+  if (existing) {
+    console.log('✓ Journal: already exists, skipped')
+    return
+  }
+
+  const coverId = await uploadMedia(
+    payload,
+    path.join(imagesRoot, j.coverImage),
+    j.title,
+    dryRun,
+  )
+
+  if (!dryRun) {
+    await payload.create({
+      collection: 'journal-entries',
+      data: {
+        title: j.title,
+        slug: j.slug,
+        excerpt: j.excerpt,
+        content: textToLexical(j.content),
+        coverImage: coverId ?? undefined,
+      },
+      locale: 'fr',
+    })
+  }
+
+  console.log('✓ Journal: 1 entry')
+}
 
 async function run() {
+  if (!existsSync(path.join(dataDir, 'portfolio-manifest.json'))) {
+    console.error('Missing manifests. Run:')
+    console.error('  node scripts/extract-portfolio-manifest.mjs')
+    console.error('  node scripts/parse-site-map.mjs')
+    process.exit(1)
+  }
+
+  clearMediaCache()
   const payload = await getPayload({ config })
 
-  // 1. Globals
-  await payload.updateGlobal({
-    slug: 'about',
-    data: {
-      bio: {
-        root: {
-          type: 'root',
-          format: '',
-          indent: 0,
-          version: 1,
-          direction: 'ltr',
-          children: [
-            {
-              type: 'paragraph',
-              version: 1,
-              direction: 'ltr',
-              format: '',
-              indent: 0,
-              textFormat: 0,
-              children: [{
-                mode: 'normal',
-                text: "Voir est mon plus grand péché, depuis toute petite. Manger avec gourmandise les images, les couleurs, les ombres, les vides. Voir pour savoir, connaître, faire connaissance avec l'œil.\n\nUne image, deux images, une séquence de lumière et d'ombre. Collant à la chose filmée ou s'en décollant. Toute en subjectivité, je les peins, les triture, les malaxe, les desserre de leur étreinte « collet monté ».\n\nVision triple, sonde cérébrale, flash affectif, projection d'amour. Je vous laisse découvrir mes hantises, mes fantasmes, mes angoisses et mes joies.",
-                type: 'text',
-                version: 1,
-                detail: 0,
-                style: '',
-              }],
-            },
-          ],
-        },
-      },
-    },
-    locale: 'fr',
-  })
+  if (dryRun) console.log('DRY RUN — no writes to Payload')
 
-  await payload.updateGlobal({
-    slug: 'contact',
-    data: {
-      email: 'contact@katiakrylova.com',
-      phone: '+32(0)474 468 168',
-      calComUrl: 'https://cal.com/katia-krylova',
-    },
-    locale: 'fr',
-  })
-
-  // 2. Portfolio categories
-  const categories = ['Collage', 'Gravure', 'Identity', 'Letter']
-  for (let i = 0; i < categories.length; i++) {
-    await payload.create({
-      collection: 'portfolio-categories',
-      data: { name: categories[i], slug: categories[i].toLowerCase(), order: i },
-      locale: 'fr',
-      draft: true,
-    })
+  if (shouldRun('globals')) {
+    const globals = await loadJson<GlobalsManifest>('globals-manifest.json')
+    await migrateGlobals(payload, globals)
+    if (shouldRun('journal')) await migrateJournal(payload, globals)
   }
 
-  // 3. Projects — slug + year + format from INDEX.md
-  const projectsData = [
-    { slug: 'la-tache-noire', title: 'La Tâche Noire', year: 2025, format: 'Court-métrage', description: "Court-métrage – Tournage express (8 heures maximum) réalisé à l'atelier de l'Académie des arts d'Uccle." },
-    { slug: 'casting', title: 'CASTING', year: 2025, format: 'Court-métrage', description: "Casting retrace une journée haute en couleurs où il est question d'ambitions contrariées entre un réalisateur borné et des candidat.e.s, plus dingues les uns des autres!" },
-    { slug: 'presentation-teresa-1', title: 'TERESA Présentation', year: 2021, format: 'Documentaire', description: 'TERESA VIESTI, présentation' },
-    { slug: 'teresa-viesti', title: 'DÉFILÉ MODE', year: 2021, format: 'Documentaire', description: "Défilé pour l'école de Stylisme. Présentation de quatre pièces. Teresa Viesti Collection." },
-    { slug: 'light-vador', title: 'LIGHT VADOR', year: 2016, format: 'Court-métrage', description: "La journée extraordinaire d'un héros ordinaire. Scénario, réalisation et montage." },
-    { slug: 'la-petite-faucheuse', title: 'LA PETITE FAUCHEUSE', year: 2015, format: 'Court-métrage', description: "«LA PETITE FAUCHEUSE» court-métrage de KATIA KRYLOVA Aurore, belle jeune femme de 28 ans, Victor son mari, 35 ans et leur petit garçon de 6 ans, Antoine, vivent heureux et sans histoires dans un monde …" },
-    { slug: 'strangers', title: 'STRANGERS', year: 2014, format: 'Making Of', description: 'Making Of, photos de plateau et affiche Premier court-métrage de Philippe Geus.' },
-    { slug: 'seconde-papillon', title: 'SECONDE PAPILLON', year: 2014, format: 'Performance', description: "Vidéo Performance autour de l'œuvre de la plasticienne Sylvie Pichrist sur la thématique des Métamorphoses." },
-    { slug: 'paphius', title: 'MIRAGE', year: 2013, format: 'Clip', description: 'Making Of et photos de plateau Clip musical du nouveau groupe « JOY » de Marc Huyghens.' },
-    { slug: 'hip-hop-de-rue', title: 'HIP HOP DE RUE', year: 2013, format: 'Clip', description: 'Making Of – Montage – Etalonnage – Photos Le chanteur auteur-compositeur Rodwyn.' },
-    { slug: 'alice-au-pays-des-ombres', title: 'ALICE AU PAYS DES OMBRES', year: 2013, format: 'Essai expérimental', description: "Essai expérimental sur base d'images fixes. Music and lyrics by David Lynch." },
-    { slug: 'manacao', title: 'MANACAO', year: 2013, format: 'Making Of', description: 'Photos de plateau et Making Of. Kino Kabaret International 2013 (Brussels).' },
-    { slug: 'la-beaute-du-geste', title: 'LA BEAUTE DU GESTE', year: 2013, format: 'Court-métrage', description: "La beauté du geste raconte les premiers émois inoffensifs d'un jeune homme méthodique." },
-    { slug: 'que-faire-avec-innuit-siniswichi', title: 'QUE FAIRE AVEC INNUIT SINISWICHI', year: 2013, format: 'Court-métrage', description: "Le projet expérimental autour du personnage d'innuit siniswichi, double conceptuel de l'artiste Sylvain Paris." },
-    { slug: 'le-mariage-campagnard', title: 'LE MARIAGE CAMPAGNARD', year: 2013, format: 'Essai expérimental', description: "Essai d'animation sur base de 200 photos ratées." },
-    { slug: 'la-robe-ragot', title: 'LA ROBE RAGOT', year: 2013, format: 'Documentaire', description: "Mini Documentaire autour de l'oeuvre du sculpteur Sophie De Meyer." },
-    { slug: 'hero-zero', title: 'HERO ZERO', year: 2013, format: 'Court-métrage', description: "Prise de vues, photos de plateau, montage et étalonnage. Court métrage de Sébastien mélot." },
-    { slug: 'yadel', title: 'YADEL', year: 2013, format: 'Making Of', description: 'Making Of et Photos de plateau. Yadel is the last son born to a Turkish family living in Belgium.' },
-    { slug: 'cine-palace', title: 'CINE PALACE', year: 2013, format: 'Making Of', description: 'Making Of, photos de plateau. Cine Palace court-métrage de Séverine De Streyker.' },
-  ]
-
-  const externalLinks: Record<string, { platform: 'Vimeo' | 'YouTube'; url: string }[]> = {
-    'alice-au-pays-des-ombres': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=NagZ3zRKrdo' }],
-    'casting': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=bfdJ_oSxmFc' }],
-    'hip-hop-de-rue': [
-      { platform: 'YouTube', url: 'https://www.youtube.com/watch?v=QJZnqs8kB50' },
-      { platform: 'YouTube', url: 'https://www.youtube.com/watch?v=nDs5HIDi7BE' },
-    ],
-    'la-beaute-du-geste': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=7VESxLSnBDM' }],
-    'la-petite-faucheuse': [
-      { platform: 'Vimeo', url: 'https://vimeo.com/168341224' },
-      { platform: 'YouTube', url: 'https://www.youtube.com/watch?v=VPh0IlIfUdw' },
-    ],
-    'la-robe-ragot': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=XRppup7OYgc' }],
-    'la-tache-noire': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=d3n17bUjCWo' }],
-    'le-mariage-campagnard': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=ivrH8EDRn3A' }],
-    'light-vador': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=YMdizVGkzMU' }],
-    'manacao': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=oFjSNHDKm4Y' }],
-    'paphius': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=S5_8AzISuqM' }],
-    'presentation-teresa-1': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=HrX-4HMQHuM' }],
-    'seconde-papillon': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=L0MMAVRswOY' }],
-    'teresa-viesti': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=O3ABvb6TfmQ' }],
+  let categoryIds: Record<string, number> = {}
+  if (shouldRun('portfolio') || shouldRun('projects')) {
+    categoryIds = await migrateCategories(payload)
   }
 
-  for (let i = 0; i < projectsData.length; i++) {
-    const p = projectsData[i]
-    await payload.create({
-      collection: 'projects',
-      data: {
-        title: p.title,
-        slug: p.slug,
-        year: p.year,
-        format: p.format as 'Court-métrage' | 'Clip' | 'Performance' | 'Documentaire' | 'Essai expérimental' | 'Making Of',
-        description: p.description,
-        order: i,
-        externalLinks: externalLinks[p.slug] ?? [],
-      },
-      locale: 'fr',
-      draft: true,
-    })
+  if (shouldRun('portfolio')) {
+    const portfolio = await loadJson<PortfolioManifest>('portfolio-manifest.json')
+    await migratePortfolio(payload, portfolio, categoryIds)
   }
 
-  console.log(`✓ Migrated ${projectsData.length} projects`)
+  if (shouldRun('projects')) {
+    const projects = await loadJson<ProjectsManifest>('projects-manifest.json')
+    await migrateProjects(payload, projects)
+  }
+
+  console.log('Done.')
   process.exit(0)
 }
 
-run().catch((e) => { console.error(e); process.exit(1) })
+run().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

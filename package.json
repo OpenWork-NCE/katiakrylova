@@ -15,6 +15,7 @@
     "migrate": "node --experimental-strip-types --no-warnings scripts/migrate.mjs migrate",
     "migrate:status": "node --experimental-strip-types --no-warnings scripts/migrate.mjs migrate:status",
     "migrate:fresh": "node --experimental-strip-types --no-warnings scripts/migrate.mjs migrate:fresh",
+    "migrate:content": "node scripts/run-migrate-content.mjs",
     "patch:migrations": "node scripts/patch-migration-imports.mjs",
     "test:e2e": "playwright test"
   },

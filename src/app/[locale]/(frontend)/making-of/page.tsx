@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getMakingOfEntries } from '@/lib/payload'
 import { Section } from '@/components/ui/Section'
+import { getMediaUrl } from '@/lib/utils'
 
 export default async function MakingOfPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
@@ -13,7 +14,7 @@ export default async function MakingOfPage({ params }: { params: Promise<{ local
       {items.length === 0 && <p className="text-text-muted">Aucun contenu pour l'instant.</p>}
       <div className="grid md:grid-cols-2 gap-xl">
         {items.map((item: any) => {
-          const cover = typeof item.coverImage === 'object' ? item.coverImage?.url : null
+          const cover = getMediaUrl(item.coverImage)
           return (
             <Link key={item.id} href={`/${locale}/making-of/${item.slug}`} className="group">
               {cover && <Image src={cover} alt={item.title} width={1200} height={800} className="w-full aspect-video object-cover" />}

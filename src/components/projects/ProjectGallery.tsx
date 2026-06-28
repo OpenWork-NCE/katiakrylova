@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { ImageLightbox } from '@/components/ui/Lightbox'
+import { getMediaUrl } from '@/lib/utils'
 
 type Item = { image: { url?: string; alt?: string; width?: number; height?: number } }
 
@@ -10,7 +11,7 @@ export function ProjectGallery({ images }: { images: Item[] }) {
   const [idx, setIdx] = useState(0)
 
   const slides = images
-    .map((i) => i.image?.url)
+    .map((i) => getMediaUrl(i.image))
     .filter((u): u is string => !!u)
     .map((url, i) => ({ src: url, alt: images[i]?.image?.alt, width: images[i]?.image?.width, height: images[i]?.image?.height }))
 

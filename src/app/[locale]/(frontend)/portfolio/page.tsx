@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { getPortfolio, getPortfolioCategories } from '@/lib/payload'
 import { Section } from '@/components/ui/Section'
 import { CategoryFilter } from '@/components/portfolio/CategoryFilter'
@@ -14,9 +15,13 @@ export default async function PortfolioPage({ params }: { params: Promise<{ loca
     <Section>
       <h1 className="font-hand text-5xl mb-xl">Portfolio</h1>
       <div className="mb-xl">
-        <CategoryFilter categories={categories as any} />
+        <Suspense fallback={null}>
+          <CategoryFilter categories={categories as any} />
+        </Suspense>
       </div>
-      <PortfolioGrid items={items} categories={categories as any} locale={locale} />
+      <Suspense fallback={<p className="text-text-muted text-sm">Chargement…</p>}>
+        <PortfolioGrid items={items} categories={categories as any} locale={locale} />
+      </Suspense>
     </Section>
   )
 }
