@@ -19,7 +19,12 @@ export function MobileMenu({ items }: { items: { href: string; label: string }[]
       {open && (
         <nav className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-lg bg-bg-primary px-md pb-[env(safe-area-inset-bottom,0px)] pt-[env(safe-area-inset-top,0px)] md:hidden">
           {items.map((item) => (
-            <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="text-2xl font-hand">
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setOpen(false)}
+              className="text-2xl font-hand uppercase tracking-widest"
+            >
               {item.label}
             </Link>
           ))}

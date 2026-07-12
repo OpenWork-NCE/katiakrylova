@@ -110,6 +110,7 @@ export async function getJournalEntryBySlug(slug: string, locale: Locale = 'fr')
   const { docs } = await payload.find({
     collection: 'journal-entries',
     where: { slug: { equals: slug } },
+    depth: 1,
     locale: locale === 'all' ? 'all' : locale,
     limit: 1,
   })
@@ -138,10 +139,36 @@ export async function getContact(locale: Locale = 'fr') {
 
 export async function getAbout(locale: Locale = 'fr') {
   const payload = await getPayloadClient()
-  return payload.findGlobal({ slug: 'about', locale: locale === 'all' ? 'all' : locale })
+  return payload.findGlobal({
+    slug: 'about',
+    depth: 1,
+    locale: locale === 'all' ? 'all' : locale,
+  })
+}
+
+export async function getJournal(locale: Locale = 'fr') {
+  const payload = await getPayloadClient()
+  return payload.findGlobal({
+    slug: 'journal',
+    depth: 1,
+    locale: locale === 'all' ? 'all' : locale,
+  })
 }
 
 export async function getHome(locale: Locale = 'fr') {
   const payload = await getPayloadClient()
-  return payload.findGlobal({ slug: 'home', locale: locale === 'all' ? 'all' : locale })
+  return payload.findGlobal({
+    slug: 'home',
+    depth: 1,
+    locale: locale === 'all' ? 'all' : locale,
+  })
+}
+
+export async function getLinks(locale: Locale = 'fr') {
+  const payload = await getPayloadClient()
+  return payload.findGlobal({
+    slug: 'links',
+    depth: 1,
+    locale: locale === 'all' ? 'all' : locale,
+  })
 }

@@ -2,33 +2,23 @@
 import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
-import type { Portfolio, PortfolioCategory } from '@/payload-types'
+import type { Portfolio } from '@/payload-types'
 import { getMediaUrl } from '@/lib/utils'
 import { PortfolioViewer } from '@/components/portfolio/PortfolioViewer'
 import { buildPortfolioSlides } from '@/components/portfolio/portfolio-slides'
 
 export function PortfolioGrid({
   items,
-  categories: _categories,
-  locale: _locale,
+  initialViewSlug,
 }: {
   items: Portfolio[]
-  categories: PortfolioCategory[]
-  locale: string
+  /** Optional work slug to open the viewer immediately (legacy ?view=). */
+  initialViewSlug?: string | null
 }) {
   const params = useSearchParams()
-  const filter = params.get('cat')
-  const viewSlug = params.get('view')
+  const viewSlug = initialViewSlug ?? params.get('view')
 
-  const filtered = useMemo(() => {
-    if (!filter) return items
-    return items.filter((p) => {
-      const cat = typeof p.category === 'object' ? (p.category as PortfolioCategory).slug : p.category
-      return cat === filter
-    })
-  }, [items, filter])
-
-  const slides = useMemo(() => buildPortfolioSlides(filtered), [filtered])
+  const slides = useMemo(() => buildPortfolioSlides(items), [items])
 
   const [open, setOpen] = useState(false)
   const [index, setIndex] = useState(0)
@@ -49,10 +39,14 @@ export function PortfolioGrid({
     if (slideIndex >= 0) openAt(slideIndex)
   }, [viewSlug, slides])
 
+  if (items.length === 0) {
+    return null
+  }
+
   return (
     <>
       <div className="columns-1 gap-md md:columns-2 lg:columns-3">
-        {filtered.map((p, workIndex) => {
+        {items.map((p, workIndex) => {
           const cover = getMediaUrl(p.coverImage)
           return (
             <button

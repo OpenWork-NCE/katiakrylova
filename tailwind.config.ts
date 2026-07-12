@@ -19,8 +19,13 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['var(--font-body)'],
+        body: ['var(--font-body)'],
         hand: ['var(--font-hand)'],
         display: ['var(--font-hand)'],
+      },
+      fontWeight: {
+        regular: 'var(--font-weight-regular)',
+        bold: 'var(--font-weight-bold)',
       },
       spacing: {
         xs: '4px',

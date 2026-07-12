@@ -181,12 +181,52 @@ async function main() {
       phone: '+32(0)474 468 168',
       calComUrl: 'https://cal.com/katia-krylova',
     },
-    journal: {
-      title: 'La petite faucheuse',
-      slug: 'la-petite-faucheuse-news',
-      excerpt: 'Premier court-métrage.',
-      coverImage: 'IMG_1311-e1437043386525.jpg',
-      content: "Le film raconte une histoire familiale éclatée suite à un drame : la mort d'un enfant, celle d'un petit garçon de 6 ans, ANTOINE. La mère, AURORE, formait et « forme » toujours une dyade inséparable avec son petit garçon qu'elle hallucine comme étant toujours présent, la douleur de la perte restant ingérable, le « ça ne peut pas avoir eu lieu ».\n\nDéni total de la réalité avec de ci de là une incursion dans la « vie d'avant », quand la petite famille, le père, la mère et l'enfant formaient une trinité heureuse.\n\nLe père, VICTOR, est présent et absent, il a tout perdu. Et sa femme et son enfant. Il regarde cette épouse dévastée, avec une tristesse infinie et une sorte d'impuissance totale, lui-même fuyant ses responsabilités d'homme dans l'alcool, afin de tout oublier. Il ira jusqu'à « voir » la présence de son fils pour ne pas perdre sa femme.",
+    journalPage: {
+      photo: 'moodboard.jpg',
+    },
+    journalEntries: [
+      {
+        title: 'La petite faucheuse',
+        slug: 'la-petite-faucheuse-news',
+        excerpt: 'Premier court-métrage.',
+        coverImage: 'IMG_1311-e1437043386525.jpg',
+        content:
+          "Le film raconte une histoire familiale éclatée suite à un drame : la mort d'un enfant, celle d'un petit garçon de 6 ans, ANTOINE. La mère, AURORE, formait et « forme » toujours une dyade inséparable avec son petit garçon qu'elle hallucine comme étant toujours présent, la douleur de la perte restant ingérable, le « ça ne peut pas avoir eu lieu ».\n\nDéni total de la réalité avec de ci de là une incursion dans la « vie d'avant », quand la petite famille, le père, la mère et l'enfant formaient une trinité heureuse.\n\nLe père, VICTOR, est présent et absent, il a tout perdu. Et sa femme et son enfant. Il regarde cette épouse dévastée, avec une tristesse infinie et une sorte d'impuissance totale, lui-même fuyant ses responsabilités d'homme dans l'alcool, afin de tout oublier. Il ira jusqu'à « voir » la présence de son fils pour ne pas perdre sa femme.",
+      },
+      {
+        title: 'Plus de lait',
+        slug: 'plus-de-lait',
+        excerpt:
+          "Tournage ce 3 juin 2026 de mon court-métrage : « Plus de lait », avec une team explosive!",
+        coverImage: 'moodboard.jpg',
+        content:
+          "News\n\nTournage ce 3 juin 2026 de mon court-métrage : « Plus de lait », avec une team explosive!\n\nTrès heureuse de pouvoir à nouveau me retrouver sur un set de tournage avec des personnes talentueuses.\n\nPITCH :\n\nChaque matin, Marie-Christine, mère autoritaire et obsessionnelle, orchestre le petit déjeuner de son fils Stéphane, 30 ans, comme une cérémonie millimétrée entre médicaments, tartines et reproches passifs-agressifs. Mais lorsque Stéphane annonce tranquillement que Dieu lui parle — et semble commencer à produire des “miracles” de plus en plus gênants à table — le rituel dérape.\n\nEntre foi opportuniste, panique ménagère et déni tenace, Marie-Christine vacille : doit-elle appeler un médecin… ou réorganiser sa cuisine pour accueillir le Messie ?",
+      },
+    ],
+    linksPage: {
+      photo: 'Liens2.jpg',
+      items: [
+        { name: 'à ciel ouvert', role: 'Concepteur lumière', url: 'https://www.acielouvert.net/' },
+        { name: 'Rohan Graeffly', role: 'Artiste visuel', url: 'https://www.rohangraeffly.be/' },
+        { name: 'Marc Kieffer', role: 'Photographe / Musicien', url: 'https://www.marckieffer.com/' },
+        {
+          name: 'Luc Noel',
+          role: 'Artiste / sculpteur / Décorateur cinéma',
+          url: 'https://www.lucno-l.com/fr/page_6964.html',
+        },
+        { name: 'Sylvie Pichrist', role: 'Artiste / Performeuse', url: 'https://www.sylviepichrist.com/' },
+        { name: 'Nathalie Sartiaxx', role: 'Cinéaste / Photographe', url: 'https://sartiaxx.wix.com/wixx' },
+        {
+          name: 'Nicolas Tourte',
+          role: 'Artiste / Plasticien / vidéaste',
+          url: 'https://www.nicolastourte.net/',
+        },
+        {
+          name: 'Clément van Der Fronty',
+          role: 'Clips / vidéaste',
+          url: 'https://www.youtube.com/user/muppetshowman1972',
+        },
+      ],
     },
   }
 

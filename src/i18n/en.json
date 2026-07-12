@@ -8,7 +8,12 @@
     "portfolio": "Portfolio",
     "about": "About",
     "journal": "Journal",
+    "links": "Links",
     "contact": "Contact"
+  },
+  "links": {
+    "title": "Links",
+    "empty": "No links yet."
   },
   "home": {
     "enter": "Enter",
@@ -20,6 +25,14 @@
   },
   "projects": {
     "title": "Projects",
+    "introTitle": "My projects",
+    "introBody": [
+      "Making-ofs and stills from set were my first steps and teachers in the world of video and film.",
+      "Then came more personal creations, essays, collaborations with visual artists.",
+      "Then the need to express my own inner world through writing screenplays and directing them.",
+      "Today I am writing a short-film screenplay and a series set in the art world, and I hope to keep working with my team of collaborators and artists to make ambitious dreams real."
+    ],
+    "introHint": "Click or scroll to enter",
     "viewProject": "View project →",
     "scrollHint": "↓ Scroll to explore the gallery",
     "galleryLabel": "Gallery",
@@ -36,6 +49,8 @@
   "portfolio": {
     "title": "Portfolio",
     "all": "All",
+    "backToHub": "← Portfolio",
+    "emptyCategory": "No works in this category yet.",
     "loading": "Loading…",
     "viewerLabel": "Viewer — {title}",
     "close": "Close",
