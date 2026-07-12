@@ -45,12 +45,26 @@ type GlobalsManifest = {
   home: { heroImage: string; tagline: string }
   about: { photo: string; bio: string }
   contact: { email: string; phone: string; calComUrl: string }
-  journal: {
+  /** Page liste Journal — fond CMS */
+  journalPage?: { photo: string }
+  /** @deprecated prefer journalEntries */
+  journal?: {
     title: string
     slug: string
     excerpt: string
     coverImage: string
     content: string
+  }
+  journalEntries?: Array<{
+    title: string
+    slug: string
+    excerpt: string
+    coverImage: string
+    content: string
+  }>
+  linksPage?: {
+    photo: string
+    items: Array<{ name: string; role: string; url: string }>
   }
 }
 
@@ -90,7 +104,21 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
   const aboutPhotoId = await uploadMedia(
     payload,
     path.join(imagesRoot, globals.about.photo),
-    'About Katia Krylova',
+    'Fond de page About',
+    dryRun,
+  )
+  const journalPhotoPath = globals.journalPage?.photo ?? 'moodboard.jpg'
+  const journalPhotoId = await uploadMedia(
+    payload,
+    path.join(imagesRoot, journalPhotoPath),
+    'Fond de page Journal',
+    dryRun,
+  )
+  const linksPhotoPath = globals.linksPage?.photo ?? 'Liens2.jpg'
+  const linksPhotoId = await uploadMedia(
+    payload,
+    path.join(imagesRoot, linksPhotoPath),
+    'Fond de page Liens',
     dryRun,
   )
 
@@ -118,20 +146,51 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
       data: globals.contact,
       locale: 'fr',
     })
+
+    await payload.updateGlobal({
+      slug: 'journal',
+      data: {
+        photo: journalPhotoId ?? undefined,
+      },
+      locale: 'fr',
+    })
+
+    await payload.updateGlobal({
+      slug: 'links',
+      data: {
+        photo: linksPhotoId ?? undefined,
+        items: globals.linksPage?.items ?? [],
+      },
+      locale: 'fr',
+    })
   }
 
-  console.log('✓ Globals: home, about, contact')
+  console.log('✓ Globals: home, about, contact, journal, links')
 }
 
+/** Hub order: Acryliques · Collage · Gravure · Linos · Identity. Letter kept for legacy items. */
 async function migrateCategories(payload: Awaited<ReturnType<typeof getPayload>>) {
-  const categories = ['Collage', 'Gravure', 'Identity', 'Letter']
+  const categories = [
+    { name: 'Acryliques', slug: 'acryliques', order: 0 },
+    { name: 'Collage', slug: 'collage', order: 1 },
+    { name: 'Gravure', slug: 'gravure', order: 2 },
+    { name: 'Linos', slug: 'linos', order: 3 },
+    { name: 'Identity', slug: 'identity', order: 4 },
+    { name: 'Letter', slug: 'letter', order: 99 },
+  ]
   const ids: Record<string, number> = {}
 
-  for (let i = 0; i < categories.length; i++) {
-    const name = categories[i]
-    const slug = name.toLowerCase()
+  for (const { name, slug, order } of categories) {
     const existing = await findBySlug(payload, 'portfolio-categories', slug)
     if (existing) {
+      if (!dryRun) {
+        await payload.update({
+          collection: 'portfolio-categories',
+          id: existing.id,
+          data: { name, order },
+          locale: 'fr',
+        })
+      }
       ids[slug] = existing.id
       continue
     }
@@ -141,7 +200,7 @@ async function migrateCategories(payload: Awaited<ReturnType<typeof getPayload>>
     }
     const doc = await payload.create({
       collection: 'portfolio-categories',
-      data: { name, slug, order: i },
+      data: { name, slug, order },
       locale: 'fr',
     })
     ids[slug] = doc.id
@@ -251,35 +310,44 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
 }
 
 async function migrateJournal(payload: Awaited<ReturnType<typeof getPayload>>, globals: GlobalsManifest) {
-  const j = globals.journal
-  const existing = await findBySlug(payload, 'journal-entries', j.slug)
-  if (existing) {
-    console.log('✓ Journal: already exists, skipped')
-    return
+  const entries =
+    globals.journalEntries ??
+    (globals.journal ? [globals.journal] : [])
+
+  let created = 0
+  let skipped = 0
+
+  for (const j of entries) {
+    const existing = await findBySlug(payload, 'journal-entries', j.slug)
+    if (existing) {
+      skipped += 1
+      continue
+    }
+
+    const coverId = await uploadMedia(
+      payload,
+      path.join(imagesRoot, j.coverImage),
+      j.title,
+      dryRun,
+    )
+
+    if (!dryRun) {
+      await payload.create({
+        collection: 'journal-entries',
+        data: {
+          title: j.title,
+          slug: j.slug,
+          excerpt: j.excerpt,
+          content: textToLexical(j.content),
+          coverImage: coverId ?? undefined,
+        },
+        locale: 'fr',
+      })
+    }
+    created += 1
   }
 
-  const coverId = await uploadMedia(
-    payload,
-    path.join(imagesRoot, j.coverImage),
-    j.title,
-    dryRun,
-  )
-
-  if (!dryRun) {
-    await payload.create({
-      collection: 'journal-entries',
-      data: {
-        title: j.title,
-        slug: j.slug,
-        excerpt: j.excerpt,
-        content: textToLexical(j.content),
-        coverImage: coverId ?? undefined,
-      },
-      locale: 'fr',
-    })
-  }
-
-  console.log('✓ Journal: 1 entry')
+  console.log(`✓ Journal: ${created} created, ${skipped} skipped`)
 }
 
 async function run() {
@@ -295,10 +363,13 @@ async function run() {
 
   if (dryRun) console.log('DRY RUN — no writes to Payload')
 
-  if (shouldRun('globals')) {
+  if (shouldRun('globals') || shouldRun('journal')) {
     const globals = await loadJson<GlobalsManifest>('globals-manifest.json')
-    await migrateGlobals(payload, globals)
-    if (shouldRun('journal')) await migrateJournal(payload, globals)
+    if (shouldRun('globals')) await migrateGlobals(payload, globals)
+    // Journal entries ship with the globals manifest (incl. --only=globals)
+    if (shouldRun('journal') || shouldRun('globals')) {
+      await migrateJournal(payload, globals)
+    }
   }
 
   let categoryIds: Record<string, number> = {}

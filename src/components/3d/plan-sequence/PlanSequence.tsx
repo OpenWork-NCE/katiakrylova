@@ -7,6 +7,7 @@ import { Fog } from 'three'
 import Link from 'next/link'
 import type { Project } from '@/payload-types'
 import { getMediaUrl } from '@/lib/utils'
+import { ProjectsIntroOverlay } from '@/components/projects/ProjectsIntroOverlay'
 import { GalleryCorridor } from './GalleryCorridor'
 import { CorridorHUD } from './CorridorHUD'
 import { CorridorScrollProgress } from './CorridorScrollProgress'
@@ -18,6 +19,7 @@ import '@/styles/corridor-scroll.css'
 export function PlanSequence({ projects, locale }: { projects: Project[]; locale: string }) {
   const [supportsWebGL, setSupportsWebGL] = useState(true)
   const [reduced, setReduced] = useState(false)
+  const [introOpen, setIntroOpen] = useState(true)
   const [activeIndex, setActiveIndex] = useState(0)
   const [showHint, setShowHint] = useState(true)
   const [scrollOffset, setScrollOffset] = useState(0)
@@ -32,6 +34,10 @@ export function PlanSequence({ projects, locale }: { projects: Project[]; locale
     [locale, navigate],
   )
 
+  const dismissIntro = useCallback(() => {
+    setIntroOpen(false)
+  }, [])
+
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     setReduced(mq.matches)
@@ -43,71 +49,81 @@ export function PlanSequence({ projects, locale }: { projects: Project[]; locale
     }
   }, [])
 
-  if (reduced || !supportsWebGL) {
-    return <FallbackGrid projects={projects} locale={locale} />
-  }
-
+  const useFallback = reduced || !supportsWebGL
   const activeProject = projects[activeIndex]
   const scrollPages = Math.max(1.5, projects.length * SCROLL_PAGES_PER_PROJECT)
 
   return (
     <>
-      <div className="plan-sequence-viewport fixed inset-x-0 top-16 z-10 h-[calc(100dvh-4rem)] min-h-[calc(100svh-4rem)]">
-        <Canvas
-          camera={{ position: [0, CAMERA_EYE_Y, 9], fov: 50 }}
-          gl={{ antialias: true }}
-          frameloop="always"
-          style={{ touchAction: 'pan-y' }}
-          onCreated={({ scene }) => {
-            scene.fog = new Fog(FOG_COLOR, 9, 44)
-          }}
+      {introOpen && <ProjectsIntroOverlay onDismiss={dismissIntro} />}
+
+      {useFallback ? (
+        <FallbackGrid projects={projects} locale={locale} />
+      ) : (
+        <div
+          className="plan-sequence-viewport fixed inset-x-0 top-16 z-10 h-[calc(100dvh-4rem)] min-h-[calc(100svh-4rem)]"
+          aria-hidden={introOpen || undefined}
         >
-          <ScrollControls
-            pages={scrollPages}
-            damping={SCROLL_DAMPING}
-            distance={1}
-            maxSpeed={1.75}
-            eps={0.001}
-            style={{ scrollbarGutter: 'stable' }}
+          <Canvas
+            camera={{ position: [0, CAMERA_EYE_Y, 9], fov: 50 }}
+            gl={{ antialias: true }}
+            frameloop="always"
+            style={{ touchAction: 'pan-y' }}
+            onCreated={({ scene }) => {
+              scene.fog = new Fog(FOG_COLOR, 9, 44)
+            }}
           >
-            <GalleryCorridor
-              projects={projects}
-              activeIndex={activeIndex}
-              onActiveIndexChange={setActiveIndex}
-              onDismissHint={() => setShowHint(false)}
-              onProjectSelect={handleProjectSelect}
-              scrollProgressRef={scrollProgressRef}
-              scrollHandleRef={scrollHandleRef}
-              onScrollOffsetChange={setScrollOffset}
-            />
-          </ScrollControls>
-        </Canvas>
+            <ScrollControls
+              pages={scrollPages}
+              damping={SCROLL_DAMPING}
+              distance={1}
+              maxSpeed={1.75}
+              eps={0.001}
+              style={{ scrollbarGutter: 'stable' }}
+            >
+              <GalleryCorridor
+                projects={projects}
+                activeIndex={activeIndex}
+                onActiveIndexChange={setActiveIndex}
+                onDismissHint={() => setShowHint(false)}
+                onProjectSelect={handleProjectSelect}
+                scrollProgressRef={scrollProgressRef}
+                scrollHandleRef={scrollHandleRef}
+                onScrollOffsetChange={setScrollOffset}
+              />
+            </ScrollControls>
+          </Canvas>
 
-        <CorridorScrollProgress progressRef={scrollProgressRef} />
+          {!introOpen && (
+            <>
+              <CorridorScrollProgress progressRef={scrollProgressRef} />
 
-        <CorridorScrollNav
-          atStart={scrollOffset < 0.02}
-          atEnd={scrollOffset > 0.98}
-          onGoToStart={() => {
-            scrollHandleRef.current?.goToStart()
-            setShowHint(false)
-          }}
-          onGoToEnd={() => {
-            scrollHandleRef.current?.goToEnd()
-            setShowHint(false)
-          }}
-        />
+              <CorridorScrollNav
+                atStart={scrollOffset < 0.02}
+                atEnd={scrollOffset > 0.98}
+                onGoToStart={() => {
+                  scrollHandleRef.current?.goToStart()
+                  setShowHint(false)
+                }}
+                onGoToEnd={() => {
+                  scrollHandleRef.current?.goToEnd()
+                  setShowHint(false)
+                }}
+              />
 
-        {activeProject && (
-          <CorridorHUD
-            project={activeProject}
-            locale={locale}
-            index={activeIndex}
-            total={projects.length}
-            showHint={showHint}
-          />
-        )}
-      </div>
+              {activeProject && (
+                <CorridorHUD
+                  project={activeProject}
+                  locale={locale}
+                  index={activeIndex}
+                  total={projects.length}
+                  showHint={showHint}
+                />
+              )}
+            </>
+          )}
+        </div>
+      )}
 
       <ul className="sr-only">
         {projects.map((p) => (

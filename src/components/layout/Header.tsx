@@ -8,6 +8,7 @@ export async function Header({ locale }: { locale: string }) {
     { href: `/${locale}/portfolio`, label: t('portfolio') },
     { href: `/${locale}/about`, label: t('about') },
     { href: `/${locale}/journal`, label: t('journal') },
+    { href: `/${locale}/liens`, label: t('links') },
     { href: `/${locale}/contact`, label: t('contact') },
   ]
   return <HeaderBar locale={locale} items={items} />

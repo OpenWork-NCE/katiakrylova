@@ -34,7 +34,7 @@ export function HeaderBar({ locale, items }: Props) {
           />
         </Link>
         <nav
-          className={`hidden md:flex items-center gap-lg text-sm transition-opacity duration-500 ${
+          className={`hidden md:flex items-center gap-lg text-sm uppercase tracking-widest transition-opacity duration-500 ${
             isHome ? 'text-text-primary/75 hover:text-text-primary' : ''
           }`}
         >

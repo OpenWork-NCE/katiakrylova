@@ -8,7 +8,12 @@
     "portfolio": "Portfolio",
     "about": "À propos",
     "journal": "Journal",
+    "links": "Liens",
     "contact": "Contact"
+  },
+  "links": {
+    "title": "Liens",
+    "empty": "Aucun lien pour l’instant."
   },
   "home": {
     "enter": "Entrer",
@@ -20,6 +25,14 @@
   },
   "projects": {
     "title": "Projets",
+    "introTitle": "Mes projets",
+    "introBody": [
+      "Les making Of et les photos de plateaux ont été mes premiers pas et professeurs dans l’univers de la vidéo et du film.",
+      "S’en sont suivis des créations plus personnelles, des essais, des collaborations avec des plasticiens, des artistes.",
+      "Puis la nécessité d’exprimer mon propre monde personnel à travers l’écriture de scénarii et la réalisation de ceux-ci.",
+      "Aujourd’hui, je suis à l’écriture d’un scénario de court-métrage et d’une série autour du monde de l’art, et espère pouvoir continuer avec mon team de collaborateurs/artistes afin de réaliser mes rêves ambitieux."
+    ],
+    "introHint": "Cliquez ou scrollez pour entrer",
     "viewProject": "Voir le projet →",
     "scrollHint": "↓ Scroller pour découvrir la galerie",
     "galleryLabel": "Galerie",
@@ -36,6 +49,8 @@
   "portfolio": {
     "title": "Portfolio",
     "all": "Tous",
+    "backToHub": "← Portfolio",
+    "emptyCategory": "Aucune œuvre dans cette rubrique pour l’instant.",
     "loading": "Chargement…",
     "viewerLabel": "Visionneuse — {title}",
     "close": "Fermer",

@@ -21,15 +21,11 @@ function blobFilename(filePath: string): string {
   return path.basename(filePath)
 }
 
-async function findExistingMedia(payload: Payload, alt: string, filename: string) {
+/** Idempotent lookup by filename only — alt can change when reusing the same media. */
+async function findExistingMedia(payload: Payload, filename: string) {
   const { docs } = await payload.find({
     collection: 'media',
-    where: {
-      or: [
-        { alt: { equals: alt } },
-        { filename: { equals: filename } },
-      ],
-    },
+    where: { filename: { equals: filename } },
     limit: 1,
   })
   return docs[0] ?? null
@@ -54,7 +50,7 @@ export async function uploadMedia(
   }
 
   const name = blobFilename(resolved)
-  const existing = await findExistingMedia(payload, alt, name)
+  const existing = await findExistingMedia(payload, name)
   if (existing) {
     cache.set(resolved, existing.id)
     return existing.id

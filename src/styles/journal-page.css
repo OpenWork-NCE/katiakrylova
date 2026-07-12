@@ -1,0 +1,40 @@
+/* Journal — fond image + scrim sombre pour lisibilité */
+
+.journal-page {
+  position: relative;
+  min-height: calc(100dvh - 4rem);
+}
+
+.journal-page__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0.45) contrast(1.05);
+}
+
+.journal-page__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(10, 10, 10, 0.72);
+}
+
+.journal-page__vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 40%,
+    transparent 0%,
+    rgba(10, 10, 10, 0.35) 55%,
+    rgba(10, 10, 10, 0.75) 100%
+  );
+}
+
+.journal-page__content {
+  position: relative;
+  z-index: 10;
+}

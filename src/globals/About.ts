@@ -9,6 +9,14 @@ export const About: GlobalConfig = {
       required: true,
       localized: true,
     },
-    { name: 'photo', type: 'upload', relationTo: 'media' },
+    {
+      name: 'photo',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Fond de page',
+      admin: {
+        description: 'Image de fond de la page About (plein écran).',
+      },
+    },
   ],
 }
