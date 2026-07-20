@@ -2,7 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 export const Journal: GlobalConfig = {
   slug: 'journal',
-  label: 'Journal (page)',
+  label: 'News (page)',
   fields: [
     {
       name: 'photo',
@@ -10,7 +10,7 @@ export const Journal: GlobalConfig = {
       relationTo: 'media',
       label: 'Fond de page',
       admin: {
-        description: 'Image de fond de la page liste Journal (plein écran).',
+        description: 'Image de fond de la page liste News (plein écran).',
       },
     },
   ],

@@ -7,7 +7,7 @@
     "projects": "Projects",
     "portfolio": "Portfolio",
     "about": "About",
-    "journal": "Journal",
+    "journal": "News",
     "contact": "Contact"
   },
   "home": {
@@ -58,9 +58,9 @@
     "title": "About"
   },
   "journal": {
-    "title": "Journal",
+    "title": "News",
     "empty": "No entries yet.",
-    "back": "← Back"
+    "back": "← News"
   },
   "makingOf": {
     "title": "Making Of",

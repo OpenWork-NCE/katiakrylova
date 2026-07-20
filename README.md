@@ -32,7 +32,7 @@ Site: http://localhost:3000 · Admin: http://localhost:3000/admin
 ## Utilisation du CMS
 1. Aller sur `/admin`
 2. Se connecter
-3. Ajouter/modifier projets, portfolio, journal, making-of
+3. Ajouter/modifier projets, portfolio, news, making-of
 4. Tout changement déclenche un redéploiement automatique
 
 ## Workflow de migration de contenu
@@ -44,7 +44,7 @@ Migration automatisée depuis l'ancien site (`previousWebsite/` + scrape live du
 ```bash
 node scripts/extract-portfolio-manifest.mjs   # 100 items portfolio depuis l'ancien site
 node scripts/download-portfolio-assets.mjs    # télécharge les images portfolio (HTTP)
-node scripts/parse-site-map.mjs               # manifest projets + globals + journal
+node scripts/parse-site-map.mjs               # manifest projets + globals + news
 node scripts/copy-assets.mjs                  # copie images vers public/
 ```
 
@@ -57,9 +57,9 @@ pnpm migrate:content                          # import complet
 
 Options :
 - `--dry-run` — simule sans écrire dans Payload
-- `--only=globals|portfolio|projects|journal` — section ciblée
+- `--only=globals|portfolio|projects|journal` — section ciblée (journal = news)
 
-Le script importe : globals (home, about, contact), 4 catégories portfolio, 100 réalisations images, 19 projets (covers + galeries + crédits, publiés), 1 article journal.
+Le script importe : globals (home, about, contact), catégories portfolio, réalisations images, projets (covers + galeries + crédits), articles news.
 
 Idempotent : relancer le script ignore les entrées déjà présentes (slug existant).
 

@@ -2,7 +2,14 @@ import type { CollectionConfig } from 'payload'
 
 export const Journal: CollectionConfig = {
   slug: 'journal-entries',
-  admin: { useAsTitle: 'title' },
+  labels: {
+    singular: 'News',
+    plural: 'News',
+  },
+  admin: {
+    useAsTitle: 'title',
+    group: 'Contenu',
+  },
   access: { read: () => true },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
