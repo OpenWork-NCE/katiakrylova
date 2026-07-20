@@ -380,12 +380,24 @@ async function migratePortfolio(
 
 async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, manifest: ProjectsManifest) {
   let created = 0
+  let updated = 0
   let skipped = 0
 
   for (const p of manifest.projects) {
     const existing = await findBySlug(payload, 'projects', p.slug)
     if (existing) {
-      skipped += 1
+      // Keep filmography order in sync with the manifest (e.g. after inserting a new lead project)
+      if (!dryRun && existing.order !== p.order) {
+        await payload.update({
+          collection: 'projects',
+          id: existing.id,
+          data: { order: p.order },
+          locale: 'fr',
+        })
+        updated += 1
+      } else {
+        skipped += 1
+      }
       continue
     }
 
@@ -432,7 +444,7 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
     created += 1
   }
 
-  console.log(`✓ Projects: ${created} created, ${skipped} skipped`)
+  console.log(`✓ Projects: ${created} created, ${updated} order-updated, ${skipped} skipped`)
 }
 
 async function migrateJournal(payload: Awaited<ReturnType<typeof getPayload>>, globals: GlobalsManifest) {
@@ -441,12 +453,28 @@ async function migrateJournal(payload: Awaited<ReturnType<typeof getPayload>>, g
     (globals.journal ? [globals.journal] : [])
 
   let created = 0
+  let updated = 0
   let skipped = 0
 
   for (const j of entries) {
     const existing = await findBySlug(payload, 'journal-entries', j.slug)
     if (existing) {
-      skipped += 1
+      // Sync title / excerpt / rich-text from manifest (e.g. project links added to a news post)
+      if (!dryRun) {
+        await payload.update({
+          collection: 'journal-entries',
+          id: existing.id,
+          data: {
+            title: j.title,
+            excerpt: j.excerpt,
+            content: textToLexical(j.content),
+          },
+          locale: 'fr',
+        })
+        updated += 1
+      } else {
+        skipped += 1
+      }
       continue
     }
 
@@ -473,7 +501,7 @@ async function migrateJournal(payload: Awaited<ReturnType<typeof getPayload>>, g
     created += 1
   }
 
-  console.log(`✓ Journal: ${created} created, ${skipped} skipped`)
+  console.log(`✓ Journal: ${created} created, ${updated} updated, ${skipped} skipped`)
 }
 
 async function run() {
