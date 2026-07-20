@@ -7,16 +7,21 @@ test('signature flow: home → projects → project page', async ({ page }) => {
   await expect(page.locator('h1')).toContainText('Katia Krylova')
 
   // 2. Navigate to projects
-  await page.click('text=Projects')
+  await page.click('text=Projets')
   await expect(page).toHaveURL(/\/fr\/projects/)
 
-  // 3. Wait for 3D canvas and scroll invite
-  const canvas = page.locator('canvas')
-  await expect(canvas).toBeVisible({ timeout: 10_000 })
-  await expect(page.getByText(/Scroller pour découvrir/i)).toBeVisible()
+  // 3. Dismiss intro overlay if present, then vertical list is available
+  const intro = page.getByRole('dialog', { name: /Mes projets/i })
+  if (await intro.isVisible().catch(() => false)) {
+    await intro.click()
+  }
+  await expect(page.getByRole('heading', { name: 'Projets', exact: true })).toBeVisible({
+    timeout: 10_000,
+  })
+  await expect(page.getByRole('link', { name: /Voir le projet/i }).first()).toBeVisible()
 
-  // 4. Click CTA opens project detail
-  await page.getByRole('link', { name: /Voir le projet/i }).click()
+  // 4. Open first project from the scroll list
+  await page.getByRole('link', { name: /Voir le projet/i }).first().click()
   await expect(page).toHaveURL(/\/fr\/projects\//)
 
   // 5. Project page with video embed

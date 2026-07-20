@@ -5,7 +5,6 @@ Site portfolio professionnel de Katia Krylova, réalisatrice et artiste visuelle
 ## Stack
 - Next.js 15 (App Router) + TypeScript
 - Payload CMS 3
-- React Three Fiber (3D)
 - Tailwind CSS
 - next-intl (FR/EN)
 - Vercel + Neon Postgres + Vercel Blob

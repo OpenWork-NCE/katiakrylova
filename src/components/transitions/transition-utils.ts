@@ -8,9 +8,9 @@ export function normalizePath(path: string): string {
   }
 }
 
-/** Fullscreen 3D routes — skip transition overlay and content transforms */
-export function isImmersiveRoute(pathname: string): boolean {
-  return /\/projects$/.test(pathname.replace(/\/$/, ''))
+/** Fullscreen immersive routes — skip transition overlay and content transforms */
+export function isImmersiveRoute(_pathname: string): boolean {
+  return false
 }
 
 export function isTransitionableHref(href: string | null): href is string {
