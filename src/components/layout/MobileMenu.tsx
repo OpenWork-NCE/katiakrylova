@@ -1,68 +1,107 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import '@/styles/mobile-menu.css'
+
+/** Aligné sur PortfolioViewer (FADE_MS ~280–500, ease premium) */
+const FADE_MS = 450
 
 export function MobileMenu({ items }: { items: { href: string; label: string }[] }) {
   const [open, setOpen] = useState(false)
+  const [rendered, setRendered] = useState(false)
+  const [visible, setVisible] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const closeTimer = useRef<number | null>(null)
   const pathname = usePathname()
   const t = useTranslations('common')
 
-  useEffect(() => {
-    setMounted(true)
+  const clearCloseTimer = useCallback(() => {
+    if (closeTimer.current !== null) {
+      window.clearTimeout(closeTimer.current)
+      closeTimer.current = null
+    }
   }, [])
 
-  // Close on route change
-  useEffect(() => {
+  const requestOpen = useCallback(() => {
+    clearCloseTimer()
+    setOpen(true)
+    setRendered(true)
+    // double rAF pour laisser le DOM peindre opacity:0 avant d’ouvrir
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setVisible(true))
+    })
+  }, [clearCloseTimer])
+
+  const requestClose = useCallback(() => {
     setOpen(false)
+    setVisible(false)
+    clearCloseTimer()
+    closeTimer.current = window.setTimeout(() => {
+      setRendered(false)
+      closeTimer.current = null
+    }, FADE_MS)
+  }, [clearCloseTimer])
+
+  const toggle = useCallback(() => {
+    if (open || visible) requestClose()
+    else requestOpen()
+  }, [open, visible, requestClose, requestOpen])
+
+  useEffect(() => {
+    setMounted(true)
+    return () => clearCloseTimer()
+  }, [clearCloseTimer])
+
+  // Close smoothly on route change
+  useEffect(() => {
+    if (!rendered) return
+    requestClose()
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only on pathname
   }, [pathname])
 
   useEffect(() => {
-    if (!open) return
+    if (!rendered) return
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
+      if (e.key === 'Escape') requestClose()
     }
     window.addEventListener('keydown', onKey)
     return () => {
       document.body.style.overflow = prevOverflow
       window.removeEventListener('keydown', onKey)
     }
-  }, [open])
+  }, [rendered, requestClose])
 
   const panel =
-    open && mounted
+    rendered && mounted
       ? createPortal(
           <div
-            className="fixed inset-0 z-[200] flex flex-col bg-bg-primary lg:hidden"
+            className={`mobile-menu${visible ? ' mobile-menu--open' : ''}`}
             role="dialog"
             aria-modal="true"
             aria-label={t('menu')}
           >
-            <div className="flex items-center justify-end px-md pt-[max(0.75rem,env(safe-area-inset-top,0px))]">
+            <div className="mobile-menu__bar">
               <button
                 type="button"
-                onClick={() => setOpen(false)}
-                className="flex h-11 w-11 items-center justify-center text-xl text-text-primary"
+                onClick={requestClose}
+                className="mobile-menu__close"
                 aria-label={t('close')}
               >
                 ✕
               </button>
             </div>
-            <nav
-              className="flex flex-1 flex-col items-center justify-center gap-lg overflow-y-auto overscroll-contain px-md pb-[max(2rem,env(safe-area-inset-bottom,0px))]"
-              aria-label={t('menu')}
-            >
+            <nav className="mobile-menu__nav" aria-label={t('menu')}>
               {items.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="max-w-full px-sm text-center text-[clamp(1.35rem,6vw,1.85rem)] font-hand uppercase tracking-[0.18em] text-text-primary transition-colors hover:text-accent"
+                  onClick={requestClose}
+                  className="mobile-menu__link"
                 >
                   {item.label}
                 </Link>
@@ -77,12 +116,12 @@ export function MobileMenu({ items }: { items: { href: string; label: string }[]
     <>
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="relative z-[70] flex h-10 w-10 items-center justify-center text-lg text-text-primary lg:hidden"
-        aria-label={open ? t('close') : t('menu')}
-        aria-expanded={open}
+        onClick={toggle}
+        className="mobile-menu__toggle"
+        aria-label={open || visible ? t('close') : t('menu')}
+        aria-expanded={open || visible}
       >
-        {open ? '✕' : '☰'}
+        {open || visible ? '✕' : '☰'}
       </button>
       {panel}
     </>
