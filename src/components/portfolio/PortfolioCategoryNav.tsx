@@ -15,15 +15,15 @@ export function PortfolioCategoryNav({ locale, categories, activeSlug, backLabel
   )
 
   return (
-    <div className="mb-xl space-y-md">
+    <div className="mb-lg space-y-sm md:mb-xl md:space-y-md">
       <Link
         href={`/${locale}/portfolio`}
-        className="inline-block text-sm uppercase tracking-widest text-text-muted transition hover:text-accent"
+        className="inline-block text-xs uppercase tracking-widest text-text-muted transition hover:text-accent sm:text-sm"
       >
         {backLabel}
       </Link>
       <nav
-        className="flex flex-wrap gap-md text-sm uppercase tracking-widest"
+        className="flex flex-wrap gap-x-md gap-y-sm text-[0.65rem] uppercase tracking-[0.14em] sm:gap-md sm:text-xs sm:tracking-widest md:text-sm"
         aria-label="Rubriques portfolio"
       >
         {ordered.map((cat) => {

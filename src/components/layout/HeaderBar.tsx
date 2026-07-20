@@ -23,28 +23,33 @@ export function HeaderBar({ locale, items }: Props) {
         isHome ? 'bg-transparent' : 'bg-bg-primary/80 backdrop-blur'
       }`}
     >
-      <Container className="flex items-center justify-between py-sm sm:py-md">
-        <Link href={`/${locale}`} className="shrink-0">
+      <Container className="flex items-center justify-between gap-sm py-sm sm:gap-md sm:py-md">
+        <Link href={`/${locale}`} className="min-w-0 shrink">
           <Image
             src="/images/katia_krylova.png"
             alt="Katia Krylova"
             width={120}
             height={32}
-            className="h-auto w-[clamp(5.25rem,30vw,7.5rem)]"
+            className="h-auto w-[clamp(4.75rem,28vw,7.5rem)]"
+            priority
           />
         </Link>
         <nav
-          className={`hidden md:flex items-center gap-lg text-sm uppercase tracking-widest transition-opacity duration-500 ${
+          className={`hidden items-center gap-md text-xs uppercase tracking-widest transition-opacity duration-500 lg:flex lg:gap-lg lg:text-sm ${
             isHome ? 'text-text-primary/75 hover:text-text-primary' : ''
           }`}
         >
           {items.map((item) => (
-            <Link key={item.href} href={item.href} className="transition-colors duration-300 hover:text-accent">
+            <Link
+              key={item.href}
+              href={item.href}
+              className="whitespace-nowrap transition-colors duration-300 hover:text-accent"
+            >
               {item.label}
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-md">
+        <div className="flex shrink-0 items-center gap-sm sm:gap-md">
           <MobileMenu items={items} />
           <LocaleSwitch />
         </div>

@@ -29,17 +29,19 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <article>
-      <header className="relative pt-xl pb-lg">
+      <header className="relative pb-md pt-lg sm:pb-lg sm:pt-xl">
         <div className="mx-auto w-full max-w-6xl px-md">
-          <div className="mb-md flex items-center justify-between">
+          <div className="mb-md flex flex-wrap items-center justify-between gap-sm">
             <Link
               href={`/${locale}/projects`}
-              className="text-sm uppercase tracking-widest text-text-muted transition hover:text-accent"
+              className="text-xs uppercase tracking-widest text-text-muted transition hover:text-accent sm:text-sm"
             >
               {t('backToProjects')}
             </Link>
             {primaryVideo?.platform && (
-              <span className="text-xs uppercase tracking-widest text-text-muted">{primaryVideo.platform}</span>
+              <span className="text-[0.65rem] uppercase tracking-widest text-text-muted sm:text-xs">
+                {primaryVideo.platform}
+              </span>
             )}
           </div>
 
@@ -63,12 +65,16 @@ export default async function ProjectPage({ params }: Props) {
       </header>
 
       <Section>
-        <h1 className="font-hand text-5xl md:text-[6vw] leading-none">{project.title}</h1>
-        <p className="mt-md text-text-muted uppercase tracking-widest text-xs">
+        <h1 className="font-hand text-[clamp(1.85rem,8vw,3.5rem)] leading-none md:text-[clamp(2.5rem,5vw,4.5rem)]">
+          {project.title}
+        </h1>
+        <p className="mt-md text-[0.65rem] uppercase tracking-widest text-text-muted sm:text-xs">
           {project.format} · {project.year}
         </p>
         {project.description && (
-          <p className="mt-xl max-w-prose text-lg whitespace-pre-line">{project.description}</p>
+          <p className="mt-lg max-w-prose text-base whitespace-pre-line sm:mt-xl sm:text-lg">
+            {project.description}
+          </p>
         )}
       </Section>
 

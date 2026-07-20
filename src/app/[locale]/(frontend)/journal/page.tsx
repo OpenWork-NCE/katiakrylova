@@ -30,7 +30,7 @@ export default async function JournalPage({ params }: { params: Promise<{ locale
       <div className="journal-page__vignette" aria-hidden />
 
       <Section className="journal-page__content">
-        <h1 className="font-hand text-5xl mb-xl">{t('title')}</h1>
+        <h1 className="mb-lg font-hand text-[clamp(1.85rem,8vw,3rem)] md:mb-xl">{t('title')}</h1>
         {entries.length === 0 && <p className="text-text-muted">{t('empty')}</p>}
         <ul className="space-y-xl">
           {entries.map((e: any) => (

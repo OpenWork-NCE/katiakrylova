@@ -20,7 +20,6 @@
   will-change: transform;
 }
 
-/* Scrim sombre pour lisibilité (comme about / portfolio hub) */
 .home-hero__shade {
   background: rgba(10, 10, 10, 0.48);
 }
@@ -44,7 +43,7 @@
   );
 }
 
-/* Colonne centrale — empilement vertical centré */
+/* Colonne centrale */
 .home-hero__content {
   position: absolute;
   inset: 0;
@@ -65,35 +64,35 @@
 .home-hero__logo {
   display: inline-block;
   max-width: 100%;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .home-hero__logo-img {
   display: block;
   margin-inline: auto;
   height: auto;
-  width: clamp(10.5rem, 52vw, 28rem);
-  max-width: min(92vw, 28rem);
+  /* logo plus grand */
+  width: clamp(14rem, 62vw, 36rem);
+  max-width: min(94vw, 36rem);
 }
 
-/* Fonction — EB Garamond, discret */
 .home-hero__role {
-  margin: 0 0 1.75rem;
+  margin: 0 0 1.85rem;
   font-family: var(--font-hand);
   font-weight: 500;
-  font-size: clamp(1.05rem, 2.8vw, 1.55rem);
+  font-size: clamp(1.1rem, 3vw, 1.65rem);
   line-height: 1.25;
   letter-spacing: 0.02em;
   color: var(--text-primary);
 }
 
-/* Manifeste — corps typewriter, lisible, largeur prose */
+/* Manifeste — largeur un peu plus généreuse */
 .home-hero__intro {
-  margin: 0 auto 2.25rem;
-  max-width: min(100%, 34rem);
+  margin: 0 auto 2.5rem;
+  max-width: min(100%, 40rem);
   font-family: var(--font-body);
   font-weight: var(--font-weight-bold);
-  font-size: clamp(0.95rem, 1.8vw, 1.125rem); /* ~text-lg */
+  font-size: clamp(0.95rem, 1.9vw, 1.15rem);
   line-height: 1.75;
   letter-spacing: 0.02em;
   color: rgba(245, 241, 234, 0.92);
@@ -101,7 +100,127 @@
 }
 
 .home-hero__cta {
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
+}
+
+/* —— CTA « Découvrir mon univers » ——
+   Style générique cinéma : pastille iris + trait + label + flèche */
+.home-enter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  max-width: min(100%, 26rem);
+  padding: 0.85rem 1.35rem 0.85rem 1rem;
+  border: 1px solid rgba(245, 241, 234, 0.22);
+  background: rgba(10, 10, 10, 0.35);
+  color: var(--text-primary);
+  text-decoration: none;
+  backdrop-filter: blur(6px);
+  transition:
+    border-color 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home-enter:hover,
+.home-enter:focus-visible {
+  border-color: var(--accent);
+  background: rgba(139, 46, 46, 0.14);
+  box-shadow: 0 0 0 1px rgba(139, 46, 46, 0.25);
+  outline: none;
+}
+
+.home-enter:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.home-enter__iris {
+  position: relative;
+  flex-shrink: 0;
+  width: 2.35rem;
+  height: 2.35rem;
+}
+
+.home-enter__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  transition:
+    transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home-enter__ring--outer {
+  border: 1px solid rgba(139, 46, 46, 0.7);
+}
+
+.home-enter__ring--inner {
+  inset: 5px;
+  border: 1px solid rgba(245, 241, 234, 0.28);
+}
+
+.home-enter__dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.4rem;
+  height: 0.4rem;
+  margin: -0.2rem 0 0 -0.2rem;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home-enter:hover .home-enter__ring--outer,
+.home-enter:focus-visible .home-enter__ring--outer {
+  transform: scale(1.08);
+  border-color: var(--accent);
+}
+
+.home-enter:hover .home-enter__ring--inner,
+.home-enter:focus-visible .home-enter__ring--inner {
+  transform: scale(1.04);
+  border-color: rgba(245, 241, 234, 0.5);
+}
+
+.home-enter:hover .home-enter__dot,
+.home-enter:focus-visible .home-enter__dot {
+  transform: scale(1.25);
+}
+
+.home-enter__label {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size: clamp(0.68rem, 1.6vw, 0.8rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  text-align: left;
+  transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home-enter:hover .home-enter__label,
+.home-enter:focus-visible .home-enter__label {
+  color: #fff;
+}
+
+.home-enter__arrow {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1;
+  color: var(--accent);
+  transition:
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home-enter:hover .home-enter__arrow,
+.home-enter:focus-visible .home-enter__arrow {
+  transform: translateX(0.25rem);
+  color: #fff;
 }
 
 /* Entrées en fondu */
@@ -147,7 +266,11 @@
   }
 
   .home-hero__logo {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .home-hero__logo-img {
+    width: clamp(18rem, 48vw, 36rem);
   }
 
   .home-hero__role {
@@ -155,18 +278,63 @@
   }
 
   .home-hero__intro {
-    margin-bottom: 2.75rem;
-    max-width: min(100%, 38rem);
+    margin-bottom: 2.85rem;
+    max-width: min(100%, 44rem);
+  }
+
+  .home-enter {
+    gap: 1rem;
+    padding: 1rem 1.65rem 1rem 1.15rem;
+  }
+
+  .home-enter__iris {
+    width: 2.6rem;
+    height: 2.6rem;
+  }
+
+  .home-enter__label {
+    letter-spacing: 0.26em;
+  }
+}
+
+@media (max-width: 767px) {
+  .home-hero__content {
+    justify-content: center;
+    padding-left: max(1rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1rem, env(safe-area-inset-right, 0px));
+  }
+
+  .home-hero__intro {
+    max-width: min(100%, 28rem);
+    padding-inline: 0.25rem;
+  }
+
+  .home-enter {
+    width: min(100%, 22rem);
+    padding: 0.8rem 1.1rem 0.8rem 0.9rem;
+  }
+
+  .home-enter__label {
+    letter-spacing: 0.16em;
+    font-size: 0.68rem;
   }
 }
 
 @media (max-height: 700px) {
+  .home-hero__content {
+    justify-content: flex-start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-top: max(4.75rem, env(safe-area-inset-top, 0px));
+    -webkit-overflow-scrolling: touch;
+  }
+
   .home-hero__logo {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.85rem;
   }
 
   .home-hero__logo-img {
-    width: clamp(9rem, 40vw, 18rem);
+    width: clamp(12rem, 48vw, 22rem);
   }
 
   .home-hero__role {
@@ -175,13 +343,19 @@
   }
 
   .home-hero__intro {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.35rem;
     font-size: 0.95rem;
     line-height: 1.6;
     -webkit-line-clamp: 5;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+}
+
+@media (max-height: 520px) {
+  .home-hero__intro {
+    -webkit-line-clamp: 3;
   }
 }
 
@@ -196,6 +370,14 @@
   .home-hero__cta {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  .home-enter,
+  .home-enter__ring,
+  .home-enter__dot,
+  .home-enter__arrow,
+  .home-enter__label {
     transition: none;
   }
 }
