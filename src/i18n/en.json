@@ -29,13 +29,10 @@
     ],
     "introHint": "Click or scroll to enter",
     "viewProject": "View project →",
-    "scrollHint": "↓ Scroll to explore the gallery",
-    "galleryLabel": "Gallery",
+    "scrollHint": "↓ Scroll to explore",
+    "galleryLabel": "Projects",
     "backToProjects": "← Back to projects",
-    "videos": "Videos",
-    "scrollNavLabel": "Gallery navigation",
-    "goToStart": "Go to start",
-    "goToEnd": "Go to end"
+    "videos": "Videos"
   },
   "projectNav": {
     "prev": "← Previous",
