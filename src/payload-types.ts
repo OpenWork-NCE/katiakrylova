@@ -763,7 +763,7 @@ export interface Home {
 export interface Journal {
   id: number;
   /**
-   * Image de fond de la page liste Journal (plein écran).
+   * Image de fond de la page liste News (plein écran).
    */
   photo?: (number | null) | Media;
   updatedAt?: string | null;
