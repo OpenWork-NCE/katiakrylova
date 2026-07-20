@@ -1,41 +1,193 @@
-/* About — fond image + scrim sombre pour lisibilité du texte */
+/* About — bio + portrait 50/50 sticky + bandeau images
+   Breakpoint principal codebase : md = 768px
+   Portrait source : 600×746 (ratio ~0.804) */
 
 .about-page {
   position: relative;
   min-height: calc(100dvh - 4rem);
+  background: var(--bg-primary);
+  padding-bottom: max(4rem, env(safe-area-inset-bottom, 0px));
 }
 
-.about-page__bg {
+.about-page__inner {
+  max-width: 72rem; /* max-w-6xl */
+  margin: 0 auto;
+  padding: 2.25rem 1rem 0; /* px-md */
+}
+
+.about-page__title {
+  margin: 0 0 2rem;
+  font-family: var(--font-hand);
+  font-weight: 500;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  line-height: 1.08;
+  color: var(--text-primary);
+}
+
+/* —— Bloc principal : texte | portrait —— */
+.about-page__main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.about-page__bio {
+  min-width: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.125rem;
+  line-height: 1.75;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+
+.about-page__bio > *:first-child {
+  margin-top: 0;
+}
+
+.about-page__bio p:first-of-type {
+  font-family: var(--font-hand);
+  font-weight: 500;
+  font-size: clamp(1.45rem, 2.8vw, 1.85rem);
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+.about-page__bio p {
+  margin: 0 0 1.15rem;
+}
+
+.about-page__bio p:last-child {
+  margin-bottom: 0;
+}
+
+.about-page__aside {
+  min-width: 0;
+  width: 100%;
+}
+
+/* Portrait 600×746 — cadre film */
+.about-page__portrait {
+  position: relative;
+  width: 100%;
+  max-width: 22rem;
+  margin-inline: auto;
+  aspect-ratio: 600 / 746;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border: 1px solid rgba(245, 241, 234, 0.1);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35) inset;
+}
+
+.about-page__portrait::after {
+  content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  /* assombrit l’image elle-même avant le scrim */
-  filter: brightness(0.45) contrast(1.05);
-}
-
-.about-page__scrim {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: rgba(10, 10, 10, 0.72);
-}
-
-.about-page__vignette {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 80% 70% at 50% 40%,
-    transparent 0%,
-    rgba(10, 10, 10, 0.35) 55%,
-    rgba(10, 10, 10, 0.75) 100%
+  box-shadow: inset 0 0 0 1px rgba(10, 10, 10, 0.3);
+  background: linear-gradient(
+    160deg,
+    rgba(245, 241, 234, 0.06) 0%,
+    transparent 45%,
+    transparent 100%
   );
 }
 
-.about-page__content {
+.about-page__portrait img {
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* —— Bandeau bas : 2 images —— */
+.about-page__gallery {
+  list-style: none;
+  margin: 3rem 0 0;
+  padding: 2rem 0 0;
+  border-top: 1px solid rgba(245, 241, 234, 0.1);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.about-page__frame {
   position: relative;
-  z-index: 10;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border: 1px solid rgba(245, 241, 234, 0.1);
+  aspect-ratio: 4 / 3;
+}
+
+.about-page__frame img {
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.about-page__frame:hover img {
+  transform: scale(1.02);
+}
+
+@media (min-width: 768px) {
+  .about-page__inner {
+    padding: 3.5rem 1rem 0;
+  }
+
+  .about-page__title {
+    margin-bottom: 2.75rem;
+  }
+
+  /*
+   * Flex 50/50 + align-items: stretch (défaut) :
+   * l’aside a la même hauteur que le texte → sticky a de la place pour coller.
+   */
+  .about-page__main {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 2.5rem;
+  }
+
+  .about-page__bio {
+    flex: 1 1 50%;
+    width: 50%;
+    max-width: 50%;
+  }
+
+  .about-page__aside {
+    flex: 1 1 50%;
+    width: 50%;
+    max-width: 50%;
+    /* hauteur = colonne bio (stretch) */
+  }
+
+  .about-page__portrait {
+    margin-inline: 0;
+    max-width: none;
+    /* sticky : l’image ne scrolle pas avec le texte */
+    position: -webkit-sticky;
+    position: sticky;
+    top: 5.5rem; /* sous header fixed */
+    width: min(100%, calc((100dvh - 6.5rem) * 600 / 746));
+    max-height: calc(100dvh - 6.5rem);
+  }
+
+  .about-page__gallery {
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page__frame img {
+    transition: none;
+  }
+
+  .about-page__frame:hover img {
+    transform: none;
+  }
 }
