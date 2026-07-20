@@ -16,6 +16,8 @@
     "migrate:status": "node --experimental-strip-types --no-warnings scripts/migrate.mjs migrate:status",
     "migrate:fresh": "node --experimental-strip-types --no-warnings scripts/migrate.mjs migrate:fresh",
     "migrate:content": "node scripts/run-migrate-content.mjs",
+    "portfolio:manifest": "node scripts/build-portfolio-manifest.mjs",
+    "portfolio:replace": "node scripts/build-portfolio-manifest.mjs && node scripts/run-migrate-content.mjs -- --only=portfolio --replace",
     "patch:migrations": "node scripts/patch-migration-imports.mjs",
     "test:e2e": "playwright test"
   },

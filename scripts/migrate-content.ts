@@ -84,8 +84,9 @@ type GlobalsManifest = {
   }>
 }
 
-const args = process.argv.slice(2)
+const args = process.argv.slice(2).filter((a) => a !== '--')
 const dryRun = args.includes('--dry-run')
+const replace = args.includes('--replace')
 const only = args.find((a) => a.startsWith('--only='))?.split('=')[1]
 
 function shouldRun(section: string) {
@@ -249,46 +250,132 @@ async function migrateCategories(payload: Awaited<ReturnType<typeof getPayload>>
   return ids
 }
 
+function sleep(ms: number) {
+  return new Promise((r) => setTimeout(r, ms))
+}
+
+async function withRetry<T>(label: string, fn: () => Promise<T>, attempts = 5): Promise<T> {
+  let last: unknown
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fn()
+    } catch (e) {
+      last = e
+      const msg = e instanceof Error ? e.message : String(e)
+      console.warn(`  ↻ retry ${i + 1}/${attempts} ${label}: ${msg.slice(0, 140)}`)
+      await sleep(2000 * (i + 1))
+    }
+  }
+  throw last
+}
+
+async function deleteAllPortfolio(payload: Awaited<ReturnType<typeof getPayload>>) {
+  let deleted = 0
+  // page through all docs
+  for (;;) {
+    const { docs } = await withRetry('list portfolio', () =>
+      payload.find({
+        collection: 'portfolio',
+        limit: 50,
+        depth: 0,
+      }),
+    )
+    if (docs.length === 0) break
+    for (const doc of docs) {
+      if (!dryRun) {
+        await withRetry(`delete portfolio ${doc.id}`, () =>
+          payload.delete({ collection: 'portfolio', id: doc.id }),
+        )
+      }
+      deleted += 1
+    }
+    if (dryRun) break
+  }
+  console.log(`✓ Portfolio purge: ${deleted} deleted${dryRun ? ' (dry-run)' : ''}`)
+}
+
 async function migratePortfolio(
   payload: Awaited<ReturnType<typeof getPayload>>,
   manifest: PortfolioManifest,
   categoryIds: Record<string, number>,
 ) {
+  if (replace) {
+    await deleteAllPortfolio(payload)
+  }
+
   let created = 0
+  let updated = 0
   let skipped = 0
 
   for (const item of manifest.items) {
-    const existing = await findBySlug(payload, 'portfolio', item.slug)
-    if (existing) {
-      skipped += 1
+    const catId = categoryIds[item.categorySlug]
+    if (!catId && !dryRun) {
+      console.warn(`  ⚠ Skipping ${item.slug}: unknown category ${item.categorySlug}`)
       continue
     }
 
     const filePath = path.join(imagesRoot, item.localPath)
     const coverId = await uploadMedia(payload, filePath, item.title, dryRun)
     if (!coverId && !dryRun) {
-      console.warn(`  ⚠ Skipping portfolio ${item.slug}: no cover image`)
+      console.warn(`  ⚠ Skipping portfolio ${item.slug}: no cover image (${item.localPath})`)
+      continue
+    }
+
+    const existing = replace
+      ? null
+      : await withRetry(`find portfolio ${item.slug}`, () => findBySlug(payload, 'portfolio', item.slug))
+
+    if (existing && !replace) {
+      skipped += 1
       continue
     }
 
     if (!dryRun) {
-      await payload.create({
-        collection: 'portfolio',
-        data: {
-          title: item.title,
-          slug: item.slug,
-          year: item.year,
-          category: categoryIds[item.categorySlug],
-          coverImage: coverId!,
-          order: item.order,
-        },
-        locale: 'fr',
-      })
+      if (existing) {
+        await withRetry(`update portfolio ${item.slug}`, () =>
+          payload.update({
+            collection: 'portfolio',
+            id: existing.id,
+            data: {
+              title: item.title,
+              year: item.year,
+              category: catId,
+              coverImage: coverId!,
+              order: item.order,
+            },
+            locale: 'fr',
+          }),
+        )
+        updated += 1
+      } else {
+        await withRetry(`create portfolio ${item.slug}`, () =>
+          payload.create({
+            collection: 'portfolio',
+            data: {
+              title: item.title,
+              slug: item.slug,
+              year: item.year,
+              category: catId!,
+              coverImage: coverId!,
+              order: item.order,
+            },
+            locale: 'fr',
+          }),
+        )
+        created += 1
+      }
+      // gentle pacing for Neon pooler
+      if ((created + updated) % 10 === 0) await sleep(400)
+    } else {
+      created += 1
     }
-    created += 1
+
+    if ((created + updated + skipped) % 20 === 0) {
+      console.log(`  … progress ${created + updated + skipped}/${manifest.items.length}`)
+    }
   }
 
-  console.log(`✓ Portfolio: ${created} created, ${skipped} skipped`)
+  console.log(`✓ Portfolio: ${created} created, ${updated} updated, ${skipped} skipped`)
 }
 
 async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, manifest: ProjectsManifest) {
@@ -392,7 +479,7 @@ async function migrateJournal(payload: Awaited<ReturnType<typeof getPayload>>, g
 async function run() {
   if (!existsSync(path.join(dataDir, 'portfolio-manifest.json'))) {
     console.error('Missing manifests. Run:')
-    console.error('  node scripts/extract-portfolio-manifest.mjs')
+    console.error('  node scripts/build-portfolio-manifest.mjs')
     console.error('  node scripts/parse-site-map.mjs')
     process.exit(1)
   }
@@ -401,6 +488,7 @@ async function run() {
   const payload = await getPayload({ config })
 
   if (dryRun) console.log('DRY RUN — no writes to Payload')
+  if (replace) console.log('REPLACE mode — portfolio entries will be purged first')
 
   if (shouldRun('globals') || shouldRun('journal')) {
     const globals = await loadJson<GlobalsManifest>('globals-manifest.json')
