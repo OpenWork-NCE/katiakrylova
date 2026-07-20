@@ -1,8 +1,11 @@
-/* Contact — fond fixe type Projets / About */
+/* Contact — fond fixe, contenu centré verticalement (texte à gauche) */
 
 .contact-page {
   position: relative;
   min-height: calc(100dvh - 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background: var(--bg-primary);
   padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
 }
@@ -42,9 +45,11 @@
 .contact-page__inner {
   position: relative;
   z-index: 10;
+  width: 100%;
   max-width: 72rem;
   margin: 0 auto;
-  padding: 2.25rem 1rem 0;
+  padding: 2.25rem 1rem;
+  text-align: left;
 }
 
 .contact-page__title {
@@ -54,6 +59,7 @@
   font-size: clamp(2.25rem, 5vw, 3.5rem);
   line-height: 1.08;
   color: var(--text-primary);
+  text-align: left;
 }
 
 .contact-page__intro {
@@ -64,19 +70,16 @@
   font-size: 1.125rem;
   line-height: 1.7;
   color: rgba(245, 241, 234, 0.85);
-}
-
-.contact-page__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2.5rem;
+  text-align: left;
 }
 
 .contact-page__meta {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 1rem;
   font-size: 1.125rem;
+  text-align: left;
 }
 
 .contact-page__label {
@@ -102,28 +105,8 @@
   padding-top: 0.5rem;
 }
 
-.contact-page__book-title {
-  margin: 0 0 1rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.contact-page__iframe {
-  width: 100%;
-  height: 600px;
-  border: 1px solid rgba(245, 241, 234, 0.12);
-  background: rgba(20, 20, 20, 0.72);
-}
-
 @media (min-width: 768px) {
   .contact-page__inner {
-    padding: 3.5rem 1rem 0;
-  }
-
-  .contact-page__grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    padding: 3.5rem 1rem;
   }
 }
