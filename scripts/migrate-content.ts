@@ -43,7 +43,13 @@ type ProjectsManifest = {
 
 type GlobalsManifest = {
   home: { heroImage: string; tagline: string }
-  about: { photo: string; bio: string }
+  about: {
+    bio: string
+    /** @deprecated legacy full-bleed background */
+    photo?: string
+    profileImage?: string
+    gallery?: string[]
+  }
   contact: { email: string; phone: string; calComUrl: string }
   /** Page liste Journal — fond CMS */
   journalPage?: { photo: string }
@@ -97,12 +103,33 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
     'Hero Katia Krylova',
     dryRun,
   )
-  const aboutPhotoId = await uploadMedia(
+  const aboutProfilePath = globals.about.profileImage ?? 'Profile Picture.png'
+  const aboutProfileId = await uploadMedia(
     payload,
-    path.join(imagesRoot, globals.about.photo),
-    'Fond de page About',
+    path.join(imagesRoot, aboutProfilePath),
+    'Portrait Katia Krylova',
     dryRun,
   )
+  const aboutGalleryPaths = globals.about.gallery ?? ['maman.jpg', 'Image de fond.jpg']
+  const aboutGalleryIds: number[] = []
+  for (const filename of aboutGalleryPaths) {
+    const id = await uploadMedia(
+      payload,
+      path.join(imagesRoot, filename),
+      `About — ${filename}`,
+      dryRun,
+    )
+    if (id != null) aboutGalleryIds.push(id)
+  }
+  const aboutLegacyPhotoPath = globals.about.photo
+  const aboutLegacyPhotoId = aboutLegacyPhotoPath
+    ? await uploadMedia(
+        payload,
+        path.join(imagesRoot, aboutLegacyPhotoPath),
+        'Fond de page About (legacy)',
+        dryRun,
+      )
+    : null
   const journalPhotoPath = globals.journalPage?.photo ?? 'moodboard.jpg'
   const journalPhotoId = await uploadMedia(
     payload,
@@ -125,7 +152,9 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
       slug: 'about',
       data: {
         bio: textToLexical(globals.about.bio),
-        photo: aboutPhotoId ?? undefined,
+        profileImage: aboutProfileId ?? undefined,
+        gallery: aboutGalleryIds.map((image) => ({ image })),
+        photo: aboutLegacyPhotoId ?? undefined,
       },
       locale: 'fr',
     })

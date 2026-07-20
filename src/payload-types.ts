@@ -691,6 +691,22 @@ export interface About {
     };
     [k: string]: unknown;
   };
+  /**
+   * Portrait à droite (ratio portrait recommandé, ex. 600×746).
+   */
+  profileImage?: (number | null) | Media;
+  /**
+   * Deux images sous le texte / portrait (bandeau bas).
+   */
+  gallery?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Ancien fond plein écran — non utilisé par la mise en page actuelle.
+   */
   photo?: (number | null) | Media;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -752,6 +768,13 @@ export interface SiteSetting {
  */
 export interface AboutSelect<T extends boolean = true> {
   bio?: T;
+  profileImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
   photo?: T;
   updatedAt?: T;
   createdAt?: T;
