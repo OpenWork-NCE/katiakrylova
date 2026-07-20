@@ -67,7 +67,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
-  align-items: center;
+  align-items: start;
   padding: 1.15rem 0;
   border-bottom: 1px solid rgba(245, 241, 234, 0.08);
   color: inherit;
@@ -103,7 +103,7 @@
 
 .projects-scroll__still {
   position: relative;
-  width: min(100%, 14rem);
+  width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background: var(--bg-secondary);
@@ -194,17 +194,18 @@
   color: #fff;
 }
 
+/* Aligné sur le détail projet : text-lg + couleur primaire */
 .projects-scroll__excerpt {
-  margin: 0.2rem 0 0;
-  max-width: 36rem;
+  margin: 0.5rem 0 0;
+  max-width: none;
   font-family: var(--font-body);
-  font-weight: var(--font-weight-regular);
-  font-size: 0.88rem;
-  line-height: 1.55;
+  font-weight: var(--font-weight-bold);
+  font-size: 1.125rem; /* text-lg — comme projects/[slug] description */
+  line-height: 1.7;
   letter-spacing: 0.02em;
-  color: rgba(245, 241, 234, 0.62);
+  color: var(--text-primary);
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -230,9 +231,10 @@
   transform: translateX(0.2rem);
 }
 
-/* md (768px) — breakpoint principal codebase (Header, pages projet) */
+/* md (768px) — still ~40% / texte ~60% pour remplir la largeur utile */
 @media (min-width: 768px) {
   .projects-scroll__inner {
+    max-width: 64rem; /* un peu plus serré que 6xl pour une lecture filmographie */
     padding: 3.5rem 1rem 0;
   }
 
@@ -242,13 +244,20 @@
   }
 
   .projects-scroll__row {
-    grid-template-columns: 13.75rem minmax(0, 1fr);
-    gap: 1.75rem;
-    padding: 1.35rem 0.5rem 1.35rem 0.65rem;
+    grid-template-columns: minmax(18rem, 0.42fr) minmax(0, 1fr);
+    column-gap: 2rem;
+    row-gap: 0;
+    align-items: center;
+    padding: 1.5rem 0.5rem 1.5rem 0.65rem;
   }
 
   .projects-scroll__still {
-    width: 13.75rem;
+    width: 100%;
+    max-width: none;
+  }
+
+  .projects-scroll__copy {
+    padding-block: 0.15rem;
   }
 }
 
