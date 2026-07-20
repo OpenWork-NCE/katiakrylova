@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl'
 import '@/styles/projects-intro.css'
 
-const BACKDROP = '/images/img8.jpg'
+const BACKDROP = '/images/FONDS%20page%20PROJECTS.jpg'
 
 /** Atterrissage filmographie — section en flux (scroll up pour y revenir). */
 export function ProjectsLanding() {
