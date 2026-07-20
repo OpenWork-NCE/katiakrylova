@@ -705,7 +705,7 @@ export interface About {
       }[]
     | null;
   /**
-   * Ancien fond plein écran — non utilisé par la mise en page actuelle.
+   * Image de fond plein écran (style page Projets : scrim + vignette).
    */
   photo?: (number | null) | Media;
   updatedAt?: string | null;
@@ -717,6 +717,10 @@ export interface About {
  */
 export interface Contact {
   id: number;
+  /**
+   * Image de fond plein écran (style scrim + vignette).
+   */
+  backgroundImage?: (number | null) | Media;
   email: string;
   phone?: string | null;
   vimeoUrl?: string | null;
@@ -732,7 +736,22 @@ export interface Contact {
  */
 export interface Home {
   id: number;
+  /**
+   * Fond plein écran de la page d’accueil.
+   */
   heroImage: number | Media;
+  /**
+   * Ex. Réalisatrice · Artiste visuelle
+   */
+  role?: string | null;
+  /**
+   * Manifeste affiché entre le logo et le bouton d’entrée.
+   */
+  intro?: string | null;
+  /**
+   * Ex. Découvrir mon univers
+   */
+  ctaLabel?: string | null;
   tagline?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -785,6 +804,7 @@ export interface AboutSelect<T extends boolean = true> {
  * via the `definition` "contact_select".
  */
 export interface ContactSelect<T extends boolean = true> {
+  backgroundImage?: T;
   email?: T;
   phone?: T;
   vimeoUrl?: T;
@@ -801,6 +821,9 @@ export interface ContactSelect<T extends boolean = true> {
  */
 export interface HomeSelect<T extends boolean = true> {
   heroImage?: T;
+  role?: T;
+  intro?: T;
+  ctaLabel?: T;
   tagline?: T;
   updatedAt?: T;
   createdAt?: T;

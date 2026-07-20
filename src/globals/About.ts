@@ -45,10 +45,9 @@ export const About: GlobalConfig = {
       name: 'photo',
       type: 'upload',
       relationTo: 'media',
-      label: 'Fond (legacy)',
+      label: 'Fond de page',
       admin: {
-        description: 'Ancien fond plein écran — non utilisé par la mise en page actuelle.',
-        hidden: true,
+        description: 'Image de fond plein écran (style page Projets : scrim + vignette).',
       },
     },
   ],

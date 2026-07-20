@@ -8,7 +8,7 @@ export async function Footer({ locale }: { locale: string }) {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-border py-xl mt-2xl">
+    <footer className="relative z-20 mt-2xl border-t border-border bg-bg-primary py-xl">
       <Container className="flex flex-col md:flex-row justify-between gap-md text-sm text-text-muted">
         <div className="flex gap-md">
           {contact?.email && <a href={`mailto:${contact.email}`}>{contact.email}</a>}

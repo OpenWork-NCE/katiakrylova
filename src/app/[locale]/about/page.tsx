@@ -22,6 +22,9 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const profileMedia = typeof profile === 'object' && profile !== null ? (profile as Media) : null
   const profileAlt = profileMedia?.alt?.trim() || t('title')
 
+  /** Fond type page Projets — CMS `photo`, fallback public/images/maman.jpg */
+  const backgroundUrl = getMediaUrl(about?.photo) ?? '/images/maman.jpg'
+
   const gallery = (about?.gallery ?? [])
     .map((row) => {
       const url = getMediaUrl(row.image)
@@ -37,6 +40,14 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
   return (
     <div className="about-page">
+      <div
+        className="about-page__bg"
+        style={{ backgroundImage: `url('${backgroundUrl}')` }}
+        aria-hidden
+      />
+      <div className="about-page__scrim" aria-hidden />
+      <div className="about-page__vignette" aria-hidden />
+
       <div className="about-page__inner">
         <h1 className="about-page__title">{t('title')}</h1>
 

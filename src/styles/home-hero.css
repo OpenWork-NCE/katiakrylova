@@ -1,9 +1,13 @@
+/* Home — écran d’entrée cinématographique
+   Logo → fonction → manifeste → CTA
+   Breakpoint md = 768px */
+
 @keyframes home-ken-burns {
   from {
     transform: scale(1.04) translate3d(0, 0, 0);
   }
   to {
-    transform: scale(1.12) translate3d(-1.2%, -0.6%, 0);
+    transform: scale(1.1) translate3d(-1%, -0.5%, 0);
   }
 }
 
@@ -12,40 +16,101 @@
 }
 
 .home-hero__image {
-  animation: home-ken-burns 22s ease-in-out infinite alternate;
+  animation: home-ken-burns 24s ease-in-out infinite alternate;
   will-change: transform;
 }
 
+/* Scrim sombre pour lisibilité (comme about / portfolio hub) */
 .home-hero__shade {
-  background: rgba(10, 10, 10, 0.42);
+  background: rgba(10, 10, 10, 0.48);
 }
 
 .home-hero__vignette {
   background: radial-gradient(
-    ellipse 78% 72% at 50% 44%,
+    ellipse 72% 68% at 50% 42%,
     transparent 0%,
-    rgba(10, 10, 10, 0.28) 48%,
-    rgba(10, 10, 10, 0.82) 100%
+    rgba(10, 10, 10, 0.35) 52%,
+    rgba(10, 10, 10, 0.88) 100%
   );
 }
 
 .home-hero__gradient {
   background: linear-gradient(
     to bottom,
-    rgba(10, 10, 10, 0.55) 0%,
-    rgba(10, 10, 10, 0.18) 38%,
-    rgba(10, 10, 10, 0.45) 68%,
-    rgba(10, 10, 10, 0.92) 100%
+    rgba(10, 10, 10, 0.5) 0%,
+    rgba(10, 10, 10, 0.22) 36%,
+    rgba(10, 10, 10, 0.55) 72%,
+    rgba(10, 10, 10, 0.9) 100%
   );
 }
 
+/* Colonne centrale — empilement vertical centré */
+.home-hero__content {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding:
+    max(5.5rem, env(safe-area-inset-top, 0px))
+    max(1.25rem, env(safe-area-inset-left, 0px))
+    max(2rem, env(safe-area-inset-bottom, 0px))
+    max(1.25rem, env(safe-area-inset-right, 0px));
+  gap: 0;
+}
+
+.home-hero__logo {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 1.25rem;
+}
+
+.home-hero__logo-img {
+  display: block;
+  margin-inline: auto;
+  height: auto;
+  width: clamp(10.5rem, 52vw, 28rem);
+  max-width: min(92vw, 28rem);
+}
+
+/* Fonction — EB Garamond, discret */
+.home-hero__role {
+  margin: 0 0 1.75rem;
+  font-family: var(--font-hand);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 2.8vw, 1.55rem);
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+
+/* Manifeste — corps typewriter, lisible, largeur prose */
+.home-hero__intro {
+  margin: 0 auto 2.25rem;
+  max-width: min(100%, 34rem);
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size: clamp(0.95rem, 1.8vw, 1.125rem); /* ~text-lg */
+  line-height: 1.75;
+  letter-spacing: 0.02em;
+  color: rgba(245, 241, 234, 0.92);
+  text-wrap: pretty;
+}
+
+.home-hero__cta {
+  margin-top: 0.25rem;
+}
+
+/* Entrées en fondu */
 .home-hero__logo,
 .home-hero__role,
-.home-hero__subtitle,
-.home-hero__cta,
-.home-hero__hint {
+.home-hero__intro,
+.home-hero__cta {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(16px);
   transition:
     opacity 900ms cubic-bezier(0.4, 0, 0.2, 1),
     transform 900ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -60,48 +125,63 @@
 .home-hero--ready .home-hero__role {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 240ms;
+  transition-delay: 220ms;
 }
 
-.home-hero--ready .home-hero__subtitle {
+.home-hero--ready .home-hero__intro {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 420ms;
+  transition-delay: 400ms;
 }
 
 .home-hero--ready .home-hero__cta {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 640ms;
+  transition-delay: 620ms;
 }
 
-.home-hero--ready .home-hero__hint {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 860ms;
-}
-
-@media (max-height: 700px) {
+@media (min-width: 768px) {
   .home-hero__content {
-    padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 
   .home-hero__logo {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
   }
 
-  .home-hero__cta {
-    margin-top: 0.75rem;
+  .home-hero__role {
+    margin-bottom: 2rem;
   }
 
-  .home-hero__hint {
-    margin-top: 0.5rem;
+  .home-hero__intro {
+    margin-bottom: 2.75rem;
+    max-width: min(100%, 38rem);
   }
 }
 
-@media (max-height: 580px) {
-  .home-hero__hint {
-    display: none;
+@media (max-height: 700px) {
+  .home-hero__logo {
+    margin-bottom: 0.75rem;
+  }
+
+  .home-hero__logo-img {
+    width: clamp(9rem, 40vw, 18rem);
+  }
+
+  .home-hero__role {
+    margin-bottom: 1rem;
+    font-size: clamp(0.95rem, 2.4vw, 1.25rem);
+  }
+
+  .home-hero__intro {
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    -webkit-line-clamp: 5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }
 
@@ -112,9 +192,8 @@
 
   .home-hero__logo,
   .home-hero__role,
-  .home-hero__subtitle,
-  .home-hero__cta,
-  .home-hero__hint {
+  .home-hero__intro,
+  .home-hero__cta {
     opacity: 1;
     transform: none;
     transition: none;

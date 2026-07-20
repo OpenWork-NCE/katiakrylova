@@ -1,4 +1,4 @@
-/* About — bio + portrait 50/50 sticky + bandeau images
+/* About — fond type Projets + bio/portrait 50/50 sticky + bandeau
    Breakpoint principal codebase : md = 768px
    Portrait source : 600×746 (ratio ~0.804) */
 
@@ -9,7 +9,42 @@
   padding-bottom: max(4rem, env(safe-area-inset-bottom, 0px));
 }
 
+/* Fond fixe — sous le contenu et sous le footer (footer z-20 + fond opaque) */
+.about-page__bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0.42) contrast(1.05);
+}
+
+.about-page__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: rgba(10, 10, 10, 0.74);
+}
+
+.about-page__vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 78% 68% at 50% 42%,
+    transparent 0%,
+    rgba(10, 10, 10, 0.32) 52%,
+    rgba(10, 10, 10, 0.78) 100%
+  );
+}
+
 .about-page__inner {
+  position: relative;
+  z-index: 10;
   max-width: 72rem; /* max-w-6xl */
   margin: 0 auto;
   padding: 2.25rem 1rem 0; /* px-md */

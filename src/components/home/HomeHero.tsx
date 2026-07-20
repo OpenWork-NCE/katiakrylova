@@ -9,13 +9,12 @@ type Props = {
   locale: string
   heroUrl: string
   role: string
-  subtitle?: string | null
+  intro: string
   enterLabel: string
   enterHref: string
-  scrollHint: string
 }
 
-export function HomeHero({ locale, heroUrl, role, subtitle, enterLabel, enterHref, scrollHint }: Props) {
+export function HomeHero({ locale, heroUrl, role, intro, enterLabel, enterHref }: Props) {
   const [ready, setReady] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
   const [parallax, setParallax] = useState({ x: 0, y: 0 })
@@ -75,31 +74,25 @@ export function HomeHero({ locale, heroUrl, role, subtitle, enterLabel, enterHre
       <div className="home-hero__vignette pointer-events-none absolute inset-0" aria-hidden />
       <div className="home-hero__gradient pointer-events-none absolute inset-0" aria-hidden />
 
-      <div className="home-hero__content absolute inset-0 flex max-w-full flex-col items-center justify-end px-[max(1rem,env(safe-area-inset-left,0px))] pb-[max(clamp(2rem,8vh,6rem),env(safe-area-inset-bottom,0px))] text-center">
-        <Link href={`/${locale}`} className="home-hero__logo mb-lg inline-block max-w-full sm:mb-xl">
+      <div className="home-hero__content">
+        <Link href={`/${locale}`} className="home-hero__logo">
           <Image
             src="/images/katia_krylova.png"
             alt="Katia Krylova"
             width={800}
             height={215}
-            className="mx-auto h-auto w-[clamp(11rem,58vw,44rem)] max-w-[92vw]"
+            className="home-hero__logo-img"
             priority
           />
         </Link>
-        <p className="home-hero__role font-hand text-[clamp(1.1rem,4.5vw,2.4rem)] leading-tight text-text-primary">
-          {role}
-        </p>
-        {subtitle && (
-          <p className="home-hero__subtitle mt-sm max-w-[min(100%,20rem)] text-[0.7rem] uppercase tracking-[0.2em] text-text-primary/85 sm:max-w-xl sm:text-sm sm:tracking-[0.32em]">
-            {subtitle}
-          </p>
-        )}
-        <div className="home-hero__cta mt-lg sm:mt-xl">
+
+        {role ? <p className="home-hero__role">{role}</p> : null}
+
+        {intro ? <p className="home-hero__intro">{intro}</p> : null}
+
+        <div className="home-hero__cta">
           <IrisEnterButton href={enterHref} label={enterLabel} />
         </div>
-        <p className="home-hero__hint mt-md text-[0.6rem] uppercase tracking-[0.28em] text-text-primary/55 sm:mt-lg sm:text-[0.65rem] sm:tracking-[0.35em]">
-          {scrollHint}
-        </p>
       </div>
     </section>
   )
