@@ -8,12 +8,7 @@
     "portfolio": "Portfolio",
     "about": "About",
     "journal": "Journal",
-    "links": "Links",
     "contact": "Contact"
-  },
-  "links": {
-    "title": "Links",
-    "empty": "No links yet."
   },
   "home": {
     "enter": "Enter",

@@ -18,7 +18,6 @@ import { About } from './globals/About'
 import { Contact } from './globals/Contact'
 import { Home } from './globals/Home'
 import { Journal as JournalGlobal } from './globals/Journal'
-import { Links } from './globals/Links'
 import { SiteSettings } from './globals/SiteSettings'
 import { env } from './lib/env'
 
@@ -34,7 +33,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Projects, PortfolioCategories, Portfolio, Journal, MakingOf],
-  globals: [About, Contact, Home, JournalGlobal, Links, SiteSettings],
+  globals: [About, Contact, Home, JournalGlobal, SiteSettings],
   editor: lexicalEditor({}),
   secret: env.PAYLOAD_SECRET,
   sharp: sharp as unknown as SharpDependency,

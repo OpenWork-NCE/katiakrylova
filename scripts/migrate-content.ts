@@ -62,10 +62,6 @@ type GlobalsManifest = {
     coverImage: string
     content: string
   }>
-  linksPage?: {
-    photo: string
-    items: Array<{ name: string; role: string; url: string }>
-  }
 }
 
 const args = process.argv.slice(2)
@@ -114,13 +110,6 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
     'Fond de page Journal',
     dryRun,
   )
-  const linksPhotoPath = globals.linksPage?.photo ?? 'Liens2.jpg'
-  const linksPhotoId = await uploadMedia(
-    payload,
-    path.join(imagesRoot, linksPhotoPath),
-    'Fond de page Liens',
-    dryRun,
-  )
 
   if (!dryRun) {
     await payload.updateGlobal({
@@ -154,18 +143,9 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
       },
       locale: 'fr',
     })
-
-    await payload.updateGlobal({
-      slug: 'links',
-      data: {
-        photo: linksPhotoId ?? undefined,
-        items: globals.linksPage?.items ?? [],
-      },
-      locale: 'fr',
-    })
   }
 
-  console.log('✓ Globals: home, about, contact, journal, links')
+  console.log('✓ Globals: home, about, contact, journal')
 }
 
 /** Hub order: Acryliques · Collage · Gravure · Linos · Identity. Letter kept for legacy items. */

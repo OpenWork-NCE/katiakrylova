@@ -31,50 +31,5 @@
       "coverImage": "moodboard.jpg",
       "content": "News\n\nTournage ce 3 juin 2026 de mon court-métrage : « Plus de lait », avec une team explosive!\n\nTrès heureuse de pouvoir à nouveau me retrouver sur un set de tournage avec des personnes talentueuses.\n\nPITCH :\n\nChaque matin, Marie-Christine, mère autoritaire et obsessionnelle, orchestre le petit déjeuner de son fils Stéphane, 30 ans, comme une cérémonie millimétrée entre médicaments, tartines et reproches passifs-agressifs. Mais lorsque Stéphane annonce tranquillement que Dieu lui parle — et semble commencer à produire des “miracles” de plus en plus gênants à table — le rituel dérape.\n\nEntre foi opportuniste, panique ménagère et déni tenace, Marie-Christine vacille : doit-elle appeler un médecin… ou réorganiser sa cuisine pour accueillir le Messie ?"
     }
-  ],
-  "linksPage": {
-    "photo": "Liens2.jpg",
-    "items": [
-      {
-        "name": "à ciel ouvert",
-        "role": "Concepteur lumière",
-        "url": "https://www.acielouvert.net/"
-      },
-      {
-        "name": "Rohan Graeffly",
-        "role": "Artiste visuel",
-        "url": "https://www.rohangraeffly.be/"
-      },
-      {
-        "name": "Marc Kieffer",
-        "role": "Photographe / Musicien",
-        "url": "https://www.marckieffer.com/"
-      },
-      {
-        "name": "Luc Noel",
-        "role": "Artiste / sculpteur / Décorateur cinéma",
-        "url": "https://www.lucno-l.com/fr/page_6964.html"
-      },
-      {
-        "name": "Sylvie Pichrist",
-        "role": "Artiste / Performeuse",
-        "url": "https://www.sylviepichrist.com/"
-      },
-      {
-        "name": "Nathalie Sartiaxx",
-        "role": "Cinéaste / Photographe",
-        "url": "https://sartiaxx.wix.com/wixx"
-      },
-      {
-        "name": "Nicolas Tourte",
-        "role": "Artiste / Plasticien / vidéaste",
-        "url": "https://www.nicolastourte.net/"
-      },
-      {
-        "name": "Clément van Der Fronty",
-        "role": "Clips / vidéaste",
-        "url": "https://www.youtube.com/user/muppetshowman1972"
-      }
-    ]
-  }
+  ]
 }
