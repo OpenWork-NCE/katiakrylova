@@ -6,6 +6,7 @@ import { getJournalEntryBySlug } from '@/lib/payload'
 import { getMediaUrl } from '@/lib/utils'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { Section } from '@/components/ui/Section'
+import '@/styles/journal-page.css'
 
 type Props = { params: Promise<{ locale: string; slug: string }> }
 
@@ -64,7 +65,7 @@ export default async function JournalDetail({ params }: Props) {
           </p>
           <h1 className="font-hand text-5xl mt-sm leading-none">{entry.title}</h1>
           {entry.content && (
-            <div className="mt-xl">
+            <div className="journal-entry__body mt-xl">
               <RichText data={entry.content} />
             </div>
           )}
