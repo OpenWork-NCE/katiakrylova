@@ -2,11 +2,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import type { Project } from '@/payload-types'
 import { getMediaUrl } from '@/lib/utils'
-import { ProjectsIntroOverlay } from './ProjectsIntroOverlay'
+import { ProjectsLanding } from './ProjectsLanding'
 import '@/styles/projects-scroll.css'
 
 type Props = {
@@ -21,8 +21,8 @@ function padIndex(n: number, total: number) {
 
 export function ProjectsScroll({ projects, locale }: Props) {
   const t = useTranslations('projects')
-  const [introOpen, setIntroOpen] = useState(true)
   const listRef = useRef<HTMLUListElement>(null)
+  const total = projects.length
 
   useEffect(() => {
     const root = listRef.current
@@ -46,69 +46,78 @@ export function ProjectsScroll({ projects, locale }: Props) {
           }
         }
       },
-      { root: null, rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+      { root: null, rootMargin: '0px 0px -6% 0px', threshold: 0.08 },
     )
 
     items.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
-  }, [projects, introOpen])
+  }, [projects])
 
   return (
-    <>
-      {introOpen && <ProjectsIntroOverlay onDismiss={() => setIntroOpen(false)} />}
+    <div className="projects-scroll">
+      <ProjectsLanding />
 
-      <div className="projects-scroll" aria-hidden={introOpen || undefined}>
-        <header className="projects-scroll__header">
-          <h1 className="projects-scroll__title">{t('title')}</h1>
-          <p className="projects-scroll__count">
-            {padIndex(projects.length, projects.length)} · {t('galleryLabel')}
-          </p>
-        </header>
+      <div className="projects-scroll__filmography" id="filmographie">
+        <div className="projects-scroll__inner">
+          <header className="projects-scroll__header">
+            <h2 className="projects-scroll__title">{t('title')}</h2>
+            <p className="projects-scroll__count">
+              {padIndex(total, total)} · {t('filmographyMeta')}
+            </p>
+          </header>
 
-        <ul ref={listRef} className="projects-scroll__list">
-          {projects.map((project, i) => {
-            const cover = getMediaUrl(project.coverImage)
-            const indexLabel = `${padIndex(i + 1, projects.length)} / ${padIndex(projects.length, projects.length)}`
+          <ul ref={listRef} className="projects-scroll__list">
+            {projects.map((project, i) => {
+              const cover = getMediaUrl(project.coverImage)
+              const n = padIndex(i + 1, total)
 
-            return (
-              <li key={project.id} data-project-item className="projects-scroll__item">
-                <Link
-                  href={`/${locale}/projects/${project.slug}`}
-                  className="projects-scroll__card"
-                >
-                  <div className="projects-scroll__media" aria-hidden={!cover}>
-                    {cover && (
-                      <Image
-                        src={cover}
-                        alt=""
-                        fill
-                        sizes="100vw"
-                        className="object-cover"
-                        priority={i < 2}
-                      />
-                    )}
-                    <div className="projects-scroll__scrim" />
-                  </div>
-
-                  <div className="projects-scroll__body">
-                    <div className="projects-scroll__meta">
-                      <span className="projects-scroll__index">{indexLabel}</span>
-                      <span>
-                        {project.format} · {project.year}
-                      </span>
+              return (
+                <li key={project.id} data-project-item className="projects-scroll__item">
+                  <Link
+                    href={`/${locale}/projects/${project.slug}`}
+                    className="projects-scroll__row"
+                  >
+                    <div
+                      className={`projects-scroll__still${cover ? '' : ' projects-scroll__still--empty'}`}
+                      aria-hidden
+                    >
+                      {cover ? (
+                        <Image
+                          src={cover}
+                          alt=""
+                          fill
+                          sizes="(max-width: 768px) 14rem, 220px"
+                          className="object-cover"
+                          priority={i < 4}
+                        />
+                      ) : (
+                        <span className="projects-scroll__still-placeholder">—</span>
+                      )}
                     </div>
-                    <h2 className="projects-scroll__name">{project.title}</h2>
-                    {project.description && (
-                      <p className="projects-scroll__excerpt">{project.description}</p>
-                    )}
-                    <span className="projects-scroll__cta">{t('viewProject')}</span>
-                  </div>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
+
+                    <div className="projects-scroll__copy">
+                      <div className="projects-scroll__meta">
+                        <span className="projects-scroll__index">{n}</span>
+                        <span className="projects-scroll__dot" aria-hidden>
+                          ·
+                        </span>
+                        <span>
+                          {project.format} · {project.year}
+                        </span>
+                      </div>
+                      <h3 className="projects-scroll__name">{project.title}</h3>
+                      {project.description ? (
+                        <p className="projects-scroll__excerpt">{project.description}</p>
+                      ) : null}
+                      <span className="projects-scroll__cta">{t('viewProject')}</span>
+                    </div>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
       </div>
-    </>
+    </div>
   )
 }
