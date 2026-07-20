@@ -6,21 +6,18 @@ test('signature flow: home → projects → project page', async ({ page }) => {
   await expect(page).toHaveTitle(/Katia Krylova/)
   await expect(page.locator('h1')).toContainText('Katia Krylova')
 
-  // 2. Navigate to projects
+  // 2. Navigate to projects landing
   await page.click('text=Projets')
   await expect(page).toHaveURL(/\/fr\/projects/)
-
-  // 3. Dismiss intro overlay if present, then vertical list is available
-  const intro = page.getByRole('dialog', { name: /Mes projets/i })
-  if (await intro.isVisible().catch(() => false)) {
-    await intro.click()
-  }
-  await expect(page.getByRole('heading', { name: 'Projets', exact: true })).toBeVisible({
+  await expect(page.getByRole('heading', { name: /Mes projets/i })).toBeVisible({
     timeout: 10_000,
   })
+
+  // 3. Scroll to filmography list
+  await page.getByRole('heading', { name: 'Projets', exact: true }).scrollIntoViewIfNeeded()
   await expect(page.getByRole('link', { name: /Voir le projet/i }).first()).toBeVisible()
 
-  // 4. Open first project from the scroll list
+  // 4. Open first project from the list
   await page.getByRole('link', { name: /Voir le projet/i }).first().click()
   await expect(page).toHaveURL(/\/fr\/projects\//)
 
