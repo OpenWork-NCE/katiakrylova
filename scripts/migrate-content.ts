@@ -3,10 +3,12 @@ import { readFile } from 'fs/promises'
 import { existsSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { getPayload } from 'payload'
+import { getPayload, type DataFromCollectionSlug } from 'payload'
 import config from '../src/payload.config'
 import { uploadMedia, clearMediaCache } from './lib/upload-media'
 import { textToLexical } from './lib/lexical'
+
+type SlugCollection = 'portfolio' | 'portfolio-categories' | 'projects' | 'journal-entries'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
@@ -98,17 +100,17 @@ async function loadJson<T>(name: string): Promise<T> {
   return JSON.parse(await readFile(p, 'utf8')) as T
 }
 
-async function findBySlug(
+async function findBySlug<T extends SlugCollection>(
   payload: Awaited<ReturnType<typeof getPayload>>,
-  collection: 'portfolio' | 'portfolio-categories' | 'projects' | 'journal-entries',
+  collection: T,
   slug: string,
-) {
+): Promise<DataFromCollectionSlug<T> | null> {
   const { docs } = await payload.find({
     collection,
     where: { slug: { equals: slug } },
     limit: 1,
   })
-  return docs[0] ?? null
+  return (docs[0] as DataFromCollectionSlug<T> | undefined) ?? null
 }
 
 async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, globals: GlobalsManifest) {
