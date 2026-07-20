@@ -1,8 +1,11 @@
 {
   "generatedAt": "2026-06-28T01:27:50.394Z",
   "home": {
-    "heroImage": "Capture-d_écran-2025-08-01-à-14.19.23.png",
-    "tagline": "Réalisatrice et artiste visuelle"
+    "heroImage": "Image de fond.jpg",
+    "role": "Réalisatrice · Artiste visuelle",
+    "intro": "Une image, deux images, une séquence de lumière et d'ombre. Collant à la chose filmée ou s'en décollant. Toute en subjectivité, je les peins, les triture, les malaxe, les desserre de leur étreinte « collet monté ».",
+    "ctaLabel": "Découvrir mon univers",
+    "tagline": "Réalisatrice · Artiste visuelle"
   },
   "about": {
     "bio": "Tout commence par un regard.\n\nIl y a des rencontres qui changent une vie. Les miennes n'ont jamais été préméditées ; elles se sont simplement placées sur mon chemin.\n\nJe suis psychologue clinicienne et thérapeute spécialisée en traumatologie. Depuis toujours, je m'intéresse à ce qui façonne l'être humain : ses blessures, ses ressources, ses émotions, son imaginaire. Comprendre, accompagner, révéler… c'est le fil conducteur de mon parcours.\n\nEn 1999, la vie me conduit en Italie sur le tournage d'un long métrage de fiction. Rien ne me destinait à cette aventure. J'avais même refusé le rôle que me proposait le réalisateur. Il est revenu une deuxième fois. Puis une troisième. J'ai finalement accepté, sans imaginer que cette décision allait changer le cours de ma vie.\n\nDurant le tournage, une lourde caméra Sony VHS passe entre mes mains. Je regarde à travers son objectif et cadre un simple brin d'herbe. Je reste fascinée. À travers cette caméra, ce n'est plus seulement un brin d'herbe : c'est un monde.\n\nPuis je tourne la caméra. Une jeune femme improvise un irrésistible jeu de séduction avec le chauffeur de notre authentique bus des années 60. Je filme leurs regards, leurs sourires, leurs gestes, leur plaisir de jouer. Sans le savoir, je découvre ce jour-là le bonheur immense de raconter une histoire avec une caméra.\n\nLorsque la camerawoman visionne les rushes, elle reste sans voix. Mais les cassettes VHS sont comptées. Pour pouvoir continuer à filmer, il faut en effacer une. Ce sera la mienne.\n\nMon premier film n'existe plus.\n\nEt pourtant, c'est lui qui a tout fait naître.\n\nLe tarot est arrivé de manière inattendue. Je ne cherchais pas à créer un jeu. Je réalisais des collages autour des arcanes majeures du Tarot de Marseille, uniquement pour le plaisir de créer. Peu à peu, j'ai eu le sentiment que ces images m'emmenaient ailleurs, qu'elles me demandaient de construire un univers.\n\nC'est ainsi qu'est né LE TAROT DÉCRYPTÉ, une approche qui revisite les codes traditionnels et ouvre un espace d'interprétation libre et créatif.\n\nQuelques années plus tard est né L'EGO du MOI, un jeu imaginé d'abord pour les enfants avant d'être adopté avec enthousiasme par les adultes. Une nouvelle manière d'explorer l'imaginaire, les émotions et le regard que chacun porte sur lui-même.\n\nCe n'est que bien plus tard que j'ai compris ce qui reliait toutes ces expériences. La psychologie, la création et le cinéma procèdent, pour moi, d'une même recherche : celle du regard. Regarder autrement. Déplacer le point de vue. Révéler ce qui était déjà là, mais demeurait invisible.\n\nAujourd'hui, je reviens naturellement au cinéma. Non comme une nouvelle direction, mais comme le prolongement d'un chemin commencé il y a longtemps, lorsqu'un simple brin d'herbe m'a appris qu'une caméra pouvait transformer notre regard sur le monde.",
@@ -10,12 +13,14 @@
     "gallery": [
       "maman.jpg",
       "Image de fond.jpg"
-    ]
+    ],
+    "photo": "maman.jpg"
   },
   "contact": {
     "email": "contact@katiakrylova.com",
     "phone": "+32(0)474 468 168",
-    "calComUrl": "https://cal.com/katia-krylova"
+    "calComUrl": "https://cal.com/katia-krylova",
+    "backgroundImage": "Fonds Contact.jpg"
   },
   "journalPage": {
     "photo": "moodboard.jpg"

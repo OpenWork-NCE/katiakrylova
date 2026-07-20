@@ -1,10 +1,11 @@
 import { test, expect } from '@playwright/test'
 
 test('signature flow: home → projects → project page', async ({ page }) => {
-  // 1. Home loads with hero
+  // 1. Home loads with hero logo + CTA
   await page.goto('/fr')
   await expect(page).toHaveTitle(/Katia Krylova/)
-  await expect(page.locator('h1')).toContainText('Katia Krylova')
+  await expect(page.getByRole('img', { name: 'Katia Krylova' }).first()).toBeVisible()
+  await expect(page.getByRole('link', { name: /Découvrir mon univers/i })).toBeVisible()
 
   // 2. Navigate to projects landing
   await page.click('text=Projets')

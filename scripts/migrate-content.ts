@@ -42,7 +42,13 @@ type ProjectsManifest = {
 }
 
 type GlobalsManifest = {
-  home: { heroImage: string; tagline: string }
+  home: {
+    heroImage: string
+    tagline?: string
+    role?: string
+    intro?: string
+    ctaLabel?: string
+  }
   about: {
     bio: string
     /** @deprecated legacy full-bleed background */
@@ -50,7 +56,15 @@ type GlobalsManifest = {
     profileImage?: string
     gallery?: string[]
   }
-  contact: { email: string; phone: string; calComUrl: string }
+  contact: {
+    email: string
+    phone: string
+    calComUrl: string
+    backgroundImage?: string
+    vimeoUrl?: string
+    instagramUrl?: string
+    linkedinUrl?: string
+  }
   /** Page liste Journal — fond CMS */
   journalPage?: { photo: string }
   /** @deprecated prefer journalEntries */
@@ -121,20 +135,25 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
     )
     if (id != null) aboutGalleryIds.push(id)
   }
-  const aboutLegacyPhotoPath = globals.about.photo
-  const aboutLegacyPhotoId = aboutLegacyPhotoPath
-    ? await uploadMedia(
-        payload,
-        path.join(imagesRoot, aboutLegacyPhotoPath),
-        'Fond de page About (legacy)',
-        dryRun,
-      )
-    : null
+  const aboutBgPath = globals.about.photo ?? 'maman.jpg'
+  const aboutBgId = await uploadMedia(
+    payload,
+    path.join(imagesRoot, aboutBgPath),
+    'Fond de page About',
+    dryRun,
+  )
   const journalPhotoPath = globals.journalPage?.photo ?? 'moodboard.jpg'
   const journalPhotoId = await uploadMedia(
     payload,
     path.join(imagesRoot, journalPhotoPath),
     'Fond de page Journal',
+    dryRun,
+  )
+  const contactBgPath = globals.contact.backgroundImage ?? 'Fonds Contact.jpg'
+  const contactBgId = await uploadMedia(
+    payload,
+    path.join(imagesRoot, contactBgPath),
+    'Fond de page Contact',
     dryRun,
   )
 
@@ -144,6 +163,9 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
       data: {
         heroImage: heroId ?? undefined,
         tagline: globals.home.tagline,
+        role: globals.home.role,
+        intro: globals.home.intro,
+        ctaLabel: globals.home.ctaLabel,
       },
       locale: 'fr',
     })
@@ -154,14 +176,22 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
         bio: textToLexical(globals.about.bio),
         profileImage: aboutProfileId ?? undefined,
         gallery: aboutGalleryIds.map((image) => ({ image })),
-        photo: aboutLegacyPhotoId ?? undefined,
+        photo: aboutBgId ?? undefined,
       },
       locale: 'fr',
     })
 
     await payload.updateGlobal({
       slug: 'contact',
-      data: globals.contact,
+      data: {
+        email: globals.contact.email,
+        phone: globals.contact.phone,
+        calComUrl: globals.contact.calComUrl,
+        vimeoUrl: globals.contact.vimeoUrl,
+        instagramUrl: globals.contact.instagramUrl,
+        linkedinUrl: globals.contact.linkedinUrl,
+        backgroundImage: contactBgId ?? undefined,
+      },
       locale: 'fr',
     })
 
