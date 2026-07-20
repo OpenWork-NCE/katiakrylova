@@ -17,14 +17,14 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: brightness(0.42) contrast(1.05);
+  filter: brightness(0.58) contrast(1.05);
 }
 
 .projects-intro__scrim {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: rgba(10, 10, 10, 0.74);
+  background: rgba(10, 10, 10, 0.55);
 }
 
 .projects-intro__vignette {
@@ -32,10 +32,10 @@
   inset: 0;
   pointer-events: none;
   background: radial-gradient(
-    ellipse 78% 68% at 50% 42%,
+    ellipse 80% 72% at 50% 42%,
     transparent 0%,
-    rgba(10, 10, 10, 0.32) 52%,
-    rgba(10, 10, 10, 0.78) 100%
+    rgba(10, 10, 10, 0.22) 52%,
+    rgba(10, 10, 10, 0.62) 100%
   );
 }
 
