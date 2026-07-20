@@ -102,7 +102,6 @@ export interface Config {
     contact: Contact;
     home: Home;
     journal: Journal;
-    links: Link;
     'site-settings': SiteSetting;
   };
   globalsSelect: {
@@ -110,7 +109,6 @@ export interface Config {
     contact: ContactSelect<false> | ContactSelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
     journal: JournalSelect<false> | JournalSelect<true>;
-    links: LinksSelect<false> | LinksSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: 'fr' | 'en';
@@ -738,27 +736,6 @@ export interface Journal {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "links".
- */
-export interface Link {
-  id: number;
-  /**
-   * Image de fond de la page Liens (plein écran).
-   */
-  photo?: (number | null) | Media;
-  items?:
-    | {
-        name: string;
-        role: string;
-        url: string;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
 export interface SiteSetting {
@@ -812,24 +789,6 @@ export interface HomeSelect<T extends boolean = true> {
  */
 export interface JournalSelect<T extends boolean = true> {
   photo?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "links_select".
- */
-export interface LinksSelect<T extends boolean = true> {
-  photo?: T;
-  items?:
-    | T
-    | {
-        name?: T;
-        role?: T;
-        url?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

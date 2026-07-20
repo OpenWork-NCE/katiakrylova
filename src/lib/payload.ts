@@ -164,11 +164,3 @@ export async function getHome(locale: Locale = 'fr') {
   })
 }
 
-export async function getLinks(locale: Locale = 'fr') {
-  const payload = await getPayloadClient()
-  return payload.findGlobal({
-    slug: 'links',
-    depth: 1,
-    locale: locale === 'all' ? 'all' : locale,
-  })
-}
