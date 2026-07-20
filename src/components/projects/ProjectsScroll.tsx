@@ -86,7 +86,7 @@ export function ProjectsScroll({ projects, locale }: Props) {
                           src={cover}
                           alt=""
                           fill
-                          sizes="(max-width: 768px) 14rem, 220px"
+                          sizes="(max-width: 768px) 90vw, 420px"
                           className="object-cover"
                           priority={i < 4}
                         />
