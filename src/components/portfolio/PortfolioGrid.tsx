@@ -45,7 +45,7 @@ export function PortfolioGrid({
 
   return (
     <>
-      <div className="columns-1 gap-md md:columns-2 lg:columns-3">
+      <div className="columns-1 gap-md sm:columns-2 lg:columns-3">
         {items.map((p, workIndex) => {
           const cover = getMediaUrl(p.coverImage)
           return (
@@ -62,13 +62,14 @@ export function PortfolioGrid({
                     alt={p.title}
                     width={1200}
                     height={800}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="h-auto w-full transition duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-[1.02]"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-accent/0 transition duration-500 group-hover:bg-accent/10" />
                 </div>
               )}
-              <h3 className="mt-sm font-hand text-xl text-text-primary">{p.title}</h3>
-              <p className="text-xs uppercase tracking-widest text-text-muted">{p.year}</p>
+              <h3 className="mt-sm font-hand text-lg text-text-primary sm:text-xl">{p.title}</h3>
+              <p className="text-[0.65rem] uppercase tracking-widest text-text-muted sm:text-xs">{p.year}</p>
             </button>
           )
         })}
