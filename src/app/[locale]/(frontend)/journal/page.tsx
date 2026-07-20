@@ -5,6 +5,8 @@ import { getMediaUrl } from '@/lib/utils'
 import { Section } from '@/components/ui/Section'
 import '@/styles/journal-page.css'
 
+const FALLBACK_BG = '/images/Fond News.jpg'
+
 export default async function JournalPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)
@@ -14,21 +16,18 @@ export default async function JournalPage({ params }: { params: Promise<{ locale
     getJournalEntries(loc),
     getJournal(loc),
   ])
-  const backgroundUrl = getMediaUrl(journal?.photo)
+  /** CMS photo, sinon Fond News.jpg (même logique Contact / Portfolio catégorie) */
+  const backgroundUrl = getMediaUrl(journal?.photo) ?? FALLBACK_BG
 
   return (
     <div className="journal-page">
-      {backgroundUrl && (
-        <>
-          <div
-            className="journal-page__bg"
-            style={{ backgroundImage: `url('${backgroundUrl}')` }}
-            aria-hidden
-          />
-          <div className="journal-page__scrim" aria-hidden />
-          <div className="journal-page__vignette" aria-hidden />
-        </>
-      )}
+      <div
+        className="journal-page__bg"
+        style={{ backgroundImage: `url('${backgroundUrl}')` }}
+        aria-hidden
+      />
+      <div className="journal-page__scrim" aria-hidden />
+      <div className="journal-page__vignette" aria-hidden />
 
       <Section className="journal-page__content">
         <h1 className="font-hand text-5xl mb-xl">{t('title')}</h1>

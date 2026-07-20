@@ -189,7 +189,7 @@ async function main() {
       backgroundImage: 'Fonds Contact.jpg',
     },
     journalPage: {
-      photo: 'moodboard.jpg',
+      photo: 'Fond News.jpg',
     },
     journalEntries: [
       {

@@ -143,7 +143,7 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
     'Fond de page About',
     dryRun,
   )
-  const journalPhotoPath = globals.journalPage?.photo ?? 'moodboard.jpg'
+  const journalPhotoPath = globals.journalPage?.photo ?? 'Fond News.jpg'
   const journalPhotoId = await uploadMedia(
     payload,
     path.join(imagesRoot, journalPhotoPath),
