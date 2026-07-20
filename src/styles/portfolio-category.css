@@ -1,0 +1,67 @@
+/* Portfolio catégorie — fond fixe type Contact / About */
+
+.portfolio-category {
+  position: relative;
+  min-height: calc(100dvh - 4rem);
+  background: var(--bg-primary);
+  padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
+}
+
+.portfolio-category__bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0.42) contrast(1.05);
+}
+
+.portfolio-category__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: rgba(10, 10, 10, 0.74);
+}
+
+.portfolio-category__vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 78% 68% at 50% 42%,
+    transparent 0%,
+    rgba(10, 10, 10, 0.32) 52%,
+    rgba(10, 10, 10, 0.78) 100%
+  );
+}
+
+.portfolio-category__inner {
+  position: relative;
+  z-index: 10;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2.25rem 1rem 0;
+}
+
+.portfolio-category__title {
+  margin: 0 0 2rem;
+  font-family: var(--font-hand);
+  font-weight: 500;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  line-height: 1.08;
+  color: var(--text-primary);
+}
+
+.portfolio-category__empty {
+  color: var(--text-muted);
+}
+
+@media (min-width: 768px) {
+  .portfolio-category__inner {
+    padding: 3.5rem 1rem 0;
+  }
+}

@@ -2,11 +2,13 @@ import { notFound } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getPortfolio, getPortfolioCategories } from '@/lib/payload'
 import type { Portfolio, PortfolioCategory } from '@/payload-types'
-import { Section } from '@/components/ui/Section'
 import { PortfolioGrid } from '@/components/portfolio/PortfolioGrid'
 import { PortfolioCategoryNav } from '@/components/portfolio/PortfolioCategoryNav'
 import { HUB_CATEGORY_SLUGS, type HubCategory } from '@/components/portfolio/PortfolioHub'
 import { Suspense } from 'react'
+import '@/styles/portfolio-category.css'
+
+const FALLBACK_BG = '/images/Fond Portfolio.jpg'
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>
@@ -46,21 +48,31 @@ export default async function PortfolioCategoryPage({ params, searchParams }: Pr
   }))
 
   return (
-    <Section>
-      <PortfolioCategoryNav
-        locale={locale}
-        categories={hubCategories}
-        activeSlug={slug}
-        backLabel={t('backToHub')}
+    <div className="portfolio-category">
+      <div
+        className="portfolio-category__bg"
+        style={{ backgroundImage: `url('${FALLBACK_BG}')` }}
+        aria-hidden
       />
-      <h1 className="font-hand text-5xl mb-xl">{category.name}</h1>
-      {filtered.length === 0 ? (
-        <p className="text-text-muted">{t('emptyCategory')}</p>
-      ) : (
-        <Suspense fallback={<p className="text-text-muted text-sm">{t('loading')}</p>}>
-          <PortfolioGrid items={filtered} initialViewSlug={view ?? null} />
-        </Suspense>
-      )}
-    </Section>
+      <div className="portfolio-category__scrim" aria-hidden />
+      <div className="portfolio-category__vignette" aria-hidden />
+
+      <div className="portfolio-category__inner">
+        <PortfolioCategoryNav
+          locale={locale}
+          categories={hubCategories}
+          activeSlug={slug}
+          backLabel={t('backToHub')}
+        />
+        <h1 className="portfolio-category__title">{category.name}</h1>
+        {filtered.length === 0 ? (
+          <p className="portfolio-category__empty">{t('emptyCategory')}</p>
+        ) : (
+          <Suspense fallback={<p className="portfolio-category__empty text-sm">{t('loading')}</p>}>
+            <PortfolioGrid items={filtered} initialViewSlug={view ?? null} />
+          </Suspense>
+        )}
+      </div>
+    </div>
   )
 }
