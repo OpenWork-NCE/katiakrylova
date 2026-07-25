@@ -16,6 +16,9 @@ type ProjectFormat =
   | 'Documentaire'
   | 'Film-documentaire'
   | 'Photos'
+  | 'Collaboration'
+  | 'Film'
+  | 'Montage'
   | 'Scénario'
   | 'Réalisation'
   | 'Montage partiel'
@@ -52,6 +55,7 @@ type ProjectsManifest = {
     description: string
     order: number
     coverImage: string | null
+    coverImageOverride?: boolean
     gallery: string[]
     credits: Array<{ role: string; name: string }>
     externalLinks: Array<{ platform: 'Vimeo' | 'YouTube'; url: string }>
@@ -405,6 +409,10 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
     const existing = await findBySlug(payload, 'projects', p.slug)
     if (existing) {
       if (!dryRun) {
+        const coverImage =
+          p.coverImageOverride && p.coverImage
+            ? await uploadMedia(payload, path.join(imagesRoot, p.coverImage), p.title, dryRun)
+            : null
         await payload.update({
           collection: 'projects',
           id: existing.id,
@@ -412,6 +420,7 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
             format: formats,
             description: p.description,
             order: p.order,
+            coverImage: coverImage ?? undefined,
           },
           locale: 'fr',
         })

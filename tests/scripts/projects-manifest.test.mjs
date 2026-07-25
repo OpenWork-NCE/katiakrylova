@@ -46,6 +46,18 @@ test('La Petite Faucheuse contains approved formats and description', async () =
   )
 })
 
+test('Seconde Papillon contains approved formats, description, and cover image', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'seconde-papillon')
+
+  assert.deepEqual(project.format, ['Performance', 'Collaboration', 'Film', 'Montage', 'Photos'])
+  assert.equal(project.coverImage, 'papillon.jpg')
+  assert.equal(
+    project.description,
+    'Vidéo Performance autour de l\'oeuvre de la plasticienne Sylvie Pichrist autour du concept de Métamorphoses.\n\nMETAMORPHOSES\n9 \' Biennale ARTour\nDu 23 juin au 25 aout 2013\nVernissage le 23 juin à 11 h au musée du Musée du Masque à Binche et\nà 13 h place Communale de la Louvière\n(www.artour.be)\n"Seconde papillon"\nEcomusée du Bois du Luc -Ancien site minier\nSylvie Pichrist',
+  )
+})
+
 test('project format field supports the approved multiple values', async () => {
   const { Projects } = await import('../../src/collections/Projects.ts')
   const format = Projects.fields.find((field) => 'name' in field && field.name === 'format')

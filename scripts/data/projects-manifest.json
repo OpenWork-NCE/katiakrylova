@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-25T06:51:40.720Z",
+  "generatedAt": "2026-07-25T07:08:51.147Z",
   "count": 19,
   "warnings": [],
   "projects": [
@@ -215,7 +215,7 @@
     {
       "slug": "seconde-papillon",
       "title": "SECONDE PAPILLON",
-      "coverImage": "Seconde-Papillon.jpg",
+      "coverImage": "papillon.jpg",
       "gallery": [
         "Seconde-Papillon.jpg",
         "P1300885.jpg",
@@ -229,7 +229,7 @@
         "P1300963.jpg",
         "P1300965.jpg"
       ],
-      "description": "Vidéo Performance autour de l'œuvre de la plasticienne Sylvie Pichrist sur la thématique des Métamorphoses.",
+      "description": "Vidéo Performance autour de l'oeuvre de la plasticienne Sylvie Pichrist autour du concept de Métamorphoses.\n\nMETAMORPHOSES\n9 ' Biennale ARTour\nDu 23 juin au 25 aout 2013\nVernissage le 23 juin à 11 h au musée du Musée du Masque à Binche et\nà 13 h place Communale de la Louvière\n(www.artour.be)\n\"Seconde papillon\"\nEcomusée du Bois du Luc -Ancien site minier\nSylvie Pichrist",
       "credits": [],
       "externalLinks": [
         {
@@ -240,7 +240,14 @@
       "missingFiles": [],
       "order": 7,
       "year": 2014,
-      "format": "Performance"
+      "format": [
+        "Performance",
+        "Collaboration",
+        "Film",
+        "Montage",
+        "Photos"
+      ],
+      "coverImageOverride": true
     },
     {
       "slug": "paphius",

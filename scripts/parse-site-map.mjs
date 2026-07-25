@@ -35,7 +35,15 @@ const PROJECT_META = {
     description:
       'Making Of, photos de plateau et affiche\n\nPremier court-métrage de Philippe Geus.\nAdaptation de “The strangers outside”, roman de Vanessa Morgan, scénariste du C-M.\nStrangers nous conte la soirée d’un père handicapé et de sa fille chérie, venus se retirer dans un chalet pour le week end.\nNuit d’horreur où la jeune fille perdra la vie dans des circonstances plus qu’étranges…',
   },
-  'seconde-papillon': { year: 2014, format: 'Performance', description: "Vidéo Performance autour de l'œuvre de la plasticienne Sylvie Pichrist sur la thématique des Métamorphoses." },
+  'seconde-papillon': {
+    year: 2014,
+    format: ['Performance', 'Collaboration', 'Film', 'Montage', 'Photos'],
+    coverImage: 'papillon.jpg',
+    coverImageOverride: true,
+    description:
+      'Vidéo Performance autour de l\'oeuvre de la plasticienne Sylvie Pichrist autour du concept de Métamorphoses.\n\nMETAMORPHOSES\n9 \' Biennale ARTour\nDu 23 juin au 25 aout 2013\nVernissage le 23 juin à 11 h au musée du Musée du Masque à Binche et\nà 13 h place Communale de la Louvière\n(www.artour.be)\n"Seconde papillon"\nEcomusée du Bois du Luc -Ancien site minier\nSylvie Pichrist',
+    overrideDescription: true,
+  },
   paphius: { year: 2013, format: 'Clip', description: 'Making Of et photos de plateau Clip musical du nouveau groupe « JOY » de Marc Huyghens.' },
   'hip-hop-de-rue': { year: 2013, format: 'Clip', description: 'Making Of – Montage – Etalonnage – Photos Le chanteur auteur-compositeur Rodwyn.' },
   'alice-au-pays-des-ombres': { year: 2013, format: 'Essai expérimental', description: "Essai expérimental sur base d'images fixes. Music and lyrics by David Lynch." },
@@ -183,6 +191,8 @@ async function main() {
     if (meta) {
       parsed.year = meta.year
       parsed.format = meta.format
+      if (meta.coverImage) parsed.coverImage = meta.coverImage
+      if (meta.coverImageOverride) parsed.coverImageOverride = true
       if ((!parsed.description || meta.overrideDescription) && meta.description) parsed.description = meta.description
     }
     if (parsed.missingFiles.length > 0) {
