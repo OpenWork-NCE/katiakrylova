@@ -9,6 +9,16 @@ import { uploadMedia, clearMediaCache } from './lib/upload-media'
 import { textToLexical } from './lib/lexical'
 
 type SlugCollection = 'portfolio' | 'portfolio-categories' | 'projects' | 'journal-entries'
+type ProjectFormat =
+  | 'Court-métrage'
+  | 'Clip'
+  | 'Performance'
+  | 'Documentaire'
+  | 'Essai expérimental'
+  | 'Making Of'
+  | 'SCÉNARIO'
+  | 'PRISE DE VUE'
+  | 'MONTAGE'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
@@ -386,14 +396,18 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
   let skipped = 0
 
   for (const p of manifest.projects) {
+    const formats = (Array.isArray(p.format) ? p.format : [p.format]) as ProjectFormat[]
     const existing = await findBySlug(payload, 'projects', p.slug)
     if (existing) {
-      // Keep filmography order in sync with the manifest (e.g. after inserting a new lead project)
-      if (!dryRun && existing.order !== p.order) {
+      if (!dryRun) {
         await payload.update({
           collection: 'projects',
           id: existing.id,
-          data: { order: p.order },
+          data: {
+            format: formats,
+            description: p.description,
+            order: p.order,
+          },
           locale: 'fr',
         })
         updated += 1
@@ -431,17 +445,7 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
           title: p.title,
           slug: p.slug,
           year: p.year,
-          format: (Array.isArray(p.format) ? p.format : [p.format]) as Array<
-            | 'Court-métrage'
-            | 'Clip'
-            | 'Performance'
-            | 'Documentaire'
-            | 'Essai expérimental'
-            | 'Making Of'
-            | 'SCÉNARIO'
-            | 'PRISE DE VUE'
-            | 'MONTAGE'
-          >,
+          format: formats,
           description: p.description,
           order: p.order,
           coverImage: coverId!,
