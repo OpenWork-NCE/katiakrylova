@@ -719,22 +719,18 @@ export interface About {
     [k: string]: unknown;
   };
   /**
-   * Portrait à droite (ratio portrait recommandé, ex. 600×746).
+   * Portrait à gauche (ratio portrait recommandé, ex. 600×746).
    */
   profileImage?: (number | null) | Media;
   /**
-   * Deux images sous le texte / portrait (bandeau bas).
-   */
-  gallery?:
-    | {
-        image: number | Media;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Image de fond plein écran (style page Projets : scrim + vignette).
+   * Image de fond de la première section.
    */
   photo?: (number | null) | Media;
+  /**
+   * Image de fond de la seconde section.
+   */
+  visionImage?: (number | null) | Media;
+  visionText?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -815,13 +811,9 @@ export interface SiteSetting {
 export interface AboutSelect<T extends boolean = true> {
   bio?: T;
   profileImage?: T;
-  gallery?:
-    | T
-    | {
-        image?: T;
-        id?: T;
-      };
   photo?: T;
+  visionImage?: T;
+  visionText?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

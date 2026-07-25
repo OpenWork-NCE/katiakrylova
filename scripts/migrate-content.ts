@@ -77,7 +77,8 @@ type GlobalsManifest = {
     /** @deprecated legacy full-bleed background */
     photo?: string
     profileImage?: string
-    gallery?: string[]
+    visionImage?: string
+    visionText?: string
   }
   contact: {
     email: string
@@ -148,22 +149,18 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
     'Portrait Katia Krylova',
     dryRun,
   )
-  const aboutGalleryPaths = globals.about.gallery ?? ['maman.jpg', 'Image de fond.jpg']
-  const aboutGalleryIds: number[] = []
-  for (const filename of aboutGalleryPaths) {
-    const id = await uploadMedia(
-      payload,
-      path.join(imagesRoot, filename),
-      `About — ${filename}`,
-      dryRun,
-    )
-    if (id != null) aboutGalleryIds.push(id)
-  }
   const aboutBgPath = globals.about.photo ?? 'maman.jpg'
   const aboutBgId = await uploadMedia(
     payload,
     path.join(imagesRoot, aboutBgPath),
     'Fond de page About',
+    dryRun,
+  )
+  const aboutVisionPath = globals.about.visionImage ?? 'fond.jpg'
+  const aboutVisionId = await uploadMedia(
+    payload,
+    path.join(imagesRoot, aboutVisionPath),
+    'Fond de la section vision About',
     dryRun,
   )
   const journalPhotoPath = globals.journalPage?.photo ?? 'Fond News.jpg'
@@ -199,8 +196,9 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
       data: {
         bio: textToLexical(globals.about.bio),
         profileImage: aboutProfileId ?? undefined,
-        gallery: aboutGalleryIds.map((image) => ({ image })),
         photo: aboutBgId ?? undefined,
+        visionImage: aboutVisionId ?? undefined,
+        visionText: globals.about.visionText,
       },
       locale: 'fr',
     })

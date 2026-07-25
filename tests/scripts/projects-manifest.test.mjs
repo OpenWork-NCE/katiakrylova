@@ -168,3 +168,24 @@ test('projects presentation body is left aligned', async () => {
 
   assert.match(styles, /\.projects-intro__body\s*\{[\s\S]*?text-align: left;/)
 })
+
+test('about manifest uses the new vision section instead of the bottom gallery', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/globals-manifest.json', 'utf8'))
+
+  assert.equal(manifest.about.visionImage, 'fond.jpg')
+  assert.equal(
+    manifest.about.visionText,
+    "Voir est mon plus grand péché, depuis toute petite. Manger avec gourmandise les images, les couleurs, les ombres, les vides. Voir pour savoir, connaître, faire connaissance avec l'œil.\n\nUne image, deux images, une séquence de lumière et d'ombre. Collant à la chose filmée ou s'en décollant. Toute en subjectivité, je les peins, les triture, les malaxe, les desserre de leur étreinte « collet monté ».\n\nVision triple, sonde cérébrale, flash affectif, projection d'amour. Je vous laisse découvrir mes hantises, mes fantasmes, mes angoisses et mes joies.",
+  )
+  assert.equal('gallery' in manifest.about, false)
+})
+
+test('about page renders the portrait first and the CMS vision section', async () => {
+  const page = await readFile('src/app/[locale]/about/page.tsx', 'utf8')
+  const styles = await readFile('src/styles/about-page.css', 'utf8')
+
+  assert.ok(page.indexOf('about-page__aside') < page.indexOf('about-page__bio'))
+  assert.match(page, /about-page__vision/)
+  assert.match(styles, /\.about-page__bio\s*\{[\s\S]*?font-size: clamp\(0\.875rem, 2\.2vw, 1rem\);/)
+  assert.match(styles, /\.about-page__vision-copy\s*\{[\s\S]*?text-align: left;/)
+})

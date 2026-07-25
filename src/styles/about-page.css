@@ -1,4 +1,4 @@
-/* About — fond type Projets + bio/portrait 50/50 sticky + bandeau
+/* About — fond type Projets + portrait/bio 50/50 + section vision
    Breakpoint principal codebase : md = 768px
    Portrait source : 600×746 (ratio ~0.804) */
 
@@ -59,7 +59,7 @@
   color: var(--text-primary);
 }
 
-/* —— Bloc principal : texte | portrait —— */
+/* —— Bloc principal : portrait | texte —— */
 .about-page__main {
   display: grid;
   grid-template-columns: 1fr;
@@ -71,7 +71,7 @@
   min-width: 0;
   font-family: var(--font-body);
   font-weight: var(--font-weight-bold);
-  font-size: clamp(0.95rem, 2.8vw, 1.125rem);
+  font-size: clamp(0.875rem, 2.2vw, 1rem);
   line-height: 1.7;
   letter-spacing: 0.02em;
   color: var(--text-primary);
@@ -136,33 +136,43 @@
   object-position: center top;
 }
 
-/* —— Bandeau bas : 2 images —— */
-.about-page__gallery {
-  list-style: none;
-  margin: 3rem 0 0;
-  padding: 2rem 0 0;
-  border-top: 1px solid rgba(245, 241, 234, 0.1);
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-
-.about-page__frame {
+/* —— Seconde section : vision —— */
+.about-page__vision {
   position: relative;
+  z-index: 10;
+  min-height: min(100dvh, 56rem);
+  margin-top: 4rem;
+  display: grid;
+  place-items: center;
   overflow: hidden;
-  background: var(--bg-secondary);
-  border: 1px solid rgba(245, 241, 234, 0.1);
-  aspect-ratio: 4 / 3;
+  background-color: var(--bg-primary);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.about-page__frame img {
-  object-fit: cover;
-  object-position: center;
-  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+.about-page__vision-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.42);
 }
 
-.about-page__frame:hover img {
-  transform: scale(1.02);
+.about-page__vision-copy {
+  position: relative;
+  width: min(100%, 46rem);
+  padding: 2rem 1.25rem;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.75;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.about-page__vision-copy p {
+  margin: 0;
+  white-space: pre-line;
 }
 
 @media (min-width: 768px) {
@@ -206,12 +216,6 @@
     max-height: calc(100dvh - 6.5rem);
   }
 
-  .about-page__gallery {
-    margin-top: 3.5rem;
-    padding-top: 2.5rem;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-  }
 }
 
 /* Tablette étroite : portrait sous le texte si très bas */
@@ -238,18 +242,8 @@
     max-width: min(100%, 17.5rem);
   }
 
-  .about-page__gallery {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .about-page__frame img {
-    transition: none;
-  }
-
-  .about-page__frame:hover img {
-    transform: none;
+  .about-page__vision {
+    min-height: 40rem;
+    margin-top: 2.5rem;
   }
 }

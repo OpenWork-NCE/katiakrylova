@@ -20,26 +20,8 @@ export const About: GlobalConfig = {
       relationTo: 'media',
       label: 'Portrait',
       admin: {
-        description: 'Portrait à droite (ratio portrait recommandé, ex. 600×746).',
+        description: 'Portrait à gauche (ratio portrait recommandé, ex. 600×746).',
       },
-    },
-    {
-      name: 'gallery',
-      type: 'array',
-      label: 'Images bas de page',
-      labels: { singular: 'Image', plural: 'Images' },
-      maxRows: 4,
-      admin: {
-        description: 'Deux images sous le texte / portrait (bandeau bas).',
-      },
-      fields: [
-        {
-          name: 'image',
-          type: 'upload',
-          relationTo: 'media',
-          required: true,
-        },
-      ],
     },
     {
       name: 'photo',
@@ -47,8 +29,18 @@ export const About: GlobalConfig = {
       relationTo: 'media',
       label: 'Fond de page',
       admin: {
-        description: 'Image de fond plein écran (style page Projets : scrim + vignette).',
+        description: 'Image de fond de la première section.',
       },
     },
+    {
+      name: 'visionImage',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Fond de la section vision',
+      admin: {
+        description: 'Image de fond de la seconde section.',
+      },
+    },
+    { name: 'visionText', type: 'textarea', localized: true, label: 'Texte de la section vision' },
   ],
 }

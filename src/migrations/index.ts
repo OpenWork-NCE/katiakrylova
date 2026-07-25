@@ -11,6 +11,7 @@ import * as migration_20260725_080700 from './20260725_080700';
 import * as migration_20260725_082000 from './20260725_082000';
 import * as migration_20260725_083000 from './20260725_083000';
 import * as migration_20260725_084000 from './20260725_084000';
+import * as migration_20260725_085000 from './20260725_085000';
 
 export const migrations = [
   {
@@ -77,5 +78,10 @@ export const migrations = [
     up: migration_20260725_084000.up,
     down: migration_20260725_084000.down,
     name: '20260725_084000',
+  },
+  {
+    up: migration_20260725_085000.up,
+    down: migration_20260725_085000.down,
+    name: '20260725_085000',
   },
 ];

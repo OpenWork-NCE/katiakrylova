@@ -24,19 +24,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
   /** Fond type page Projets — CMS `photo`, fallback public/images/maman.jpg */
   const backgroundUrl = getMediaUrl(about?.photo) ?? '/images/maman.jpg'
-
-  const gallery = (about?.gallery ?? [])
-    .map((row) => {
-      const url = getMediaUrl(row.image)
-      if (!url) return null
-      const media = typeof row.image === 'object' && row.image !== null ? (row.image as Media) : null
-      return {
-        id: row.id ?? url,
-        url,
-        alt: media?.alt?.trim() || '',
-      }
-    })
-    .filter((x): x is NonNullable<typeof x> => Boolean(x))
+  const visionUrl = getMediaUrl(about?.visionImage)
 
   return (
     <div className="about-page">
@@ -52,8 +40,6 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         <h1 className="about-page__title">{t('title')}</h1>
 
         <div className="about-page__main">
-          <div className="about-page__bio">{about?.bio ? <RichText data={about.bio} /> : null}</div>
-
           {profileUrl ? (
             <aside className="about-page__aside" aria-hidden={false}>
               <div
@@ -75,24 +61,22 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               </div>
             </aside>
           ) : null}
-        </div>
 
-        {gallery.length > 0 ? (
-          <ul className="about-page__gallery">
-            {gallery.map((item) => (
-              <li key={item.id} className="about-page__frame">
-                <Image
-                  src={item.url}
-                  alt={item.alt}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
-                />
-              </li>
-            ))}
-          </ul>
-        ) : null}
+          <div className="about-page__bio">{about?.bio ? <RichText data={about.bio} /> : null}</div>
+        </div>
       </div>
+
+      {visionUrl && about?.visionText ? (
+        <section
+          className="about-page__vision"
+          style={{ backgroundImage: `url('${visionUrl}')` }}
+        >
+          <div className="about-page__vision-scrim" aria-hidden />
+          <div className="about-page__vision-copy">
+            <p>{about.visionText}</p>
+          </div>
+        </section>
+      ) : null}
     </div>
   )
 }
