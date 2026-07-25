@@ -160,5 +160,11 @@ test('project formats render legacy strings and multiple values', () => {
 test('home hero shade keeps the background image visible', async () => {
   const styles = await readFile('src/styles/home-hero.css', 'utf8')
 
-  assert.match(styles, /\.home-hero__shade\s*\{\s*background: rgba\(10, 10, 10, 0\.3\);\s*\}/)
+  assert.match(styles, /\.home-hero__shade\s*\{\s*background: rgba\(10, 10, 10, 0\.22\);\s*\}/)
+})
+
+test('projects presentation body is left aligned', async () => {
+  const styles = await readFile('src/styles/projects-intro.css', 'utf8')
+
+  assert.match(styles, /\.projects-intro__body\s*\{[\s\S]*?text-align: left;/)
 })
