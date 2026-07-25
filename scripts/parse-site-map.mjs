@@ -44,11 +44,34 @@ const PROJECT_META = {
       'Vidéo Performance autour de l\'oeuvre de la plasticienne Sylvie Pichrist autour du concept de Métamorphoses.\n\nMETAMORPHOSES\n9 \' Biennale ARTour\nDu 23 juin au 25 aout 2013\nVernissage le 23 juin à 11 h au musée du Musée du Masque à Binche et\nà 13 h place Communale de la Louvière\n(www.artour.be)\n"Seconde papillon"\nEcomusée du Bois du Luc -Ancien site minier\nSylvie Pichrist',
     overrideDescription: true,
   },
-  paphius: { year: 2013, format: 'Clip', description: 'Making Of et photos de plateau Clip musical du nouveau groupe « JOY » de Marc Huyghens.' },
-  'hip-hop-de-rue': { year: 2013, format: 'Clip', description: 'Making Of – Montage – Etalonnage – Photos Le chanteur auteur-compositeur Rodwyn.' },
+  paphius: {
+    year: 2013,
+    format: ['Making Of', 'Photos de plateau'],
+    description:
+      'Clip musical du nouveau groupe "JOY" de Marc Huyghens (ex Vénus).\nLa thématique du film fait référence à « On achève bien les chevaux » de Sydney\nPollack, 1969.\n\nClip filmé en super 8 par Séverine De Strycker Joy is a belgian-swedish trio founded in Brussels in 2008. The group features Françoise Vidick on drums ans vocals, Anja Naucler on cello and Marc A. Huyghens (who previously fronted the band Venus) on guitar and vocals. Their music conjures up a nightly scent of wind, earth, soot and dust.',
+    overrideDescription: true,
+  },
+  'hip-hop-de-rue': {
+    year: 2013,
+    format: ['Making Of', 'Photos de plateau'],
+    description: 'Making of d’un clip musical du chanteur autodidacte Rodwyn',
+    overrideDescription: true,
+  },
   'alice-au-pays-des-ombres': { year: 2013, format: 'Essai expérimental', description: "Essai expérimental sur base d'images fixes. Music and lyrics by David Lynch." },
-  manacao: { year: 2013, format: 'Making Of', description: 'Photos de plateau et Making Of. Kino Kabaret International 2013 (Brussels).' },
-  'la-beaute-du-geste': { year: 2013, format: 'Court-métrage', description: "La beauté du geste raconte les premiers émois inoffensifs d'un jeune homme méthodique." },
+  manacao: {
+    year: 2013,
+    format: ['Making Of', 'Photos de plateau'],
+    description:
+      "Si vous aimez le saphisme, l'inceste et la consanguinité et le tout dans une plaine de jeux, bon visionnage !\nCourt-Métrage de Donovan Alonso-Garcia\n\nPhotos de plateau et Making Of. Kino Kabaret International 2013 (Brussels).",
+    overrideDescription: true,
+  },
+  'la-beaute-du-geste': {
+    year: 2013,
+    format: ['Réalisation', 'Scénario', 'Montage'],
+    description:
+      'La beauté du geste raconte les premiers émois inoffensifs d’un jeune homme méthodique.\n\nC-M dans le cadre du 5ème Kino Kabaret International de Bruxelles, du 29/03 au 5/04/13 à la Maison de la Création, Bruxelles-Nord (Laeken).',
+    overrideDescription: true,
+  },
   'que-faire-avec-innuit-siniswichi': {
     year: 2013,
     format: ['SCÉNARIO', 'PRISE DE VUE', 'MONTAGE'],
@@ -56,7 +79,11 @@ const PROJECT_META = {
       'Le projet expérimental autour du personnage d’innuit siniswichi, double conceptuel de l’artiste Sylvain Paris, est mon premier court-métrage.\nJe rencontre un homme qui se prend pour un éléphant, il se présente à moi sous le\nnom d’innuit siniswichi, je tente dans cet essai de lui donner réalité ...',
     overrideDescription: true,
   },
-  'le-mariage-campagnard': { year: 2013, format: 'Essai expérimental', description: "Essai d'animation sur base de 200 photos ratées." },
+  'le-mariage-campagnard': {
+    year: 2013,
+    format: ['Essai expérimental', 'Photos', 'Animation', 'Montage'],
+    description: "Essai d'animation sur base de 200 photos ratées.",
+  },
   'la-robe-ragot': {
     year: 2013,
     format: ['Film-documentaire', 'Photos'],
@@ -74,7 +101,12 @@ const EXTERNAL_LINKS = {
   casting: [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=bfdJ_oSxmFc' }],
   'hip-hop-de-rue': [
     { platform: 'YouTube', url: 'https://www.youtube.com/watch?v=QJZnqs8kB50' },
-    { platform: 'YouTube', url: 'https://www.youtube.com/watch?v=nDs5HIDi7BE' },
+    {
+      platform: 'YouTube',
+      url: 'https://www.youtube.com/watch?v=nDs5HIDi7BE',
+      description:
+        "Apres les clips BOOM SHAKATA et MA DING WA l'artiste RODWYN vous offre ce 3eme vidéogramme de la chanson hip hop de rue réalisé et montée par un jeune talent de la street du nom de Marabout.",
+    },
   ],
   'la-beaute-du-geste': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=7VESxLSnBDM' }],
   'la-petite-faucheuse': [

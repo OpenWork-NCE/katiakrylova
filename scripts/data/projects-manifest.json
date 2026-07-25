@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-25T07:08:51.147Z",
+  "generatedAt": "2026-07-25T07:27:53.335Z",
   "count": 19,
   "warnings": [],
   "projects": [
@@ -256,7 +256,7 @@
       "gallery": [
         "Mirage3.jpg"
       ],
-      "description": "Making Of et photos de plateau Clip musical du nouveau groupe « JOY » de Marc Huyghens.",
+      "description": "Clip musical du nouveau groupe \"JOY\" de Marc Huyghens (ex Vénus).\nLa thématique du film fait référence à « On achève bien les chevaux » de Sydney\nPollack, 1969.\n\nClip filmé en super 8 par Séverine De Strycker Joy is a belgian-swedish trio founded in Brussels in 2008. The group features Françoise Vidick on drums ans vocals, Anja Naucler on cello and Marc A. Huyghens (who previously fronted the band Venus) on guitar and vocals. Their music conjures up a nightly scent of wind, earth, soot and dust.",
       "credits": [],
       "externalLinks": [
         {
@@ -267,7 +267,10 @@
       "missingFiles": [],
       "order": 8,
       "year": 2013,
-      "format": "Clip"
+      "format": [
+        "Making Of",
+        "Photos de plateau"
+      ]
     },
     {
       "slug": "hip-hop-de-rue",
@@ -284,7 +287,7 @@
         "Hip-Hop-De-Rue-08.jpg",
         "Hip-Hop-De-Rue-09.jpg"
       ],
-      "description": "Making Of – Montage – Etalonnage – Photos Le chanteur auteur-compositeur Rodwyn.",
+      "description": "Making of d’un clip musical du chanteur autodidacte Rodwyn",
       "credits": [],
       "externalLinks": [
         {
@@ -293,13 +296,17 @@
         },
         {
           "platform": "YouTube",
-          "url": "https://www.youtube.com/watch?v=nDs5HIDi7BE"
+          "url": "https://www.youtube.com/watch?v=nDs5HIDi7BE",
+          "description": "Apres les clips BOOM SHAKATA et MA DING WA l'artiste RODWYN vous offre ce 3eme vidéogramme de la chanson hip hop de rue réalisé et montée par un jeune talent de la street du nom de Marabout."
         }
       ],
       "missingFiles": [],
       "order": 9,
       "year": 2013,
-      "format": "Clip"
+      "format": [
+        "Making Of",
+        "Photos de plateau"
+      ]
     },
     {
       "slug": "alice-au-pays-des-ombres",
@@ -338,7 +345,7 @@
         "811.jpg",
         "Manacao2.jpg"
       ],
-      "description": "Photos de plateau et Making Of. Kino Kabaret International 2013 (Brussels).",
+      "description": "Si vous aimez le saphisme, l'inceste et la consanguinité et le tout dans une plaine de jeux, bon visionnage !\nCourt-Métrage de Donovan Alonso-Garcia\n\nPhotos de plateau et Making Of. Kino Kabaret International 2013 (Brussels).",
       "credits": [],
       "externalLinks": [
         {
@@ -349,7 +356,10 @@
       "missingFiles": [],
       "order": 11,
       "year": 2013,
-      "format": "Making Of"
+      "format": [
+        "Making Of",
+        "Photos de plateau"
+      ]
     },
     {
       "slug": "la-beaute-du-geste",
@@ -358,7 +368,7 @@
       "gallery": [
         "La-Beauté-du-Geste1.jpg"
       ],
-      "description": "La beauté du geste raconte les premiers émois inoffensifs d'un jeune homme méthodique.",
+      "description": "La beauté du geste raconte les premiers émois inoffensifs d’un jeune homme méthodique.\n\nC-M dans le cadre du 5ème Kino Kabaret International de Bruxelles, du 29/03 au 5/04/13 à la Maison de la Création, Bruxelles-Nord (Laeken).",
       "credits": [],
       "externalLinks": [
         {
@@ -369,7 +379,11 @@
       "missingFiles": [],
       "order": 12,
       "year": 2013,
-      "format": "Court-métrage"
+      "format": [
+        "Réalisation",
+        "Scénario",
+        "Montage"
+      ]
     },
     {
       "slug": "que-faire-avec-innuit-siniswichi",
@@ -408,7 +422,12 @@
       "missingFiles": [],
       "order": 14,
       "year": 2013,
-      "format": "Essai expérimental"
+      "format": [
+        "Essai expérimental",
+        "Photos",
+        "Animation",
+        "Montage"
+      ]
     },
     {
       "slug": "la-robe-ragot",

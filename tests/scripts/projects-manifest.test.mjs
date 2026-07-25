@@ -58,6 +58,61 @@ test('Seconde Papillon contains approved formats, description, and cover image',
   )
 })
 
+test('Mirage contains approved formats and description', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'paphius')
+
+  assert.deepEqual(project.format, ['Making Of', 'Photos de plateau'])
+  assert.equal(
+    project.description,
+    'Clip musical du nouveau groupe "JOY" de Marc Huyghens (ex Vénus).\nLa thématique du film fait référence à « On achève bien les chevaux » de Sydney\nPollack, 1969.\n\nClip filmé en super 8 par Séverine De Strycker Joy is a belgian-swedish trio founded in Brussels in 2008. The group features Françoise Vidick on drums ans vocals, Anja Naucler on cello and Marc A. Huyghens (who previously fronted the band Venus) on guitar and vocals. Their music conjures up a nightly scent of wind, earth, soot and dust.',
+  )
+})
+
+test('Hip Hop de Rue contains approved formats, description, and annotated second video', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'hip-hop-de-rue')
+
+  assert.deepEqual(project.format, ['Making Of', 'Photos de plateau'])
+  assert.equal(project.description, 'Making of d’un clip musical du chanteur autodidacte Rodwyn')
+  assert.deepEqual(project.externalLinks[1], {
+    platform: 'YouTube',
+    url: 'https://www.youtube.com/watch?v=nDs5HIDi7BE',
+    description:
+      "Apres les clips BOOM SHAKATA et MA DING WA l'artiste RODWYN vous offre ce 3eme vidéogramme de la chanson hip hop de rue réalisé et montée par un jeune talent de la street du nom de Marabout.",
+  })
+})
+
+test('Manacao contains approved formats and replacement description', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'manacao')
+
+  assert.deepEqual(project.format, ['Making Of', 'Photos de plateau'])
+  assert.equal(
+    project.description,
+    "Si vous aimez le saphisme, l'inceste et la consanguinité et le tout dans une plaine de jeux, bon visionnage !\nCourt-Métrage de Donovan Alonso-Garcia\n\nPhotos de plateau et Making Of. Kino Kabaret International 2013 (Brussels).",
+  )
+})
+
+test('La Beauté du Geste contains approved formats, description, and video', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'la-beaute-du-geste')
+
+  assert.deepEqual(project.format, ['Réalisation', 'Scénario', 'Montage'])
+  assert.equal(
+    project.description,
+    'La beauté du geste raconte les premiers émois inoffensifs d’un jeune homme méthodique.\n\nC-M dans le cadre du 5ème Kino Kabaret International de Bruxelles, du 29/03 au 5/04/13 à la Maison de la Création, Bruxelles-Nord (Laeken).',
+  )
+  assert.equal(project.externalLinks[0].url, 'https://www.youtube.com/watch?v=7VESxLSnBDM')
+})
+
+test('Le Mariage Campagnard preserves its current format and adds the approved formats', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'le-mariage-campagnard')
+
+  assert.deepEqual(project.format, ['Essai expérimental', 'Photos', 'Animation', 'Montage'])
+})
+
 test('project format field supports the approved multiple values', async () => {
   const { Projects } = await import('../../src/collections/Projects.ts')
   const format = Projects.fields.find((field) => 'name' in field && field.name === 'format')

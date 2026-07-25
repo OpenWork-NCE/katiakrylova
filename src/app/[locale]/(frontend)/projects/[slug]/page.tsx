@@ -106,6 +106,7 @@ export default async function ProjectPage({ params }: Props) {
                     title={`${project.title} — ${link.platform}`}
                     layout="contained"
                   />
+                  {link.description && <p className="mt-sm max-w-prose whitespace-pre-line text-sm text-text-muted">{link.description}</p>}
                 </div>
               ) : (
                 <a

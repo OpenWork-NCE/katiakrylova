@@ -227,6 +227,7 @@ export interface Project {
     | 'Documentaire'
     | 'Film-documentaire'
     | 'Photos'
+    | 'Animation'
     | 'Collaboration'
     | 'Film'
     | 'Montage'
@@ -235,6 +236,7 @@ export interface Project {
     | 'Montage partiel'
     | 'Essai expérimental'
     | 'Making Of'
+    | 'Photos de plateau'
     | 'SCÉNARIO'
     | 'PRISE DE VUE'
     | 'MONTAGE'
@@ -258,6 +260,7 @@ export interface Project {
     | {
         platform: 'Vimeo' | 'YouTube';
         url: string;
+        description?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -577,6 +580,7 @@ export interface ProjectsSelect<T extends boolean = true> {
     | {
         platform?: T;
         url?: T;
+        description?: T;
         id?: T;
       };
   caseStudy?: T;

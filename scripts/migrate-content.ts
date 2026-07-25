@@ -16,6 +16,7 @@ type ProjectFormat =
   | 'Documentaire'
   | 'Film-documentaire'
   | 'Photos'
+  | 'Animation'
   | 'Collaboration'
   | 'Film'
   | 'Montage'
@@ -24,6 +25,7 @@ type ProjectFormat =
   | 'Montage partiel'
   | 'Essai expérimental'
   | 'Making Of'
+  | 'Photos de plateau'
   | 'SCÉNARIO'
   | 'PRISE DE VUE'
   | 'MONTAGE'
@@ -58,7 +60,7 @@ type ProjectsManifest = {
     coverImageOverride?: boolean
     gallery: string[]
     credits: Array<{ role: string; name: string }>
-    externalLinks: Array<{ platform: 'Vimeo' | 'YouTube'; url: string }>
+    externalLinks: Array<{ platform: 'Vimeo' | 'YouTube'; url: string; description?: string }>
   }>
 }
 
@@ -421,6 +423,7 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
             description: p.description,
             order: p.order,
             coverImage: coverImage ?? undefined,
+            externalLinks: p.externalLinks,
           },
           locale: 'fr',
         })
