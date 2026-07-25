@@ -22,7 +22,13 @@ const PROJECT_META = {
   'presentation-teresa-1': { year: 2021, format: 'Documentaire', description: 'TERESA VIESTI, présentation' },
   'teresa-viesti': { year: 2021, format: 'Documentaire', description: "Défilé pour l'école de Stylisme. Présentation de quatre pièces. Teresa Viesti Collection." },
   'light-vador': { year: 2016, format: 'Court-métrage', description: "La journée extraordinaire d'un héros ordinaire. Scénario, réalisation et montage." },
-  'la-petite-faucheuse': { year: 2015, format: 'Court-métrage', description: "«LA PETITE FAUCHEUSE» court-métrage de KATIA KRYLOVA Aurore, belle jeune femme de 28 ans, Victor son mari, 35 ans et leur petit garçon de 6 ans, Antoine, vivent heureux et sans histoires dans un monde …" },
+  'la-petite-faucheuse': {
+    year: 2015,
+    format: ['Court-métrage', 'Scénario', 'Réalisation', 'Montage partiel'],
+    description:
+      'Le film raconte une histoire familiale éclatée suite à un drame : la mort d’Antoine, 6 ans.\nLa mère, Aurore l’hallucine comme étant toujours présent, la douleur de la perte restant\ningérable.\nLe père, VIictor, est présent et absent, il a tout perdu. Et sa femme et son enfant. Il\nregarde cette épouse dévastée, il ira jusqu’à ‘voir’ la présence de son ls pour ne pas\nperdre sa femme.',
+    overrideDescription: true,
+  },
   strangers: {
     year: 2014,
     format: 'Making Of',

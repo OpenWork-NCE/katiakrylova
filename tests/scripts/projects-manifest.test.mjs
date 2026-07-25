@@ -35,6 +35,17 @@ test('La Petite Faucheuse uses YouTube as its primary video', async () => {
   assert.equal(project.externalLinks[0].url, 'https://www.youtube.com/watch?v=VPh0IlIfUdw')
 })
 
+test('La Petite Faucheuse contains approved formats and description', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'la-petite-faucheuse')
+
+  assert.deepEqual(project.format, ['Court-métrage', 'Scénario', 'Réalisation', 'Montage partiel'])
+  assert.equal(
+    project.description,
+    'Le film raconte une histoire familiale éclatée suite à un drame : la mort d’Antoine, 6 ans.\nLa mère, Aurore l’hallucine comme étant toujours présent, la douleur de la perte restant\ningérable.\nLe père, VIictor, est présent et absent, il a tout perdu. Et sa femme et son enfant. Il\nregarde cette épouse dévastée, il ira jusqu’à ‘voir’ la présence de son ls pour ne pas\nperdre sa femme.',
+  )
+})
+
 test('project format field supports the approved multiple values', async () => {
   const { Projects } = await import('../../src/collections/Projects.ts')
   const format = Projects.fields.find((field) => 'name' in field && field.name === 'format')

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-25T06:45:43.010Z",
+  "generatedAt": "2026-07-25T06:51:40.720Z",
   "count": 19,
   "warnings": [],
   "projects": [
@@ -157,7 +157,7 @@
         "IMG_0928.gif",
         "IMG_0915.gif"
       ],
-      "description": "«LA PETITE FAUCHEUSE» court-métrage de KATIA KRYLOVA Aurore, belle jeune femme de 28 ans, Victor son mari, 35 ans et leur petit garçon de 6 ans, Antoine, vivent heureux et sans histoires dans un monde …",
+      "description": "Le film raconte une histoire familiale éclatée suite à un drame : la mort d’Antoine, 6 ans.\nLa mère, Aurore l’hallucine comme étant toujours présent, la douleur de la perte restant\ningérable.\nLe père, VIictor, est présent et absent, il a tout perdu. Et sa femme et son enfant. Il\nregarde cette épouse dévastée, il ira jusqu’à ‘voir’ la présence de son ls pour ne pas\nperdre sa femme.",
       "credits": [
         {
           "role": "Voici les liens",
@@ -177,7 +177,12 @@
       "missingFiles": [],
       "order": 5,
       "year": 2015,
-      "format": "Court-métrage"
+      "format": [
+        "Court-métrage",
+        "Scénario",
+        "Réalisation",
+        "Montage partiel"
+      ]
     },
     {
       "slug": "strangers",
