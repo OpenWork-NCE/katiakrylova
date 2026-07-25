@@ -27,6 +27,14 @@ test('La Robe Ragot manifest entry contains approved formats and description', a
   )
 })
 
+test('La Petite Faucheuse uses YouTube as its primary video', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'la-petite-faucheuse')
+
+  assert.equal(project.externalLinks[0].platform, 'YouTube')
+  assert.equal(project.externalLinks[0].url, 'https://www.youtube.com/watch?v=VPh0IlIfUdw')
+})
+
 test('project format field supports the approved multiple values', async () => {
   const { Projects } = await import('../../src/collections/Projects.ts')
   const format = Projects.fields.find((field) => 'name' in field && field.name === 'format')

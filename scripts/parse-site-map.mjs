@@ -64,8 +64,8 @@ const EXTERNAL_LINKS = {
   ],
   'la-beaute-du-geste': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=7VESxLSnBDM' }],
   'la-petite-faucheuse': [
-    { platform: 'Vimeo', url: 'https://vimeo.com/168341224' },
     { platform: 'YouTube', url: 'https://www.youtube.com/watch?v=VPh0IlIfUdw' },
+    { platform: 'Vimeo', url: 'https://vimeo.com/168341224' },
   ],
   'la-robe-ragot': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=XRppup7OYgc' }],
   'la-tache-noire': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=d3n17bUjCWo' }],
