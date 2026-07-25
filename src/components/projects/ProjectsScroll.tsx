@@ -102,7 +102,7 @@ export function ProjectsScroll({ projects, locale }: Props) {
                           ·
                         </span>
                         <span>
-                          {project.format} · {project.year}
+                          {project.format.join(' · ')} · {project.year}
                         </span>
                       </div>
                       <h3 className="projects-scroll__name">{project.title}</h3>

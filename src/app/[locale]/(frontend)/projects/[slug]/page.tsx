@@ -69,7 +69,7 @@ export default async function ProjectPage({ params }: Props) {
           {project.title}
         </h1>
         <p className="mt-md text-[0.65rem] uppercase tracking-widest text-text-muted sm:text-xs">
-          {project.format} · {project.year}
+          {project.format.join(' · ')} · {project.year}
         </p>
         {project.description && (
           <p className="mt-lg max-w-prose text-base whitespace-pre-line sm:mt-xl sm:text-lg">

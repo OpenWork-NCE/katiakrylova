@@ -33,7 +33,7 @@ type ProjectsManifest = {
     slug: string
     title: string
     year: number
-    format: string
+    format: string | string[]
     description: string
     order: number
     coverImage: string | null
@@ -431,7 +431,17 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
           title: p.title,
           slug: p.slug,
           year: p.year,
-          format: p.format as 'Court-métrage' | 'Clip' | 'Performance' | 'Documentaire' | 'Essai expérimental' | 'Making Of',
+          format: (Array.isArray(p.format) ? p.format : [p.format]) as Array<
+            | 'Court-métrage'
+            | 'Clip'
+            | 'Performance'
+            | 'Documentaire'
+            | 'Essai expérimental'
+            | 'Making Of'
+            | 'SCÉNARIO'
+            | 'PRISE DE VUE'
+            | 'MONTAGE'
+          >,
           description: p.description,
           order: p.order,
           coverImage: coverId!,

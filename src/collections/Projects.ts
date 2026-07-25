@@ -30,6 +30,7 @@ export const Projects: CollectionConfig = {
     {
       name: 'format',
       type: 'select',
+      hasMany: true,
       required: true,
       options: [
         'Court-métrage',
@@ -38,6 +39,9 @@ export const Projects: CollectionConfig = {
         'Documentaire',
         'Essai expérimental',
         'Making Of',
+        'SCÉNARIO',
+        'PRISE DE VUE',
+        'MONTAGE',
       ],
     },
     { name: 'description', type: 'textarea', localized: true },

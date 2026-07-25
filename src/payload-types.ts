@@ -220,7 +220,17 @@ export interface Project {
   title: string;
   slug: string;
   year: number;
-  format: 'Court-métrage' | 'Clip' | 'Performance' | 'Documentaire' | 'Essai expérimental' | 'Making Of';
+  format: (
+    | 'Court-métrage'
+    | 'Clip'
+    | 'Performance'
+    | 'Documentaire'
+    | 'Essai expérimental'
+    | 'Making Of'
+    | 'SCÉNARIO'
+    | 'PRISE DE VUE'
+    | 'MONTAGE'
+  )[];
   description?: string | null;
   credits?:
     | {
@@ -262,6 +272,7 @@ export interface Project {
   order: number;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -565,6 +576,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   order?: T;
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -676,6 +688,9 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface About {
   id: number;
+  /**
+   * Texte principal (colonne gauche).
+   */
   bio: {
     root: {
       type: string;

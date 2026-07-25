@@ -23,14 +23,25 @@ const PROJECT_META = {
   'teresa-viesti': { year: 2021, format: 'Documentaire', description: "Défilé pour l'école de Stylisme. Présentation de quatre pièces. Teresa Viesti Collection." },
   'light-vador': { year: 2016, format: 'Court-métrage', description: "La journée extraordinaire d'un héros ordinaire. Scénario, réalisation et montage." },
   'la-petite-faucheuse': { year: 2015, format: 'Court-métrage', description: "«LA PETITE FAUCHEUSE» court-métrage de KATIA KRYLOVA Aurore, belle jeune femme de 28 ans, Victor son mari, 35 ans et leur petit garçon de 6 ans, Antoine, vivent heureux et sans histoires dans un monde …" },
-  strangers: { year: 2014, format: 'Making Of', description: 'Making Of, photos de plateau et affiche Premier court-métrage de Philippe Geus.' },
+  strangers: {
+    year: 2014,
+    format: 'Making Of',
+    description:
+      'Making Of, photos de plateau et affiche\n\nPremier court-métrage de Philippe Geus.\nAdaptation de “The strangers outside”, roman de Vanessa Morgan, scénariste du C-M.\nStrangers nous conte la soirée d’un père handicapé et de sa fille chérie, venus se retirer dans un chalet pour le week end.\nNuit d’horreur où la jeune fille perdra la vie dans des circonstances plus qu’étranges…',
+  },
   'seconde-papillon': { year: 2014, format: 'Performance', description: "Vidéo Performance autour de l'œuvre de la plasticienne Sylvie Pichrist sur la thématique des Métamorphoses." },
   paphius: { year: 2013, format: 'Clip', description: 'Making Of et photos de plateau Clip musical du nouveau groupe « JOY » de Marc Huyghens.' },
   'hip-hop-de-rue': { year: 2013, format: 'Clip', description: 'Making Of – Montage – Etalonnage – Photos Le chanteur auteur-compositeur Rodwyn.' },
   'alice-au-pays-des-ombres': { year: 2013, format: 'Essai expérimental', description: "Essai expérimental sur base d'images fixes. Music and lyrics by David Lynch." },
   manacao: { year: 2013, format: 'Making Of', description: 'Photos de plateau et Making Of. Kino Kabaret International 2013 (Brussels).' },
   'la-beaute-du-geste': { year: 2013, format: 'Court-métrage', description: "La beauté du geste raconte les premiers émois inoffensifs d'un jeune homme méthodique." },
-  'que-faire-avec-innuit-siniswichi': { year: 2013, format: 'Court-métrage', description: "Le projet expérimental autour du personnage d'innuit siniswichi, double conceptuel de l'artiste Sylvain Paris." },
+  'que-faire-avec-innuit-siniswichi': {
+    year: 2013,
+    format: ['SCÉNARIO', 'PRISE DE VUE', 'MONTAGE'],
+    description:
+      'Le projet expérimental autour du personnage d’innuit siniswichi, double conceptuel de l’artiste Sylvain Paris, est mon premier court-métrage.\nJe rencontre un homme qui se prend pour un éléphant, il se présente à moi sous le\nnom d’innuit siniswichi, je tente dans cet essai de lui donner réalité ...',
+    overrideDescription: true,
+  },
   'le-mariage-campagnard': { year: 2013, format: 'Essai expérimental', description: "Essai d'animation sur base de 200 photos ratées." },
   'la-robe-ragot': { year: 2013, format: 'Documentaire', description: "Mini Documentaire autour de l'oeuvre du sculpteur Sophie De Meyer." },
   'hero-zero': { year: 2013, format: 'Court-métrage', description: "Prise de vues, photos de plateau, montage et étalonnage. Court métrage de Sébastien mélot." },
@@ -58,6 +69,7 @@ const EXTERNAL_LINKS = {
   paphius: [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=S5_8AzISuqM' }],
   'presentation-teresa-1': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=HrX-4HMQHuM' }],
   'seconde-papillon': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=L0MMAVRswOY' }],
+  strangers: [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=JnnRxKFuVlw' }],
   'teresa-viesti': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=O3ABvb6TfmQ' }],
 }
 
@@ -159,7 +171,7 @@ async function main() {
     if (meta) {
       parsed.year = meta.year
       parsed.format = meta.format
-      if (!parsed.description && meta.description) parsed.description = meta.description
+      if ((!parsed.description || meta.overrideDescription) && meta.description) parsed.description = meta.description
     }
     if (parsed.missingFiles.length > 0) {
       warnings.push(`${slug}: missing ${parsed.missingFiles.join(', ')}`)
