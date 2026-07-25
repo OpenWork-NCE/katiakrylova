@@ -156,3 +156,9 @@ test('project formats render legacy strings and multiple values', () => {
   assert.equal(formatProjectFormats('Court-métrage'), 'Court-métrage')
   assert.equal(formatProjectFormats(['SCÉNARIO', 'PRISE DE VUE', 'MONTAGE']), 'SCÉNARIO · PRISE DE VUE · MONTAGE')
 })
+
+test('home hero shade keeps the background image visible', async () => {
+  const styles = await readFile('src/styles/home-hero.css', 'utf8')
+
+  assert.match(styles, /\.home-hero__shade\s*\{\s*background: rgba\(10, 10, 10, 0\.3\);\s*\}/)
+})
