@@ -92,8 +92,20 @@ const PROJECT_META = {
     overrideDescription: true,
   },
   'hero-zero': { year: 2013, format: 'Court-métrage', description: "Prise de vues, photos de plateau, montage et étalonnage. Court métrage de Sébastien mélot." },
-  yadel: { year: 2013, format: 'Making Of', description: 'Making Of et Photos de plateau. Yadel is the last son born to a Turkish family living in Belgium.' },
-  'cine-palace': { year: 2013, format: 'Making Of', description: 'Making Of, photos de plateau. Cine Palace court-métrage de Séverine De Streyker.' },
+  yadel: {
+    year: 2013,
+    format: ['Making Of', 'Photos de plateau'],
+    description:
+      'Le film «YADEL» plonge dans l’intimité d’un jeune homme venu au monde dans une famille où un garçon est né et mort avant lui et qui s’appelait déjà Yadel.\nHéritier du nom d’un mort, Yadel nous entraîne dans sa quête initiatique.\nYADEL est le premier film de Kenän Gorgün.',
+    overrideDescription: true,
+  },
+  'cine-palace': {
+    year: 2013,
+    format: ['Making Of', 'Photos de plateau'],
+    description:
+      '“CINE PALACE” court-métrage de SEVERINE DE STREYKER.\nCiné Palace retrace la journée d’une strip-teaseuse dans un huis clos d’un cinéma spectacle comme il n’en existe plus beaucoup.\n\nCine Palace\nSéverine De Streyker\nBelgium / 2011 / Fiction / 14\'18',
+    overrideDescription: true,
+  },
 }
 
 const EXTERNAL_LINKS = {
@@ -123,6 +135,16 @@ const EXTERNAL_LINKS = {
   'seconde-papillon': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=L0MMAVRswOY' }],
   strangers: [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=JnnRxKFuVlw' }],
   'teresa-viesti': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=O3ABvb6TfmQ' }],
+  yadel: [
+    { platform: 'YouTube', url: 'https://www.youtube.com/watch?v=ZAkgTis02Lw' },
+    { platform: 'Vimeo', url: 'https://vimeo.com/26809851' },
+    {
+      platform: 'Vimeo',
+      url: 'https://vimeo.com/49739191',
+      description:
+        'YADEL by Kenan Gorgun - turkish subtitled version\nAfter five books written and published by major houses in Paris, and two screenplays I wrote for\nmovie director Taylan Barman, I felt it was time for me to shot my own work. The result is YADEL.\nShot with very little money, it looks like to everyone that it costed 3 times more. It didn\'t. It is a good\nexample of making more with less. Had a great crew. Very short schedule to shot it but many many\nlocations; some entire sequences didn\'t survive the editing room. I made this movie as a "carte de\nvisite", in order to start working on my projet SAD SUGAR (which is meant to be the first movie of a\nthree-movie serie.) I have connections in France and Belgium, producers I worked with, and look\nfor a main producer (the movie would be shot in Turkish and English…).',
+    },
+  ],
 }
 
 function parseImagesSection(content) {

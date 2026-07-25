@@ -113,6 +113,37 @@ test('Le Mariage Campagnard preserves its current format and adds the approved f
   assert.deepEqual(project.format, ['Essai expérimental', 'Photos', 'Animation', 'Montage'])
 })
 
+test('YADEL contains approved formats, description, and three videos', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'yadel')
+
+  assert.deepEqual(project.format, ['Making Of', 'Photos de plateau'])
+  assert.equal(
+    project.description,
+    'Le film «YADEL» plonge dans l’intimité d’un jeune homme venu au monde dans une famille où un garçon est né et mort avant lui et qui s’appelait déjà Yadel.\nHéritier du nom d’un mort, Yadel nous entraîne dans sa quête initiatique.\nYADEL est le premier film de Kenän Gorgün.',
+  )
+  assert.deepEqual(project.externalLinks.map((link) => link.url), [
+    'https://www.youtube.com/watch?v=ZAkgTis02Lw',
+    'https://vimeo.com/26809851',
+    'https://vimeo.com/49739191',
+  ])
+  assert.equal(
+    project.externalLinks[2].description,
+    'YADEL by Kenan Gorgun - turkish subtitled version\nAfter five books written and published by major houses in Paris, and two screenplays I wrote for\nmovie director Taylan Barman, I felt it was time for me to shot my own work. The result is YADEL.\nShot with very little money, it looks like to everyone that it costed 3 times more. It didn\'t. It is a good\nexample of making more with less. Had a great crew. Very short schedule to shot it but many many\nlocations; some entire sequences didn\'t survive the editing room. I made this movie as a "carte de\nvisite", in order to start working on my projet SAD SUGAR (which is meant to be the first movie of a\nthree-movie serie.) I have connections in France and Belgium, producers I worked with, and look\nfor a main producer (the movie would be shot in Turkish and English…).',
+  )
+})
+
+test('Cine Palace contains approved formats and replacement description', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'cine-palace')
+
+  assert.deepEqual(project.format, ['Making Of', 'Photos de plateau'])
+  assert.equal(
+    project.description,
+    '“CINE PALACE” court-métrage de SEVERINE DE STREYKER.\nCiné Palace retrace la journée d’une strip-teaseuse dans un huis clos d’un cinéma spectacle comme il n’en existe plus beaucoup.\n\nCine Palace\nSéverine De Streyker\nBelgium / 2011 / Fiction / 14\'18',
+  )
+})
+
 test('project format field supports the approved multiple values', async () => {
   const { Projects } = await import('../../src/collections/Projects.ts')
   const format = Projects.fields.find((field) => 'name' in field && field.name === 'format')
