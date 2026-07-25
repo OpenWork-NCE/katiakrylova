@@ -9,7 +9,7 @@ import { ProjectCredits } from '@/components/projects/ProjectCredits'
 import { ProjectNav } from '@/components/projects/ProjectNav'
 import { VideoEmbed } from '@/components/projects/VideoEmbed'
 import { parseVideoUrl } from '@/lib/video'
-import { getMediaUrl } from '@/lib/utils'
+import { formatProjectFormats, getMediaUrl } from '@/lib/utils'
 
 type Props = { params: Promise<{ locale: string; slug: string }> }
 
@@ -69,7 +69,7 @@ export default async function ProjectPage({ params }: Props) {
           {project.title}
         </h1>
         <p className="mt-md text-[0.65rem] uppercase tracking-widest text-text-muted sm:text-xs">
-          {project.format.join(' · ')} · {project.year}
+          {formatProjectFormats(project.format)} · {project.year}
         </p>
         {project.description && (
           <p className="mt-lg max-w-prose text-base whitespace-pre-line sm:mt-xl sm:text-lg">

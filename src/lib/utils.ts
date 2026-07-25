@@ -28,6 +28,12 @@ export function getMediaUrl(media: unknown): string | null {
   return null
 }
 
+/** Render project formats from either legacy single values or Payload hasMany values. */
+export function formatProjectFormats(formats: string | readonly string[] | null | undefined): string {
+  if (typeof formats === 'string') return formats
+  return formats?.join(' · ') ?? ''
+}
+
 /** Absolute URL for WebGL textures (drei Image) and other client-only loaders. */
 export function getAbsoluteMediaUrl(pathOrUrl: string): string {
   const path = normalizeMediaPath(pathOrUrl)

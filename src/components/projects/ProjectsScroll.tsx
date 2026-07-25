@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import type { Project } from '@/payload-types'
-import { getMediaUrl } from '@/lib/utils'
+import { formatProjectFormats, getMediaUrl } from '@/lib/utils'
 import { ProjectsLanding } from './ProjectsLanding'
 import '@/styles/projects-scroll.css'
 
@@ -102,7 +102,7 @@ export function ProjectsScroll({ projects, locale }: Props) {
                           ·
                         </span>
                         <span>
-                          {project.format.join(' · ')} · {project.year}
+                          {formatProjectFormats(project.format)} · {project.year}
                         </span>
                       </div>
                       <h3 className="projects-scroll__name">{project.title}</h3>
