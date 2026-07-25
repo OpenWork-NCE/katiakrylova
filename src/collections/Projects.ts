@@ -37,6 +37,8 @@ export const Projects: CollectionConfig = {
         'Clip',
         'Performance',
         'Documentaire',
+        'Film-documentaire',
+        'Photos',
         'Essai expérimental',
         'Making Of',
         'SCÉNARIO',

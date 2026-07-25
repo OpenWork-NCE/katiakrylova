@@ -225,6 +225,8 @@ export interface Project {
     | 'Clip'
     | 'Performance'
     | 'Documentaire'
+    | 'Film-documentaire'
+    | 'Photos'
     | 'Essai expérimental'
     | 'Making Of'
     | 'SCÉNARIO'

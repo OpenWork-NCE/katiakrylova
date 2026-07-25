@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-25T06:04:04.494Z",
+  "generatedAt": "2026-07-25T06:36:03.612Z",
   "count": 19,
   "warnings": [],
   "projects": [
@@ -413,7 +413,7 @@
         "La-Robe-Ragot_071.jpg",
         "La-Robe-Ragot_081.jpg"
       ],
-      "description": "Mini Documentaire autour de l'oeuvre du sculpteur Sophie De Meyer.",
+      "description": "Mini Documentaire autour de l'oeuvre du sculpteur Sophie De Meyer :\nLa Robe Ragot\n\nC’est quoi un ragot, ça sert à quoi, c’est quoi être la plus belle pour aller danser?\nLa robe de Sophie De Meyer nous parle de cela et de bien plus ou comment de\nvulgaires papiers créent une oeuvre d’art.",
       "credits": [],
       "externalLinks": [
         {
@@ -424,7 +424,10 @@
       "missingFiles": [],
       "order": 15,
       "year": 2013,
-      "format": "Documentaire"
+      "format": [
+        "Film-documentaire",
+        "Photos"
+      ]
     },
     {
       "slug": "hero-zero",

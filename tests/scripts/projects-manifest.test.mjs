@@ -16,6 +16,17 @@ test('Innuit manifest entry contains approved formats and description', async ()
   )
 })
 
+test('La Robe Ragot manifest entry contains approved formats and description', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'la-robe-ragot')
+
+  assert.deepEqual(project.format, ['Film-documentaire', 'Photos'])
+  assert.equal(
+    project.description,
+    "Mini Documentaire autour de l'oeuvre du sculpteur Sophie De Meyer :\nLa Robe Ragot\n\nC’est quoi un ragot, ça sert à quoi, c’est quoi être la plus belle pour aller danser?\nLa robe de Sophie De Meyer nous parle de cela et de bien plus ou comment de\nvulgaires papiers créent une oeuvre d’art.",
+  )
+})
+
 test('project format field supports the approved multiple values', async () => {
   const { Projects } = await import('../../src/collections/Projects.ts')
   const format = Projects.fields.find((field) => 'name' in field && field.name === 'format')

@@ -43,7 +43,13 @@ const PROJECT_META = {
     overrideDescription: true,
   },
   'le-mariage-campagnard': { year: 2013, format: 'Essai expérimental', description: "Essai d'animation sur base de 200 photos ratées." },
-  'la-robe-ragot': { year: 2013, format: 'Documentaire', description: "Mini Documentaire autour de l'oeuvre du sculpteur Sophie De Meyer." },
+  'la-robe-ragot': {
+    year: 2013,
+    format: ['Film-documentaire', 'Photos'],
+    description:
+      'Mini Documentaire autour de l\'oeuvre du sculpteur Sophie De Meyer :\nLa Robe Ragot\n\nC’est quoi un ragot, ça sert à quoi, c’est quoi être la plus belle pour aller danser?\nLa robe de Sophie De Meyer nous parle de cela et de bien plus ou comment de\nvulgaires papiers créent une oeuvre d’art.',
+    overrideDescription: true,
+  },
   'hero-zero': { year: 2013, format: 'Court-métrage', description: "Prise de vues, photos de plateau, montage et étalonnage. Court métrage de Sébastien mélot." },
   yadel: { year: 2013, format: 'Making Of', description: 'Making Of et Photos de plateau. Yadel is the last son born to a Turkish family living in Belgium.' },
   'cine-palace': { year: 2013, format: 'Making Of', description: 'Making Of, photos de plateau. Cine Palace court-métrage de Séverine De Streyker.' },
