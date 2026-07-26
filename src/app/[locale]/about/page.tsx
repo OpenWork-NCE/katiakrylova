@@ -28,43 +28,46 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
   return (
     <div className="about-page">
-      <div
-        className="about-page__bg"
-        style={{ backgroundImage: `url('${backgroundUrl}')` }}
-        aria-hidden
-      />
-      <div className="about-page__scrim" aria-hidden />
-      <div className="about-page__vignette" aria-hidden />
-
-      <div className="about-page__inner">
-        <h1 className="about-page__title">{t('title')}</h1>
-
-        <div className="about-page__main">
-          {profileUrl ? (
-            <aside className="about-page__aside" aria-hidden={false}>
-              <div
-                className="about-page__portrait"
-                style={{
-                  aspectRatio: `${profileMedia?.width ?? PROFILE_FALLBACK.width} / ${
-                    profileMedia?.height ?? PROFILE_FALLBACK.height
-                  }`,
-                }}
-              >
-                <Image
-                  src={profileUrl}
-                  alt={profileAlt}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover object-top"
-                  priority
-                />
-              </div>
-            </aside>
-          ) : null}
-
-          <div className="about-page__bio">{about?.bio ? <RichText data={about.bio} /> : null}</div>
+      <section className="about-page__intro">
+        <div className="about-page__intro-backdrop" aria-hidden>
+          <div
+            className="about-page__bg"
+            style={{ backgroundImage: `url('${backgroundUrl}')` }}
+          />
+          <div className="about-page__scrim" />
+          <div className="about-page__vignette" />
         </div>
-      </div>
+
+        <div className="about-page__inner">
+          <h1 className="about-page__title">{t('title')}</h1>
+
+          <div className="about-page__main">
+            {profileUrl ? (
+              <aside className="about-page__aside" aria-hidden={false}>
+                <div
+                  className="about-page__portrait"
+                  style={{
+                    aspectRatio: `${profileMedia?.width ?? PROFILE_FALLBACK.width} / ${
+                      profileMedia?.height ?? PROFILE_FALLBACK.height
+                    }`,
+                  }}
+                >
+                  <Image
+                    src={profileUrl}
+                    alt={profileAlt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover object-top"
+                    priority
+                  />
+                </div>
+              </aside>
+            ) : null}
+
+            <div className="about-page__bio">{about?.bio ? <RichText data={about.bio} /> : null}</div>
+          </div>
+        </div>
+      </section>
 
       {visionUrl && about?.visionText ? (
         <section

@@ -3,26 +3,38 @@
    Portrait source : 600×746 (ratio ~0.804) */
 
 .about-page {
-  position: relative;
-  min-height: calc(100dvh - 4rem);
   background: var(--bg-primary);
+}
+
+.about-page__intro {
+  position: relative;
+  isolation: isolate;
+  min-height: calc(100dvh - 4rem);
   padding-bottom: max(4rem, env(safe-area-inset-bottom, 0px));
 }
 
-/* Fond fixe — sous le contenu et sous le footer (footer z-20 + fond opaque) */
+/* Fond viewport de la première section, borné avant la section Vision. */
+.about-page__intro-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .about-page__bg {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
   filter: brightness(0.58) contrast(1.05);
 }
 
 .about-page__scrim {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
@@ -30,7 +42,7 @@
 }
 
 .about-page__vignette {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
@@ -141,7 +153,7 @@
   position: relative;
   z-index: 10;
   min-height: min(100dvh, 56rem);
-  margin-top: 4rem;
+  margin-top: 0;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -244,6 +256,5 @@
 
   .about-page__vision {
     min-height: 40rem;
-    margin-top: 2.5rem;
   }
 }

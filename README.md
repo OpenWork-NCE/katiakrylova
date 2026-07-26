@@ -58,6 +58,7 @@ pnpm migrate:content                          # import complet
 Options :
 - `--dry-run` — simule sans écrire dans Payload
 - `--only=globals|portfolio|projects|journal` — section ciblée (journal = news)
+- `--project=<slug>` — limite l’import à un projet existant et synchronise sa galerie
 
 Le script importe : globals (home, about, contact), catégories portfolio, réalisations images, projets (covers + galeries + crédits), articles news.
 

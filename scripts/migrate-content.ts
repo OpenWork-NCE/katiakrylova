@@ -112,6 +112,7 @@ const args = process.argv.slice(2).filter((a) => a !== '--')
 const dryRun = args.includes('--dry-run')
 const replace = args.includes('--replace')
 const only = args.find((a) => a.startsWith('--only='))?.split('=')[1]
+const projectSlug = args.find((a) => a.startsWith('--project='))?.split('=')[1]
 
 function shouldRun(section: string) {
   return !only || only === section
@@ -405,7 +406,14 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
   let skipped = 0
 
   for (const p of manifest.projects) {
+    if (projectSlug && p.slug !== projectSlug) continue
+
     const formats = (Array.isArray(p.format) ? p.format : [p.format]) as ProjectFormat[]
+    const galleryIds: Array<{ image: number }> = []
+    for (const file of p.gallery) {
+      const id = await uploadMedia(payload, path.join(imagesRoot, file), `${p.title} — ${file}`, dryRun)
+      if (id) galleryIds.push({ image: id })
+    }
     const existing = await findBySlug(payload, 'projects', p.slug)
     if (existing) {
       if (!dryRun) {
@@ -421,6 +429,7 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
             description: p.description,
             order: p.order,
             coverImage: coverImage ?? undefined,
+            gallery: galleryIds,
             externalLinks: p.externalLinks,
           },
           locale: 'fr',
@@ -440,12 +449,6 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
         p.title,
         dryRun,
       )
-    }
-
-    const galleryIds: Array<{ image: number }> = []
-    for (const file of p.gallery) {
-      const id = await uploadMedia(payload, path.join(imagesRoot, file), `${p.title} — ${file}`, dryRun)
-      if (id) galleryIds.push({ image: id })
     }
 
     if (!coverId && !dryRun) {
@@ -475,7 +478,7 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
     created += 1
   }
 
-  console.log(`✓ Projects: ${created} created, ${updated} order-updated, ${skipped} skipped`)
+  console.log(`✓ Projects: ${created} created, ${updated} updated, ${skipped} skipped`)
 }
 
 async function migrateJournal(payload: Awaited<ReturnType<typeof getPayload>>, globals: GlobalsManifest) {

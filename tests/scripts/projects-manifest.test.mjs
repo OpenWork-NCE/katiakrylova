@@ -46,6 +46,24 @@ test('La Petite Faucheuse contains approved formats and description', async () =
   )
 })
 
+test('La Petite Faucheuse appends the supplied production stills to its gallery', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'la-petite-faucheuse')
+
+  assert.deepEqual(project.gallery.slice(-10), [
+    'LPF2.jpg',
+    'LPF3.jpg',
+    'LPF4.jpg',
+    'LPF5.jpg',
+    'LPF6.jpg',
+    'LPF7.jpg',
+    'LPF8.jpg',
+    'LPF9.jpg',
+    'LPF1.jpg',
+    'LPF10.jpg',
+  ])
+})
+
 test('Seconde Papillon contains approved formats, description, and cover image', async () => {
   const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
   const project = manifest.projects.find((entry) => entry.slug === 'seconde-papillon')
@@ -188,4 +206,15 @@ test('about page renders the portrait first and the CMS vision section', async (
   assert.match(page, /about-page__vision/)
   assert.match(styles, /\.about-page__bio\s*\{[\s\S]*?font-size: clamp\(0\.875rem, 2\.2vw, 1rem\);/)
   assert.match(styles, /\.about-page__vision-copy\s*\{[\s\S]*?text-align: left;/)
+})
+
+test('about keeps its two image sections isolated', async () => {
+  const page = await readFile('src/app/[locale]/about/page.tsx', 'utf8')
+  const styles = await readFile('src/styles/about-page.css', 'utf8')
+
+  assert.match(page, /<section className="about-page__intro">/)
+  assert.match(page, /className="about-page__intro-backdrop"/)
+  assert.match(styles, /\.about-page__intro-backdrop\s*\{[\s\S]*?position:\s*absolute;/)
+  assert.match(styles, /\.about-page__bg\s*\{[\s\S]*?background-attachment:\s*fixed;/)
+  assert.match(styles, /\.about-page__vision\s*\{[\s\S]*?margin-top:\s*0;/)
 })
