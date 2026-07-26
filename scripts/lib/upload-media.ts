@@ -19,7 +19,15 @@ function blobFilename(filePath: string): string {
   const marker = '/public/images/'
   const idx = normalized.toLowerCase().indexOf(marker)
   const rel = idx !== -1 ? normalized.slice(idx + marker.length) : path.basename(filePath)
-  return rel.replace(/\//g, '-')
+  // ASCII-safe blob key: path seps → hyphens, collapse spaces, strip unsafe chars
+  return rel
+    .replace(/\//g, '-')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/&/g, 'et')
+    .replace(/[^a-zA-Z0-9._-]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
 }
 
 function sleep(ms: number) {

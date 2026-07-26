@@ -2,10 +2,23 @@
 import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
-import type { Portfolio } from '@/payload-types'
+import type { Media, Portfolio } from '@/payload-types'
 import { getMediaUrl } from '@/lib/utils'
 import { PortfolioViewer } from '@/components/portfolio/PortfolioViewer'
 import { buildPortfolioSlides } from '@/components/portfolio/portfolio-slides'
+
+function coverMeta(coverImage: Portfolio['coverImage']) {
+  const src = getMediaUrl(coverImage)
+  if (!src) return null
+  const media = typeof coverImage === 'object' && coverImage !== null ? (coverImage as Media) : null
+  return {
+    src,
+    width: media?.width && media.width > 0 ? media.width : 1600,
+    height: media?.height && media.height > 0 ? media.height : 1200,
+    // Serve original bytes: art portfolios must not be recompressed by Next/Image.
+    unoptimized: true as const,
+  }
+}
 
 export function PortfolioGrid({
   items,
@@ -47,7 +60,7 @@ export function PortfolioGrid({
     <>
       <div className="columns-1 gap-md sm:columns-2 lg:columns-3">
         {items.map((p, workIndex) => {
-          const cover = getMediaUrl(p.coverImage)
+          const cover = coverMeta(p.coverImage)
           return (
             <button
               key={p.id}
@@ -58,18 +71,19 @@ export function PortfolioGrid({
               {cover && (
                 <div className="relative overflow-hidden">
                   <Image
-                    src={cover}
+                    src={cover.src}
                     alt={p.title}
-                    width={1200}
-                    height={800}
+                    width={cover.width}
+                    height={cover.height}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    quality={100}
+                    unoptimized={cover.unoptimized}
                     className="h-auto w-full transition duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-[1.02]"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-accent/0 transition duration-500 group-hover:bg-accent/10" />
                 </div>
               )}
               <h3 className="mt-sm font-hand text-lg text-text-primary sm:text-xl">{p.title}</h3>
-              <p className="text-[0.65rem] uppercase tracking-widest text-text-muted sm:text-xs">{p.year}</p>
             </button>
           )
         })}

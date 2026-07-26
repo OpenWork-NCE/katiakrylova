@@ -11,16 +11,16 @@ const root = join(__dirname, '..')
 const portfolioRoot = join(root, 'public/images/PORTFOLIO')
 const outPath = join(root, 'scripts/data/portfolio-manifest.json')
 
-/** Folder name → CMS category */
+/** Folder name → CMS category (display names plural except Identity) */
 const CATEGORY_MAP = {
   ACRYLIQUES: { name: 'Acryliques', slug: 'acryliques', order: 0 },
-  COLLAGES: { name: 'Collage', slug: 'collage', order: 1 },
-  GRAVURES: { name: 'Gravure', slug: 'gravure', order: 2 },
+  COLLAGES: { name: 'Collages', slug: 'collage', order: 1 },
+  GRAVURES: { name: 'Gravures', slug: 'gravure', order: 2 },
   LINOS: { name: 'Linos', slug: 'linos', order: 3 },
   IDENTITY: { name: 'Identity', slug: 'identity', order: 4 },
 }
 
-const IMAGE_EXT = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp', '.JPG', '.JPEG', '.PNG', '.GIF', '.WEBP'])
+const IMAGE_EXT = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp'])
 
 function naturalKey(name) {
   return name
@@ -39,25 +39,19 @@ function slugify(text) {
     .replace(/^-|-$/g, '')
 }
 
-/** Human title from filename */
-function titleFromFilename(filename, categoryName) {
+/**
+ * Human title from filename — the file name (sans extension) is the work title.
+ * Optional leading "N." / "N ." order prefixes are stripped (e.g. 1.BATELEUR → BATELEUR).
+ * Hyphens become spaces; original casing of the name is preserved.
+ */
+function titleFromFilename(filename) {
   let base = basename(filename, extname(filename))
   // double ext like Maman.gif.jpg
   base = base.replace(/\.(gif|jpg|jpeg|png|webp)$/i, '')
+  // strip tarot-style order prefix: "1.BATELEUR", "4 .EMPEREUR", "16.MAISON-DIEU 2"
+  base = base.replace(/^\d+\s*\.\s*/, '')
   base = base.replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim()
-  // pure number → "Acrylique 12"
-  if (/^\d+(\.\d+)?$/.test(base)) {
-    const singular = categoryName.replace(/s$/i, '')
-    return `${singular} ${base}`
-  }
-  // Title Case light
-  return base
-    .split(' ')
-    .map((w) => {
-      if (w.length <= 2 && w === w.toUpperCase()) return w
-      return w.charAt(0).toUpperCase() + w.slice(1)
-    })
-    .join(' ')
+  return base || filename
 }
 
 async function main() {
@@ -80,14 +74,14 @@ async function main() {
     if (!st.isDirectory()) continue
 
     const files = (await readdir(dir))
-      .filter((f) => IMAGE_EXT.has(extname(f)))
+      .filter((f) => IMAGE_EXT.has(extname(f).toLowerCase()))
       .sort((a, b) => naturalKey(a).localeCompare(naturalKey(b), 'fr'))
 
     byCategory[meta.name] = files.length
 
     for (const filename of files) {
       order += 1
-      const title = titleFromFilename(filename, meta.name)
+      const title = titleFromFilename(filename)
       const slugBase = slugify(`${meta.slug}-${title}`) || `${meta.slug}-${order}`
       const localPath = `PORTFOLIO/${folder}/${filename}`
 

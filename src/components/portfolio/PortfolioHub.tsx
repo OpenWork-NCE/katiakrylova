@@ -9,7 +9,7 @@ export type HubCategory = {
 
 const BACKDROP = '/images/bg_portfolio.jpg'
 
-/** Rubriques affichées sur le hub (ordre d’intention). Letter exclu volontairement. */
+/** Rubriques affichées sur le hub (ordre d’intention). Noms CMS au pluriel sauf Identity. Letter exclu. */
 export const HUB_CATEGORY_SLUGS = ['acryliques', 'collage', 'gravure', 'linos', 'identity'] as const
 
 type Props = {

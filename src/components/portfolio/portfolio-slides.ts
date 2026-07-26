@@ -7,15 +7,22 @@ export type PortfolioSlide = {
   alt: string
   width?: number
   height?: number
+  /** True for GIF / animated media — must bypass Next image optimizer. */
+  unoptimized: boolean
   workId: number
   workSlug: string
   title: string
-  year: number
   categoryName: string
   categorySlug: string
   workIndex: number
   imageIndex: number
   imageCount: number
+}
+
+function isUnoptimizedMedia(media: Media, src: string) {
+  const mime = media.mimeType?.toLowerCase() ?? ''
+  if (mime === 'image/gif' || mime.startsWith('video/')) return true
+  return /\.gif($|\?)/i.test(src)
 }
 
 function mediaEntry(media: number | Media | null | undefined) {
@@ -27,6 +34,7 @@ function mediaEntry(media: number | Media | null | undefined) {
     alt: media.alt ?? '',
     width: media.width ?? undefined,
     height: media.height ?? undefined,
+    unoptimized: isUnoptimizedMedia(media, src),
     id: media.id,
   }
 }
@@ -68,10 +76,10 @@ export function buildPortfolioSlides(items: Portfolio[]): PortfolioSlide[] {
         alt: entry.alt || item.title,
         width: entry.width,
         height: entry.height,
+        unoptimized: entry.unoptimized,
         workId: item.id,
         workSlug: item.slug,
         title: item.title,
-        year: item.year,
         categoryName: cat.name,
         categorySlug: cat.slug,
         workIndex,

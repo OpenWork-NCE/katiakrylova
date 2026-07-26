@@ -230,12 +230,12 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
   console.log('✓ Globals: home, about, contact, journal')
 }
 
-/** Hub order: Acryliques · Collage · Gravure · Linos · Identity. Letter kept for legacy items. */
+/** Hub order: Acryliques · Collages · Gravures · Linos · Identity. Letter kept for legacy items. */
 async function migrateCategories(payload: Awaited<ReturnType<typeof getPayload>>) {
   const categories = [
     { name: 'Acryliques', slug: 'acryliques', order: 0 },
-    { name: 'Collage', slug: 'collage', order: 1 },
-    { name: 'Gravure', slug: 'gravure', order: 2 },
+    { name: 'Collages', slug: 'collage', order: 1 },
+    { name: 'Gravures', slug: 'gravure', order: 2 },
     { name: 'Linos', slug: 'linos', order: 3 },
     { name: 'Identity', slug: 'identity', order: 4 },
     { name: 'Letter', slug: 'letter', order: 99 },
@@ -246,12 +246,14 @@ async function migrateCategories(payload: Awaited<ReturnType<typeof getPayload>>
     const existing = await findBySlug(payload, 'portfolio-categories', slug)
     if (existing) {
       if (!dryRun) {
-        await payload.update({
-          collection: 'portfolio-categories',
-          id: existing.id,
-          data: { name, order },
-          locale: 'fr',
-        })
+        for (const locale of ['fr', 'en'] as const) {
+          await payload.update({
+            collection: 'portfolio-categories',
+            id: existing.id,
+            data: { name, order },
+            locale,
+          })
+        }
       }
       ids[slug] = existing.id
       continue
@@ -264,6 +266,12 @@ async function migrateCategories(payload: Awaited<ReturnType<typeof getPayload>>
       collection: 'portfolio-categories',
       data: { name, slug, order },
       locale: 'fr',
+    })
+    await payload.update({
+      collection: 'portfolio-categories',
+      id: doc.id,
+      data: { name, order },
+      locale: 'en',
     })
     ids[slug] = doc.id
   }

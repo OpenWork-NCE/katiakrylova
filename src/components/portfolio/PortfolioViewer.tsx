@@ -322,8 +322,12 @@ export function PortfolioViewer({ open, slides, index, onClose, onIndexChange }:
             key={slide.key}
             src={slide.src}
             alt={slide.alt}
-            width={slide.width ?? 1600}
-            height={slide.height ?? 1200}
+            width={slide.width ?? 2400}
+            height={slide.height ?? 1800}
+            sizes="100vw"
+            quality={100}
+            // Full original for zoom + art fidelity (no Next recompression / GIF loss).
+            unoptimized
             className="max-h-[calc(100vh-15rem)] w-auto max-w-full select-none object-contain shadow-[0_24px_80px_rgba(0,0,0,0.65)]"
             priority
             draggable={false}
@@ -338,7 +342,7 @@ export function PortfolioViewer({ open, slides, index, onClose, onIndexChange }:
       >
         <p className="font-hand text-[clamp(1.6rem,4vw,3rem)] leading-none text-text-primary">{slide.title}</p>
         <p className="mt-xs text-xs uppercase tracking-[0.2em] text-text-muted">
-          {slide.categoryName} · {slide.year}
+          {slide.categoryName}
           {slide.imageCount > 1 && (
             <span className="ml-sm text-accent">
               {slide.imageIndex + 1}/{slide.imageCount}
@@ -366,7 +370,15 @@ export function PortfolioViewer({ open, slides, index, onClose, onIndexChange }:
               aria-current={active}
             >
               <div className="relative h-14 w-20">
-                <Image src={thumb.cover} alt="" fill className="object-cover" sizes="80px" />
+                <Image
+                  src={thumb.cover}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="80px"
+                  quality={90}
+                  unoptimized={/\.gif($|\?)/i.test(thumb.cover)}
+                />
               </div>
               <span className="block max-w-20 truncate px-xs py-[2px] text-[8px] uppercase tracking-wider text-text-muted">
                 {thumb.categoryName}
