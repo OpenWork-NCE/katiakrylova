@@ -24,7 +24,7 @@
   /* même corpus que .about-page__bio */
   font-family: var(--font-body);
   font-weight: var(--font-weight-bold);
-  font-size: clamp(0.875rem, 2.2vw, 1rem);
+  font-size: clamp(0.8rem, 1.9vw, 0.9rem);
   line-height: 1.7;
   letter-spacing: 0.02em;
   color: var(--text-primary);
