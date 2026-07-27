@@ -31,7 +31,8 @@ export function HeaderBar({ locale, items }: Props) {
             width={120}
             height={32}
             className="h-auto w-[clamp(4.75rem,28vw,7.5rem)]"
-            priority
+            // Avoid competing with the home hero LCP image
+            priority={!isHome}
           />
         </Link>
         <nav

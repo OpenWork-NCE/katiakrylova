@@ -23,12 +23,13 @@
   animation: home-ken-burns 24s ease-in-out infinite alternate;
   animation-delay: 1s;
   will-change: transform;
-  opacity: 0;
-  transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Keep LCP paint visible immediately; only soft-fade in when ready */
+  opacity: 1;
 }
 
-.home-hero--ready .home-hero__image {
-  opacity: 1;
+.home-hero:not(.home-hero--ready) .home-hero__image {
+  opacity: 0.92;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .home-hero__shade {

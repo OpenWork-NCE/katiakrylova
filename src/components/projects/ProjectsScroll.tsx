@@ -4,8 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import type { Project } from '@/payload-types'
-import { formatProjectFormats, getMediaUrl } from '@/lib/utils'
+import type { ProjectListItem } from '@/lib/project-list'
+import { formatProjectFormats } from '@/lib/utils'
 import { ProjectsLanding } from './ProjectsLanding'
 import {
   ProjectsFilter,
@@ -15,7 +15,7 @@ import {
 import '@/styles/projects-scroll.css'
 
 type Props = {
-  projects: Project[]
+  projects: ProjectListItem[]
   locale: string
 }
 
@@ -59,7 +59,6 @@ export function ProjectsScroll({ projects, locale }: Props) {
       return
     }
 
-    // Reset visibility when the filtered set changes
     items.forEach((el) => el.classList.remove('projects-scroll__item--visible'))
 
     const observer = new IntersectionObserver(
@@ -115,7 +114,7 @@ export function ProjectsScroll({ projects, locale }: Props) {
           ) : (
             <ul ref={listRef} className="projects-scroll__list">
               {filtered.map((project, i) => {
-                const cover = getMediaUrl(project.coverImage)
+                const cover = project.coverUrl
                 const n = padIndex(i + 1, total)
 
                 return (
@@ -136,7 +135,7 @@ export function ProjectsScroll({ projects, locale }: Props) {
                             sizes="(max-width: 768px) 90vw, 420px"
                             className="object-cover"
                             priority={i < 4}
-                            quality={90}
+                            quality={85}
                           />
                         ) : (
                           <span className="projects-scroll__still-placeholder">—</span>

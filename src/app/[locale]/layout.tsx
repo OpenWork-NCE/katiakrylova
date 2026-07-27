@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout/Footer'
 import { ConditionalFooter } from '@/components/layout/ConditionalFooter'
 import { FilmGrain } from '@/components/ui/FilmGrain'
 import { PageTransitionProvider } from '@/components/transitions/PageTransitionProvider'
+import { fontBody, fontHand } from '@/lib/fonts'
 
 const locales = ['fr', 'en'] as const
 
@@ -32,8 +33,8 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   const messages = await getMessages()
 
   return (
-    <html lang={locale}>
-      <body>
+    <html lang={locale} className={`${fontHand.variable} ${fontBody.variable}`}>
+      <body className={fontBody.className}>
         <NextIntlClientProvider messages={messages}>
           <PageTransitionProvider>
             <Header locale={locale} />

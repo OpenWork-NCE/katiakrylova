@@ -1,12 +1,17 @@
 import type { Portfolio, PortfolioCategory, Media } from '@/payload-types'
-import { getMediaUrl } from '@/lib/utils'
+import { getMediaDimensions, getMediaUrl, isAnimatedMedia } from '@/lib/utils'
 
 export type PortfolioSlide = {
   key: string
+  /** Full original — used only by the portfolio liseuse (must never be recompressed). */
   src: string
+  /** Smaller derivative for grid / strip when available. */
+  thumbSrc: string
   alt: string
   width?: number
   height?: number
+  thumbWidth?: number
+  thumbHeight?: number
   /** True for GIF / animated media — must bypass Next image optimizer. */
   unoptimized: boolean
   workId: number
@@ -19,22 +24,23 @@ export type PortfolioSlide = {
   imageCount: number
 }
 
-function isUnoptimizedMedia(media: Media, src: string) {
-  const mime = media.mimeType?.toLowerCase() ?? ''
-  if (mime === 'image/gif' || mime.startsWith('video/')) return true
-  return /\.gif($|\?)/i.test(src)
-}
-
 function mediaEntry(media: number | Media | null | undefined) {
   if (!media || typeof media === 'number') return null
-  const src = getMediaUrl(media)
+  // Liseuse always uses master bytes
+  const src = getMediaUrl(media, 'original')
   if (!src) return null
+  const thumbSrc = getMediaUrl(media, 'card') ?? src
+  const originalDims = getMediaDimensions(media, 'original')
+  const cardDims = getMediaDimensions(media, 'card')
   return {
     src,
+    thumbSrc,
     alt: media.alt ?? '',
-    width: media.width ?? undefined,
-    height: media.height ?? undefined,
-    unoptimized: isUnoptimizedMedia(media, src),
+    width: originalDims.width,
+    height: originalDims.height,
+    thumbWidth: cardDims.width ?? originalDims.width,
+    thumbHeight: cardDims.height ?? originalDims.height,
+    unoptimized: isAnimatedMedia(media, src),
     id: media.id,
   }
 }
@@ -73,9 +79,12 @@ export function buildPortfolioSlides(items: Portfolio[]): PortfolioSlide[] {
       slides.push({
         key: `${item.id}-${imageIndex}`,
         src: entry.src,
+        thumbSrc: entry.thumbSrc,
         alt: entry.alt || item.title,
         width: entry.width,
         height: entry.height,
+        thumbWidth: entry.thumbWidth,
+        thumbHeight: entry.thumbHeight,
         unoptimized: entry.unoptimized,
         workId: item.id,
         workSlug: item.slug,
@@ -98,6 +107,7 @@ export type WorkThumb = {
   cover: string
   title: string
   categoryName: string
+  unoptimized: boolean
 }
 
 /** First slide index for each portfolio work (for thumbnail strip). */
@@ -108,15 +118,18 @@ export function workThumbIndices(slides: PortfolioSlide[]): WorkThumb[] {
       map.set(slide.workIndex, {
         workIndex: slide.workIndex,
         slideIndex,
-        cover: slide.src,
+        // Strip uses card derivative when available
+        cover: slide.thumbSrc,
         title: slide.title,
         categoryName: slide.categoryName,
+        unoptimized: slide.unoptimized,
       })
     }
   })
   return [...map.values()].sort((a, b) => a.workIndex - b.workIndex)
 }
 
+/** Preload original master (liseuse navigation). */
 export function preloadImage(src: string): Promise<void> {
   return new Promise((resolve) => {
     const img = new window.Image()

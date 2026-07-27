@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import { getProjectBySlug, getAdjacentProjects } from '@/lib/payload'
+import { getProjectBySlug, getAdjacentProjects, getProjectSlugs } from '@/lib/payload'
 import { ProjectGallery } from '@/components/projects/ProjectGallery'
 import { ProjectCredits } from '@/components/projects/ProjectCredits'
 import { ProjectNav } from '@/components/projects/ProjectNav'
@@ -12,6 +12,13 @@ import { formatProjectFormats, getMediaUrl } from '@/lib/utils'
 import '@/styles/project-detail.css'
 
 type Props = { params: Promise<{ locale: string; slug: string }> }
+
+export const revalidate = 600
+
+export async function generateStaticParams() {
+  const slugs = await getProjectSlugs()
+  return ['fr', 'en'].flatMap((locale) => slugs.map((slug) => ({ locale, slug })))
+}
 
 export default async function ProjectPage({ params }: Props) {
   const { locale, slug } = await params
@@ -23,7 +30,8 @@ export default async function ProjectPage({ params }: Props) {
   if (!project) notFound()
 
   const { prev, next } = await getAdjacentProjects(project.order, locale as 'fr' | 'en')
-  const cover = getMediaUrl(project.coverImage)
+  // Cover when no video: HD derivative is enough for ~768px hero
+  const cover = getMediaUrl(project.coverImage, 'hd')
 
   const links = (project.externalLinks ?? []).filter(
     (l) => l?.url && parseVideoUrl(l.url, l.platform ?? undefined),
@@ -129,24 +137,8 @@ export default async function ProjectPage({ params }: Props) {
       ) : null}
 
       <ProjectNav
-        prev={
-          prev
-            ? {
-                slug: prev.slug,
-                title: prev.title,
-                coverImage: typeof prev.coverImage === 'object' ? prev.coverImage : undefined,
-              }
-            : undefined
-        }
-        next={
-          next
-            ? {
-                slug: next.slug,
-                title: next.title,
-                coverImage: typeof next.coverImage === 'object' ? next.coverImage : undefined,
-              }
-            : undefined
-        }
+        prev={prev}
+        next={next}
         locale={locale}
       />
     </article>

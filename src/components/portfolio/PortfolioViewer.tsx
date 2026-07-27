@@ -377,7 +377,7 @@ export function PortfolioViewer({ open, slides, index, onClose, onIndexChange }:
                   className="object-cover"
                   sizes="80px"
                   quality={90}
-                  unoptimized={/\.gif($|\?)/i.test(thumb.cover)}
+                  unoptimized={thumb.unoptimized || /\.gif($|\?)/i.test(thumb.cover)}
                 />
               </div>
               <span className="block max-w-20 truncate px-xs py-[2px] text-[8px] uppercase tracking-wider text-text-muted">

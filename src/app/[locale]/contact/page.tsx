@@ -5,6 +5,8 @@ import { ContactView } from '@/components/contact/ContactView'
 
 const FALLBACK_BG = '/images/Fonds Contact.jpg'
 
+export const revalidate = 600
+
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)
@@ -13,7 +15,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
     getContact(locale as 'fr' | 'en'),
   ])
 
-  const backgroundUrl = getMediaUrl(contact?.backgroundImage) ?? FALLBACK_BG
+  const backgroundUrl = getMediaUrl(contact?.backgroundImage, 'hd') ?? FALLBACK_BG
 
   return (
     <ContactView

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateProjects } from '../lib/revalidate'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
@@ -8,6 +9,18 @@ export const Projects: CollectionConfig = {
     drafts: {
       autosave: false,
     },
+  },
+  hooks: {
+    afterChange: [
+      ({ doc }) => {
+        revalidateProjects(typeof doc?.slug === 'string' ? doc.slug : undefined)
+      },
+    ],
+    afterDelete: [
+      ({ doc }) => {
+        revalidateProjects(typeof doc?.slug === 'string' ? doc.slug : undefined)
+      },
+    ],
   },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },

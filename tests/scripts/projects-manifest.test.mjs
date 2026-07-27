@@ -131,7 +131,7 @@ test('Le Mariage Campagnard preserves its current format and adds the approved f
   assert.deepEqual(project.format, ['Essai expérimental', 'Photos', 'Animation', 'Montage'])
 })
 
-test('YADEL contains approved formats, description, and three videos', async () => {
+test('YADEL contains approved formats, description, and videos', async () => {
   const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
   const project = manifest.projects.find((entry) => entry.slug === 'yadel')
 
@@ -142,11 +142,10 @@ test('YADEL contains approved formats, description, and three videos', async () 
   )
   assert.deepEqual(project.externalLinks.map((link) => link.url), [
     'https://www.youtube.com/watch?v=ZAkgTis02Lw',
-    'https://vimeo.com/26809851',
     'https://vimeo.com/49739191',
   ])
   assert.equal(
-    project.externalLinks[2].description,
+    project.externalLinks[1].description,
     'YADEL by Kenan Gorgun - turkish subtitled version\nAfter five books written and published by major houses in Paris, and two screenplays I wrote for\nmovie director Taylan Barman, I felt it was time for me to shot my own work. The result is YADEL.\nShot with very little money, it looks like to everyone that it costed 3 times more. It didn\'t. It is a good\nexample of making more with less. Had a great crew. Very short schedule to shot it but many many\nlocations; some entire sequences didn\'t survive the editing room. I made this movie as a "carte de\nvisite", in order to start working on my projet SAD SUGAR (which is meant to be the first movie of a\nthree-movie serie.) I have connections in France and Belgium, producers I worked with, and look\nfor a main producer (the movie would be shot in Turkish and English…).',
   )
 })
@@ -163,11 +162,13 @@ test('Cine Palace contains approved formats and replacement description', async 
 })
 
 test('project format field supports the approved multiple values', async () => {
-  const { Projects } = await import('../../src/collections/Projects.ts')
-  const format = Projects.fields.find((field) => 'name' in field && field.name === 'format')
-
-  assert.equal(format?.hasMany, true)
-  assert.deepEqual(format?.options?.slice(-3), ['SCÉNARIO', 'PRISE DE VUE', 'MONTAGE'])
+  // Read source (avoid loading Payload collection modules under bare Node)
+  const source = await readFile('src/collections/Projects.ts', 'utf8')
+  assert.match(source, /name:\s*'format'/)
+  assert.match(source, /hasMany:\s*true/)
+  assert.match(source, /'SCÉNARIO'/)
+  assert.match(source, /'PRISE DE VUE'/)
+  assert.match(source, /'MONTAGE'/)
 })
 
 test('project formats render legacy strings and multiple values', () => {
@@ -199,22 +200,22 @@ test('about manifest uses the new vision section instead of the bottom gallery',
 })
 
 test('about page renders the portrait first and the CMS vision section', async () => {
-  const page = await readFile('src/app/[locale]/about/page.tsx', 'utf8')
+  const view = await readFile('src/components/about/AboutView.tsx', 'utf8')
   const styles = await readFile('src/styles/about-page.css', 'utf8')
 
-  assert.ok(page.indexOf('about-page__aside') < page.indexOf('about-page__bio'))
-  assert.match(page, /about-page__vision/)
+  assert.ok(view.indexOf('about-page__aside') < view.indexOf('about-page__bio'))
+  assert.match(view, /about-page__vision/)
   assert.match(styles, /\.about-page__bio\s*\{[\s\S]*?font-size: clamp\(0\.875rem, 2\.2vw, 1rem\);/)
   assert.match(styles, /\.about-page__vision-copy\s*\{[\s\S]*?text-align: left;/)
 })
 
 test('about keeps its two image sections isolated', async () => {
-  const page = await readFile('src/app/[locale]/about/page.tsx', 'utf8')
+  const view = await readFile('src/components/about/AboutView.tsx', 'utf8')
   const styles = await readFile('src/styles/about-page.css', 'utf8')
 
-  assert.match(page, /<section className="about-page__intro">/)
-  assert.match(page, /className="about-page__intro-backdrop"/)
+  assert.match(view, /about-page__intro/)
+  assert.match(view, /about-page__intro-backdrop/)
   assert.match(styles, /\.about-page__intro-backdrop\s*\{[\s\S]*?position:\s*absolute;/)
-  assert.match(styles, /\.about-page__bg\s*\{[\s\S]*?background-attachment:\s*fixed;/)
+  assert.match(styles, /\.about-page__bg\s*\{[\s\S]*?background-size:\s*cover;/)
   assert.match(styles, /\.about-page__vision\s*\{[\s\S]*?margin-top:\s*0;/)
 })

@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import type { Project } from '@/payload-types'
-import { formatProjectFormats } from '@/lib/utils'
+import type { ProjectListItem } from '@/lib/project-list'
+import { projectListSearchHaystack } from '@/lib/project-list'
 import '@/styles/projects-filter.css'
 
 export type ProjectsFilterState = {
@@ -13,7 +13,7 @@ export type ProjectsFilterState = {
 }
 
 type Props = {
-  projects: Project[]
+  projects: ProjectListItem[]
   value: ProjectsFilterState
   onChange: (next: ProjectsFilterState) => void
   resultCount: number
@@ -23,11 +23,10 @@ type Props = {
 /** Formats visibles sur une ligne (hors chip « Tous »). */
 const FORMAT_COLLAPSED_COUNT = 5
 
-function uniqueSortedFormats(projects: Project[]): string[] {
+function uniqueSortedFormats(projects: ProjectListItem[]): string[] {
   const counts = new Map<string, number>()
   for (const p of projects) {
-    const formats = Array.isArray(p.format) ? p.format : p.format ? [p.format] : []
-    for (const f of formats) {
+    for (const f of p.format) {
       if (!f) continue
       counts.set(f, (counts.get(f) ?? 0) + 1)
     }
@@ -37,7 +36,7 @@ function uniqueSortedFormats(projects: Project[]): string[] {
     .map(([f]) => f)
 }
 
-function uniqueSortedYears(projects: Project[]): number[] {
+function uniqueSortedYears(projects: ProjectListItem[]): number[] {
   const years = new Set<number>()
   for (const p of projects) {
     if (typeof p.year === 'number') years.add(p.year)
@@ -45,33 +44,23 @@ function uniqueSortedYears(projects: Project[]): number[] {
   return [...years].sort((a, b) => b - a)
 }
 
-export function filterProjects(projects: Project[], state: ProjectsFilterState): Project[] {
+export function filterProjects(
+  projects: ProjectListItem[],
+  state: ProjectsFilterState,
+): ProjectListItem[] {
   const q = state.query.trim().toLowerCase()
   const formats = state.formats
   const years = state.years
 
   return projects.filter((p) => {
-    const pFormats = Array.isArray(p.format) ? p.format : p.format ? [String(p.format)] : []
-
-    if (formats.length > 0 && !formats.some((f) => pFormats.includes(f))) {
+    if (formats.length > 0 && !formats.some((f) => p.format.includes(f))) {
       return false
     }
     if (years.length > 0 && !years.includes(p.year)) {
       return false
     }
     if (!q) return true
-
-    const haystack = [
-      p.title,
-      p.slug,
-      p.description ?? '',
-      formatProjectFormats(pFormats),
-      String(p.year),
-    ]
-      .join(' ')
-      .toLowerCase()
-
-    return haystack.includes(q)
+    return projectListSearchHaystack(p).includes(q)
   })
 }
 
@@ -250,3 +239,4 @@ export function ProjectsFilter({ projects, value, onChange, resultCount, visible
     </div>
   )
 }
+

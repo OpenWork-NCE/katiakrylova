@@ -2,6 +2,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getPortfolioCategories } from '@/lib/payload'
 import { PortfolioHub, type HubCategory } from '@/components/portfolio/PortfolioHub'
 
+export const revalidate = 600
+
 export default async function PortfolioPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)

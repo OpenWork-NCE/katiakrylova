@@ -1,8 +1,12 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobal } from '../lib/revalidate'
 
 export const Journal: GlobalConfig = {
   slug: 'journal',
   label: 'News (page)',
+  hooks: {
+    afterChange: [() => revalidateGlobal('journal')],
+  },
   fields: [
     {
       name: 'photo',

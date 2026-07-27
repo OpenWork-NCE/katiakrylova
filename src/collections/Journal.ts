@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateJournal } from '../lib/revalidate'
 
 export const Journal: CollectionConfig = {
   slug: 'journal-entries',
@@ -11,6 +12,18 @@ export const Journal: CollectionConfig = {
     group: 'Contenu',
   },
   access: { read: () => true },
+  hooks: {
+    afterChange: [
+      ({ doc }) => {
+        revalidateJournal(typeof doc?.slug === 'string' ? doc.slug : undefined)
+      },
+    ],
+    afterDelete: [
+      ({ doc }) => {
+        revalidateJournal(typeof doc?.slug === 'string' ? doc.slug : undefined)
+      },
+    ],
+  },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
     { name: 'slug', type: 'text', required: true, unique: true },

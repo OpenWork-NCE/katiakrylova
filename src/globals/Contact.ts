@@ -1,8 +1,12 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobal } from '../lib/revalidate'
 
 export const Contact: GlobalConfig = {
   slug: 'contact',
   label: 'Contact',
+  hooks: {
+    afterChange: [() => revalidateGlobal('contact')],
+  },
   fields: [
     {
       name: 'backgroundImage',

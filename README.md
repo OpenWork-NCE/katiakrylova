@@ -64,11 +64,21 @@ Le script importe : globals (home, about, contact), catégories portfolio, réal
 
 Idempotent : relancer le script ignore les entrées déjà présentes (slug existant).
 
-## Scores Lighthouse (mesurés le 2026-06-25)
-- Performance: à mesurer
-- Accessibility: à mesurer
-- Best Practices: à mesurer
-- SEO: à mesurer
+## Performance & cache (2026-07-27)
+
+Stratégie en place :
+- **ISR** `revalidate = 600` sur les pages publiques + `generateStaticParams` pour slugs
+- **Data cache** Payload via `unstable_cache` + tags invalidés par hooks CMS (`src/lib/cache.ts`, `src/lib/revalidate.ts`)
+- **Média dual** : listes/grilles → dérivés Payload (`card`/`hd`) ; **liseuse portfolio** et **lightbox projets** → **originaux** uniquement
+- **CDN** : `Cache-Control` long sur `/fonts/*` et `/images/*` ; `images.minimumCacheTTL` 7j ; AVIF/WebP
+- **Fonts** : `next/font` (Kaushan + Prestige Elite local), plus de `@import` Google
+
+### Contrainte qualité
+Les œuvres en liseuse portfolio (`PortfolioViewer`) et les images en liseuse projets (`ImageLightbox`) restent en **qualité originale** (pas de recompression Next sur le stage principal).
+
+### Scores Lighthouse
+- À re-mesurer après déploiement (mobile + desktop : home, projects, portfolio category, project detail)
+- Baseline historique (2026-06-25) : non renseignée
 
 ## Crédits
 Site construit avec soin pour Katia Krylova.

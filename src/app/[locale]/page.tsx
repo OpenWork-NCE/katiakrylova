@@ -3,6 +3,8 @@ import { getHome } from '@/lib/payload'
 import { getMediaUrl } from '@/lib/utils'
 import { HomeHero } from '@/components/home/HomeHero'
 
+export const revalidate = 600
+
 const DEFAULT_INTRO_FR =
   "Une image, deux images, une séquence de lumière et d'ombre. Collant à la chose filmée ou s'en décollant. Toute en subjectivité, je les peins, les triture, les malaxe, les desserre de leur étreinte « collet monté »."
 
@@ -11,7 +13,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   setRequestLocale(locale)
   const loc = locale as 'fr' | 'en'
   const [t, home] = await Promise.all([getTranslations('home'), getHome(loc)])
-  const heroUrl = getMediaUrl(home?.heroImage)
+  // Full-viewport hero: HD derivative is enough; keep master off the critical path
+  const heroUrl = getMediaUrl(home?.heroImage, 'hd')
   if (!heroUrl) return null
 
   const role = home?.role?.trim() || t('role')

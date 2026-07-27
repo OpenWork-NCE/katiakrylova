@@ -3,20 +3,23 @@ import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import type { Media, Portfolio } from '@/payload-types'
-import { getMediaUrl } from '@/lib/utils'
+import { getMediaDimensions, getMediaUrl, isAnimatedMedia } from '@/lib/utils'
 import { PortfolioViewer } from '@/components/portfolio/PortfolioViewer'
 import { buildPortfolioSlides } from '@/components/portfolio/portfolio-slides'
 
 function coverMeta(coverImage: Portfolio['coverImage']) {
-  const src = getMediaUrl(coverImage)
+  // Grid: Payload card derivative (not master) — liseuse uses original via slides.
+  const src = getMediaUrl(coverImage, 'card')
   if (!src) return null
   const media = typeof coverImage === 'object' && coverImage !== null ? (coverImage as Media) : null
+  const dims = getMediaDimensions(coverImage, 'card')
+  const animated = isAnimatedMedia(media, src)
   return {
     src,
-    width: media?.width && media.width > 0 ? media.width : 1600,
-    height: media?.height && media.height > 0 ? media.height : 1200,
-    // Serve original bytes: art portfolios must not be recompressed by Next/Image.
-    unoptimized: true as const,
+    width: dims.width && dims.width > 0 ? dims.width : 800,
+    height: dims.height && dims.height > 0 ? dims.height : 600,
+    // Only bypass Next optimizer for GIF/video; stills use card + AVIF/WebP pipeline.
+    unoptimized: animated,
   }
 }
 
@@ -76,7 +79,7 @@ export function PortfolioGrid({
                     width={cover.width}
                     height={cover.height}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    quality={100}
+                    quality={90}
                     unoptimized={cover.unoptimized}
                     className="h-auto w-full transition duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-[1.02]"
                   />

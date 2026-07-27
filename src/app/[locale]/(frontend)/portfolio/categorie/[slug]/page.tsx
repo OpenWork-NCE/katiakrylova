@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import { getPortfolio, getPortfolioCategories } from '@/lib/payload'
-import type { Portfolio, PortfolioCategory } from '@/payload-types'
+import { getPortfolioByCategory, getPortfolioCategories } from '@/lib/payload'
 import { PortfolioGrid } from '@/components/portfolio/PortfolioGrid'
 import { PortfolioCategoryNav } from '@/components/portfolio/PortfolioCategoryNav'
 import { HUB_CATEGORY_SLUGS, type HubCategory } from '@/components/portfolio/PortfolioHub'
@@ -12,34 +11,34 @@ const FALLBACK_BG = '/images/Fond Portfolio.jpg'
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>
-  searchParams: Promise<{ view?: string }>
 }
 
-function categorySlugOf(item: Portfolio): string {
-  const cat = item.category
-  if (typeof cat === 'object' && cat !== null) return (cat as PortfolioCategory).slug
-  return ''
+export const revalidate = 600
+
+export function generateStaticParams() {
+  return ['fr', 'en'].flatMap((locale) =>
+    HUB_CATEGORY_SLUGS.map((slug) => ({ locale, slug })),
+  )
 }
 
-export default async function PortfolioCategoryPage({ params, searchParams }: Props) {
+export default async function PortfolioCategoryPage({ params }: Props) {
   const { locale, slug } = await params
-  const { view } = await searchParams
   setRequestLocale(locale)
 
   if (!(HUB_CATEGORY_SLUGS as readonly string[]).includes(slug)) {
     notFound()
   }
 
-  const [t, items, categories] = await Promise.all([
+  const [t, categories] = await Promise.all([
     getTranslations('portfolio'),
-    getPortfolio(locale as 'fr' | 'en'),
     getPortfolioCategories(locale as 'fr' | 'en'),
   ])
 
   const category = categories.find((c) => c.slug === slug)
   if (!category) notFound()
 
-  const filtered = items.filter((p) => categorySlugOf(p) === slug)
+  // Category-scoped fetch only (not entire portfolio)
+  const filtered = await getPortfolioByCategory(category.id, locale as 'fr' | 'en')
 
   const hubCategories: HubCategory[] = categories.map((c) => ({
     id: c.id,
@@ -69,7 +68,8 @@ export default async function PortfolioCategoryPage({ params, searchParams }: Pr
           <p className="portfolio-category__empty">{t('emptyCategory')}</p>
         ) : (
           <Suspense fallback={<p className="portfolio-category__empty text-sm">{t('loading')}</p>}>
-            <PortfolioGrid items={filtered} initialViewSlug={view ?? null} />
+            {/* ?view= is read client-side so the route stays ISR-cacheable */}
+            <PortfolioGrid items={filtered} />
           </Suspense>
         )}
       </div>

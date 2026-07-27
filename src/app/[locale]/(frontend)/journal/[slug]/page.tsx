@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { getJournalEntryBySlug, getProjectBySlug } from '@/lib/payload'
+import { getJournalEntryBySlug, getJournalEntrySlugs, getProjectBySlug } from '@/lib/payload'
 import { getMediaUrl } from '@/lib/utils'
 import type { Media, Project } from '@/payload-types'
 import {
@@ -11,6 +11,13 @@ import {
 } from '@/components/journal/JournalDetailView'
 
 type Props = { params: Promise<{ locale: string; slug: string }> }
+
+export const revalidate = 600
+
+export async function generateStaticParams() {
+  const slugs = await getJournalEntrySlugs()
+  return ['fr', 'en'].flatMap((locale) => slugs.map((slug) => ({ locale, slug })))
+}
 
 /** News slug → project slug when CMS relationship not yet set. */
 const RELATED_PROJECT_FALLBACK: Record<string, string> = {
@@ -32,7 +39,7 @@ export default async function JournalDetail({ params }: Props) {
     typeof entry.coverImage === 'object' && entry.coverImage !== null
       ? (entry.coverImage as Media)
       : null
-  const coverUrl = getMediaUrl(entry.coverImage)
+  const coverUrl = getMediaUrl(entry.coverImage, 'hd')
   const cover: JournalDetailCover | null =
     coverUrl && coverMedia
       ? {

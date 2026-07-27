@@ -1,34 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap');
-
 :root {
-  /* Titres site entier */
-  --font-hand: 'Kaushan Script', 'Segoe Script', 'Apple Chancery', cursive;
-  --font-body: 'Prestige Elite Std', 'Courier New', Courier, monospace;
   --font-weight-regular: 400;
   --font-weight-bold: 700;
+  /* Fallbacks if next/font variables are unavailable (e.g. admin shell). */
+  --font-hand: 'Kaushan Script', 'Segoe Script', 'Apple Chancery', cursive;
+  --font-body: 'Prestige Elite Std', 'Courier New', Courier, monospace;
 }
 
-/* Prestige Elite — slab serif monospaced (IBM typewriter, 1953)
-   font-weight descriptors must be numeric for reliable face matching */
-@font-face {
-  font-family: 'Prestige Elite Std';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/PrestigeEliteStd.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Prestige Elite Std';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/PrestigeEliteStd-Bd.woff') format('woff');
-}
-
-/* Titres — Kaushan Script (une graisse 400) */
+/* Titres — Kaushan Script (variable set by next/font on <html>) */
 .font-hand {
-  font-family: var(--font-hand);
+  font-family: var(--font-hand), 'Kaushan Script', 'Segoe Script', 'Apple Chancery', cursive;
   font-weight: 400;
   font-style: normal;
   font-feature-settings: 'kern' 1;
@@ -38,14 +18,14 @@
 
 /* Corps — monospaced typewriter (bold par défaut) */
 .font-body {
-  font-family: var(--font-body);
+  font-family: var(--font-body), 'Prestige Elite Std', 'Courier New', Courier, monospace;
   font-weight: var(--font-weight-bold);
   font-feature-settings: 'kern' 1;
   letter-spacing: 0.02em;
 }
 
 .font-body-regular {
-  font-family: var(--font-body);
+  font-family: var(--font-body), 'Prestige Elite Std', 'Courier New', Courier, monospace;
   font-weight: var(--font-weight-regular);
   font-feature-settings: 'kern' 1;
   letter-spacing: 0.02em;

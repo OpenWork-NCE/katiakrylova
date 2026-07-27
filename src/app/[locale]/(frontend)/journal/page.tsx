@@ -6,6 +6,8 @@ import { JournalListView, type JournalListItem } from '@/components/journal/Jour
 
 const FALLBACK_BG = '/images/Fond News.jpg'
 
+export const revalidate = 600
+
 export default async function JournalPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)
@@ -15,7 +17,7 @@ export default async function JournalPage({ params }: { params: Promise<{ locale
     getJournalEntries(loc),
     getJournal(loc),
   ])
-  const backgroundUrl = getMediaUrl(journal?.photo) ?? FALLBACK_BG
+  const backgroundUrl = getMediaUrl(journal?.photo, 'hd') ?? FALLBACK_BG
 
   const list: JournalListItem[] = entries.map((e) => {
     const cover = e.coverImage
@@ -25,7 +27,7 @@ export default async function JournalPage({ params }: { params: Promise<{ locale
       slug: e.slug,
       title: e.title,
       excerpt: e.excerpt,
-      coverUrl: getMediaUrl(cover),
+      coverUrl: getMediaUrl(cover, 'card'),
       coverAlt: coverMedia?.alt?.trim() || e.title,
     }
   })

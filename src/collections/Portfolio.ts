@@ -1,9 +1,14 @@
 import type { CollectionConfig } from 'payload'
+import { revalidatePortfolio } from '../lib/revalidate'
 
 export const Portfolio: CollectionConfig = {
   slug: 'portfolio',
   admin: { useAsTitle: 'title' },
   access: { read: () => true },
+  hooks: {
+    afterChange: [() => revalidatePortfolio()],
+    afterDelete: [() => revalidatePortfolio()],
+  },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
     { name: 'slug', type: 'text', required: true, unique: true },

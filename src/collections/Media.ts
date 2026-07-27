@@ -1,10 +1,15 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateMedia } from '../lib/revalidate'
 
 const isVercel = process.env.VERCEL === '1'
 
 export const Media: CollectionConfig = {
   slug: 'media',
   access: { read: () => true },
+  hooks: {
+    afterChange: [() => revalidateMedia()],
+    afterDelete: [() => revalidateMedia()],
+  },
   upload: {
     staticDir: 'public/images',
     disableLocalStorage: isVercel,
