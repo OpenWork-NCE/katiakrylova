@@ -582,6 +582,25 @@
       "order": 19,
       "year": 2013,
       "format": ["Vidéo", "Montage"]
+    },
+    {
+      "slug": "plus-de-lait",
+      "title": "PLUS DE LAIT",
+      "coverImage": "pdl.jpg",
+      "coverImageOverride": true,
+      "gallery": [],
+      "description": "Répétition de jeu pour les deux protagonistes. Mise en scène - Acting.",
+      "credits": [],
+      "externalLinks": [
+        {
+          "platform": "YouTube",
+          "url": "https://www.youtube.com/watch?v=yLD2ouEcqRU"
+        }
+      ],
+      "missingFiles": [],
+      "order": 0,
+      "year": 2026,
+      "format": ["Court-métrage"]
     }
   ]
 }
