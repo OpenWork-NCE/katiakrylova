@@ -16,6 +16,7 @@ type Props = {
 
 export function HomeHero({ locale, heroUrl, role, intro, enterLabel, enterHref }: Props) {
   const [ready, setReady] = useState(false)
+  const [entered, setEntered] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
   const [parallax, setParallax] = useState({ x: 0, y: 0 })
   const sectionRef = useRef<HTMLElement>(null)
@@ -26,6 +27,16 @@ export function HomeHero({ locale, heroUrl, role, intro, enterLabel, enterHref }
     const timer = window.setTimeout(() => setReady(true), reducedMotion ? 0 : 120)
     return () => window.clearTimeout(timer)
   }, [reducedMotion])
+
+  useEffect(() => {
+    if (!ready) return
+    if (reducedMotion) {
+      setEntered(true)
+      return
+    }
+    const timer = window.setTimeout(() => setEntered(true), 1000)
+    return () => window.clearTimeout(timer)
+  }, [ready, reducedMotion])
 
   useEffect(() => {
     if (reducedMotion) return
@@ -43,10 +54,14 @@ export function HomeHero({ locale, heroUrl, role, intro, enterLabel, enterHref }
     return () => window.removeEventListener('mousemove', onMove)
   }, [reducedMotion])
 
-  const parallaxTransform = reducedMotion
+  // Zoom d’entrée puis parallax souris (transition uniquement pendant l’entrée)
+  const layerTransform = reducedMotion
     ? undefined
     : {
-        transform: `translate3d(${parallax.x}px, ${parallax.y}px, 0)`,
+        transform: ready
+          ? `translate3d(${parallax.x}px, ${parallax.y}px, 0) scale(1)`
+          : 'translate3d(0, 0, 0) scale(1.04)',
+        transition: entered ? undefined : 'transform 1.05s cubic-bezier(0.4, 0, 0.2, 1)',
       }
 
   return (
@@ -57,7 +72,7 @@ export function HomeHero({ locale, heroUrl, role, intro, enterLabel, enterHref }
       <div className="absolute inset-0 overflow-hidden">
         <div
           className={`absolute inset-[-4%] ${reducedMotion ? '' : 'home-hero__parallax'}`}
-          style={parallaxTransform}
+          style={layerTransform}
         >
           <Image
             src={heroUrl}
