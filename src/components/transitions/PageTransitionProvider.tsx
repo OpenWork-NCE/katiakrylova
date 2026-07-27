@@ -1,10 +1,11 @@
 'use client'
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { PageTransitionContext } from './PageTransitionContext'
-import { FADE_MS } from './constants'
-import { isImmersiveRoute, isTransitionableHref, normalizePath } from './transition-utils'
-import '@/styles/page-transition.css'
+import { PageTransitionContext, type NavigateOptions, type TransitionPhase } from './PageTransitionContext'
+import { CLOSE_MS, OPEN_MS, REDUCED_FADE_MS, type TransitionIntent } from './constants'
+import { isTransitionableHref, normalizePath } from './transition-utils'
+import { IrisWipe, type IrisPhase } from './IrisWipe'
+import '@/styles/iris-wipe.css'
 
 type Props = {
   children: ReactNode
@@ -13,26 +14,31 @@ type Props = {
 export function PageTransitionProvider({ children }: Props) {
   const router = useRouter()
   const pathname = usePathname()
-  const [fading, setFading] = useState(false)
+  const [phase, setPhase] = useState<TransitionPhase>('idle')
+  const [irisPhase, setIrisPhase] = useState<IrisPhase>('idle')
+  const [intent, setIntent] = useState<TransitionIntent>('default')
   const [reduced, setReduced] = useState(false)
 
   const pathnameRef = useRef(pathname)
-  const initiatedRef = useRef(false)
   const busyRef = useRef(false)
-  const timerRef = useRef<number | null>(null)
+  const intentRef = useRef<TransitionIntent>('default')
+  const closeTimerRef = useRef<number | null>(null)
+  const openTimerRef = useRef<number | null>(null)
+  const pendingHrefRef = useRef<string | null>(null)
 
-  const immersive = isImmersiveRoute(pathname)
-  const animate = !immersive && !reduced
-
-  const clearTimer = useCallback(() => {
-    if (timerRef.current !== null) {
-      window.clearTimeout(timerRef.current)
-      timerRef.current = null
+  const clearTimers = useCallback(() => {
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current)
+      closeTimerRef.current = null
+    }
+    if (openTimerRef.current !== null) {
+      window.clearTimeout(openTimerRef.current)
+      openTimerRef.current = null
     }
   }, [])
 
   const navigate = useCallback(
-    (href: string) => {
+    (href: string, options?: NavigateOptions) => {
       if (!isTransitionableHref(href)) {
         router.push(href)
         return
@@ -40,27 +46,37 @@ export function PageTransitionProvider({ children }: Props) {
 
       const target = normalizePath(href)
       const current = normalizePath(pathname)
-
       if (target === current || busyRef.current) return
 
-      const targetPath = target.split('?')[0].split('#')[0]
+      const nextIntent = options?.intent ?? 'default'
+      intentRef.current = nextIntent
+      setIntent(nextIntent)
 
-      if (reduced || isImmersiveRoute(targetPath)) {
-        router.push(href)
+      // Reduced motion: short fade or instant
+      if (reduced) {
+        busyRef.current = true
+        setPhase('closing')
+        setIrisPhase('idle')
+        closeTimerRef.current = window.setTimeout(() => {
+          router.push(href)
+        }, REDUCED_FADE_MS)
         return
       }
 
       busyRef.current = true
-      initiatedRef.current = true
-      clearTimer()
-      setFading(true)
+      pendingHrefRef.current = href
+      setPhase('closing')
+      setIrisPhase('closing')
 
-      timerRef.current = window.setTimeout(() => {
-        timerRef.current = null
+      const closeMs = CLOSE_MS[nextIntent]
+      closeTimerRef.current = window.setTimeout(() => {
+        closeTimerRef.current = null
+        setIrisPhase('closed')
+        // push at full blackout
         router.push(href)
-      }, FADE_MS)
+      }, closeMs)
     },
-    [clearTimer, pathname, reduced, router],
+    [pathname, reduced, router],
   )
 
   useEffect(() => {
@@ -71,16 +87,39 @@ export function PageTransitionProvider({ children }: Props) {
     return () => mq.removeEventListener('change', apply)
   }, [])
 
+  // Pathname changed → open iris
   useEffect(() => {
     if (pathname === pathnameRef.current) return
 
     pathnameRef.current = pathname
-    clearTimer()
-    busyRef.current = false
-    initiatedRef.current = false
-    setFading(false)
-  }, [clearTimer, pathname])
+    clearTimers()
+    pendingHrefRef.current = null
 
+    const currentIntent = intentRef.current
+
+    if (reduced) {
+      setPhase('idle')
+      setIrisPhase('idle')
+      busyRef.current = false
+      return
+    }
+
+    // If we weren't mid-transition (browser back/forward), still play open
+    setPhase('opening')
+    setIrisPhase('opening')
+
+    const openMs = OPEN_MS[currentIntent]
+    openTimerRef.current = window.setTimeout(() => {
+      openTimerRef.current = null
+      setPhase('idle')
+      setIrisPhase('idle')
+      busyRef.current = false
+      intentRef.current = 'default'
+      setIntent('default')
+    }, openMs)
+  }, [clearTimers, pathname, reduced])
+
+  // Capture internal link clicks
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
       if (event.defaultPrevented) return
@@ -100,22 +139,35 @@ export function PageTransitionProvider({ children }: Props) {
       const href = anchor.getAttribute('href')
       if (!isTransitionableHref(href)) return
 
+      const dataIntent = anchor.getAttribute('data-transition-intent')
+      const nextIntent: TransitionIntent =
+        dataIntent === 'signature' || dataIntent === 'locale' || dataIntent === 'default'
+          ? dataIntent
+          : 'default'
+
       event.preventDefault()
       event.stopPropagation()
-      navigate(href)
+      navigate(href, { intent: nextIntent })
     }
 
     document.addEventListener('click', onClick, { capture: true })
     return () => document.removeEventListener('click', onClick, { capture: true })
   }, [navigate])
 
-  useEffect(() => () => clearTimer(), [clearTimer])
+  useEffect(() => () => clearTimers(), [clearTimers])
+
+  const contentPhase =
+    phase === 'closing' ? 'closing' : phase === 'opening' ? 'opening' : 'idle'
 
   return (
-    <PageTransitionContext.Provider value={{ phase: fading ? 'closing' : 'open', navigate }}>
-      <div className={`page-transition-content${animate && fading ? ' page-transition-content--fade-out' : ''}`}>
+    <PageTransitionContext.Provider value={{ phase, intent, navigate }}>
+      <div
+        className="page-transition-content"
+        data-iris-phase={contentPhase === 'idle' ? undefined : contentPhase}
+      >
         {children}
       </div>
+      <IrisWipe phase={irisPhase} intent={intent} />
     </PageTransitionContext.Provider>
   )
 }

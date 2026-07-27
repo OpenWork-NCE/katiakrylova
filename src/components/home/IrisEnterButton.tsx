@@ -1,5 +1,7 @@
 'use client'
-import Link from 'next/link'
+
+import { useState } from 'react'
+import { usePageTransition } from '@/components/transitions/usePageTransition'
 
 type Props = {
   href: string
@@ -7,12 +9,27 @@ type Props = {
 }
 
 /**
- * CTA d’entrée — portail diaphragme (iris) + libellé typewriter.
- * Métaphore cinéma : l’œil s’ouvre sur l’univers.
+ * CTA d’entrée — portail diaphragme (iris) + morph vers le wipe plein écran.
+ * Métaphore cinéma : l’œil s’ouvre / cligne sur l’univers.
  */
 export function IrisEnterButton({ href, label }: Props) {
+  const { navigate } = usePageTransition()
+  const [morphing, setMorphing] = useState(false)
+
+  const onClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (morphing) return
+    setMorphing(true)
+    navigate(href, { intent: 'signature' })
+  }
+
   return (
-    <Link href={href} className="home-enter">
+    <a
+      href={href}
+      className={`home-enter${morphing ? ' home-enter--morph' : ''}`}
+      data-transition-intent="signature"
+      onClick={onClick}
+    >
       <span className="home-enter__aperture" aria-hidden>
         <span className="home-enter__ring home-enter__ring--a" />
         <span className="home-enter__ring home-enter__ring--b" />
@@ -30,6 +47,6 @@ export function IrisEnterButton({ href, label }: Props) {
       <span className="home-enter__chevron" aria-hidden>
         <span className="home-enter__chevron-line" />
       </span>
-    </Link>
+    </a>
   )
 }

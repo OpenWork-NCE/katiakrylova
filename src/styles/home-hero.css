@@ -13,10 +13,42 @@
 
 .home-hero {
   isolation: isolate;
+  --px: 0px;
+  --py: 0px;
 }
 
 .home-hero__parallax {
   will-change: transform;
+}
+
+/* ── Boot iris (first visit) ── */
+.home-hero__boot-iris {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.home-hero__boot-shutter {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-primary, #0a0a0a);
+  clip-path: circle(150% at 50% 50%);
+  transition: clip-path 900ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: clip-path;
+}
+
+.home-hero--boot-opening .home-hero__boot-shutter {
+  clip-path: circle(0% at 50% 50%);
+}
+
+.home-hero--boot-closed .home-hero__content {
+  opacity: 0;
+}
+
+.home-hero--boot-opening .home-hero__content,
+.home-hero--boot-done .home-hero__content {
+  opacity: 1;
 }
 
 .home-hero__image {
@@ -298,6 +330,7 @@
 
 .home-enter:hover .home-enter__pupil,
 .home-enter:focus-visible .home-enter__pupil {
+  animation: none;
   transform: scale(1.18);
   box-shadow:
     0 0 20px rgba(139, 46, 46, 0.55),
@@ -357,7 +390,7 @@
   }
 }
 
-/* Entrées en fondu */
+/* Entrées en fondu — synced with iris boot open */
 .home-hero__logo,
 .home-hero__role,
 .home-hero__intro,
@@ -372,25 +405,83 @@
 .home-hero--ready .home-hero__logo {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 80ms;
+  transition-delay: 120ms;
 }
 
 .home-hero--ready .home-hero__role {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 220ms;
+  transition-delay: 280ms;
 }
 
 .home-hero--ready .home-hero__intro {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 400ms;
+  transition-delay: 480ms;
 }
 
 .home-hero--ready .home-hero__cta {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 620ms;
+  transition-delay: 680ms;
+}
+
+/* Idle pupil blink — invitation every ~6.5s */
+@keyframes home-enter-blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  94% {
+    transform: scaleY(0.08);
+  }
+  96% {
+    transform: scaleY(1);
+  }
+}
+
+.home-hero--ready .home-enter__pupil {
+  animation: home-enter-blink 6.5s ease-in-out infinite;
+  animation-delay: 2.2s;
+  transform-origin: center center;
+}
+
+/* Morph CTA → full-screen iris handoff */
+.home-enter--morph {
+  pointer-events: none;
+  z-index: 30;
+}
+
+.home-enter--morph .home-enter__aperture {
+  animation: home-enter-morph-aperture 450ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.home-enter--morph .home-enter__copy,
+.home-enter--morph .home-enter__chevron {
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.home-enter--morph .home-enter__ring--a {
+  animation: none;
+  border-color: rgba(139, 46, 46, 0.9);
+  box-shadow: 0 0 40px rgba(139, 46, 46, 0.35);
+}
+
+@keyframes home-enter-morph-aperture {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  55% {
+    transform: scale(8);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(28);
+    opacity: 0;
+  }
 }
 
 @media (min-width: 768px) {
@@ -513,6 +604,10 @@
     opacity: 1;
   }
 
+  .home-hero__boot-iris {
+    display: none !important;
+  }
+
   .home-hero__logo,
   .home-hero__role,
   .home-hero__intro,
@@ -531,6 +626,14 @@
   .home-enter__chevron,
   .home-enter__chevron-line {
     transition: none !important;
+    animation: none !important;
+  }
+
+  .home-hero--ready .home-enter__pupil {
+    animation: none !important;
+  }
+
+  .home-enter--morph .home-enter__aperture {
     animation: none !important;
   }
 

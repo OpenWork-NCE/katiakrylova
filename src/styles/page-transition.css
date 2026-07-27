@@ -1,17 +1,6 @@
+/* Legacy fade styles — iris wipe is primary (iris-wipe.css).
+   Kept minimal for reduced-motion fallbacks applied via data-iris-phase. */
+
 .page-transition-content {
-  transition: opacity 180ms ease;
-}
-
-.page-transition-content--fade-out {
-  opacity: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .page-transition-content {
-    transition: none;
-  }
-
-  .page-transition-content--fade-out {
-    opacity: 1;
-  }
+  min-height: 0;
 }

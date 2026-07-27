@@ -12,7 +12,7 @@ export function LocaleSwitch() {
     if (target === locale) return
     const segments = pathname.split('/')
     segments[1] = target
-    navigate(segments.join('/'))
+    navigate(segments.join('/'), { intent: 'locale' })
   }
 
   return (

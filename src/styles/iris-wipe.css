@@ -1,0 +1,134 @@
+/* ─── Iris Wipe — site signature diaphragm ─── */
+
+.iris-wipe {
+  --iris-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --iris-close-ms: 380ms;
+  --iris-open-ms: 420ms;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.iris-wipe[data-phase='closing'],
+.iris-wipe[data-phase='closed'],
+.iris-wipe[data-phase='opening'],
+.iris-wipe[data-phase='boot'] {
+  visibility: visible;
+}
+
+/* Primary shutter — radial iris (reliable full blackout) */
+.iris-wipe__shutter {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-primary, #0a0a0a);
+  /* open = no visible black (zero radius) */
+  clip-path: circle(0% at 50% 50%);
+  transition: clip-path var(--iris-close-ms) var(--iris-ease);
+  will-change: clip-path;
+}
+
+.iris-wipe[data-phase='closing'] .iris-wipe__shutter,
+.iris-wipe[data-phase='closed'] .iris-wipe__shutter,
+.iris-wipe[data-phase='boot'] .iris-wipe__shutter {
+  /* closed = full cover (radius past corners) */
+  clip-path: circle(150% at 50% 50%);
+}
+
+.iris-wipe[data-phase='opening'] .iris-wipe__shutter {
+  clip-path: circle(0% at 50% 50%);
+  transition-duration: var(--iris-open-ms);
+}
+
+/* Decorative blades — mechanical diaphragm texture */
+.iris-wipe__svg {
+  position: absolute;
+  inset: -5%;
+  width: 110%;
+  height: 110%;
+  left: -5%;
+  top: -5%;
+  display: block;
+  opacity: 0;
+  transition: opacity 120ms linear;
+  pointer-events: none;
+}
+
+.iris-wipe[data-phase='closing'] .iris-wipe__svg,
+.iris-wipe[data-phase='closed'] .iris-wipe__svg,
+.iris-wipe[data-phase='opening'] .iris-wipe__svg,
+.iris-wipe[data-phase='boot'] .iris-wipe__svg {
+  opacity: 1;
+}
+
+.iris-wipe__blade {
+  fill: var(--bg-primary, #0a0a0a);
+  stroke: rgba(139, 46, 46, 0.28);
+  stroke-width: 0.12;
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  /* parked open: scaled down into center hole */
+  transform: rotate(var(--blade-base, 0deg)) scale(0.12);
+  transition: transform var(--iris-close-ms) var(--iris-ease);
+  will-change: transform;
+}
+
+.iris-wipe[data-phase='closing'] .iris-wipe__blade,
+.iris-wipe[data-phase='closed'] .iris-wipe__blade,
+.iris-wipe[data-phase='boot'] .iris-wipe__blade {
+  transform: rotate(calc(var(--blade-base, 0deg) + var(--blade-shut, 22deg))) scale(1.2);
+}
+
+.iris-wipe[data-phase='opening'] .iris-wipe__blade {
+  transform: rotate(var(--blade-base, 0deg)) scale(0.12);
+  transition-duration: var(--iris-open-ms);
+}
+
+.iris-wipe__blade:nth-child(1) { transition-delay: 0ms; }
+.iris-wipe__blade:nth-child(2) { transition-delay: 10ms; }
+.iris-wipe__blade:nth-child(3) { transition-delay: 20ms; }
+.iris-wipe__blade:nth-child(4) { transition-delay: 6ms; }
+.iris-wipe__blade:nth-child(5) { transition-delay: 16ms; }
+.iris-wipe__blade:nth-child(6) { transition-delay: 4ms; }
+.iris-wipe__blade:nth-child(7) { transition-delay: 18ms; }
+.iris-wipe__blade:nth-child(8) { transition-delay: 12ms; }
+
+/* Content shell subtle pull during close */
+.page-transition-content {
+  transition:
+    transform 380ms var(--iris-ease, cubic-bezier(0.4, 0, 0.2, 1)),
+    opacity 380ms var(--iris-ease, cubic-bezier(0.4, 0, 0.2, 1));
+  transform-origin: center center;
+}
+
+.page-transition-content[data-iris-phase='closing'] {
+  transform: scale(1.015);
+  opacity: 0.92;
+}
+
+.page-transition-content[data-iris-phase='opening'] {
+  transform: scale(1);
+  opacity: 1;
+  transition-duration: 420ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iris-wipe {
+    display: none !important;
+  }
+
+  .page-transition-content {
+    transition: opacity 120ms ease;
+  }
+
+  .page-transition-content[data-iris-phase='closing'] {
+    transform: none;
+    opacity: 0;
+  }
+
+  .page-transition-content[data-iris-phase='opening'] {
+    opacity: 1;
+  }
+}
