@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation'
 import { LocaleSwitch } from './LocaleSwitch'
 import { MobileMenu } from './MobileMenu'
 import { Container } from '../ui/Container'
-import { SoundToggle } from '@/components/sound/SoundToggle'
 
 type NavItem = { href: string; label: string }
 
@@ -53,7 +52,6 @@ export function HeaderBar({ locale, items }: Props) {
         </nav>
         <div className="flex shrink-0 items-center gap-sm sm:gap-md">
           <MobileMenu items={items} />
-          <SoundToggle />
           <LocaleSwitch />
         </div>
       </Container>

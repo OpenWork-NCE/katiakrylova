@@ -5,8 +5,6 @@ import { PageTransitionContext, type NavigateOptions, type TransitionPhase } fro
 import { CLOSE_MS, OPEN_MS, REDUCED_FADE_MS, type TransitionIntent } from './constants'
 import { isTransitionableHref, normalizePath } from './transition-utils'
 import { IrisWipe, type IrisPhase } from './IrisWipe'
-import { useSound } from '@/components/sound/SoundProvider'
-import { closeCueForIntent, openCueForIntent, unlockSound } from '@/lib/sound-design'
 import '@/styles/iris-wipe.css'
 
 type Props = {
@@ -16,7 +14,6 @@ type Props = {
 export function PageTransitionProvider({ children }: Props) {
   const router = useRouter()
   const pathname = usePathname()
-  const { play } = useSound()
   const [phase, setPhase] = useState<TransitionPhase>('idle')
   const [irisPhase, setIrisPhase] = useState<IrisPhase>('idle')
   const [intent, setIntent] = useState<TransitionIntent>('default')
@@ -55,15 +52,11 @@ export function PageTransitionProvider({ children }: Props) {
       intentRef.current = nextIntent
       setIntent(nextIntent)
 
-      // Gesture path — unlock audio (autoplay policy)
-      void unlockSound()
-
-      // Reduced motion: short fade or instant (soft click only)
+      // Reduced motion: short fade or instant
       if (reduced) {
         busyRef.current = true
         setPhase('closing')
         setIrisPhase('idle')
-        play(closeCueForIntent(nextIntent))
         closeTimerRef.current = window.setTimeout(() => {
           router.push(href)
         }, REDUCED_FADE_MS)
@@ -74,7 +67,6 @@ export function PageTransitionProvider({ children }: Props) {
       pendingHrefRef.current = href
       setPhase('closing')
       setIrisPhase('closing')
-      play(closeCueForIntent(nextIntent))
 
       const closeMs = CLOSE_MS[nextIntent]
       closeTimerRef.current = window.setTimeout(() => {
@@ -84,7 +76,7 @@ export function PageTransitionProvider({ children }: Props) {
         router.push(href)
       }, closeMs)
     },
-    [pathname, play, reduced, router],
+    [pathname, reduced, router],
   )
 
   useEffect(() => {
@@ -115,7 +107,6 @@ export function PageTransitionProvider({ children }: Props) {
     // If we weren't mid-transition (browser back/forward), still play open
     setPhase('opening')
     setIrisPhase('opening')
-    play(openCueForIntent(currentIntent))
 
     const openMs = OPEN_MS[currentIntent]
     openTimerRef.current = window.setTimeout(() => {
@@ -126,7 +117,7 @@ export function PageTransitionProvider({ children }: Props) {
       intentRef.current = 'default'
       setIntent('default')
     }, openMs)
-  }, [clearTimers, pathname, play, reduced])
+  }, [clearTimers, pathname, reduced])
 
   // Capture internal link clicks
   useEffect(() => {

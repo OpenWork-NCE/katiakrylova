@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { HOME_BOOT_KEY } from '@/components/transitions/constants'
-import { useSound } from '@/components/sound/SoundProvider'
 import { IrisEnterButton } from './IrisEnterButton'
 import '@/styles/home-hero.css'
 
@@ -23,14 +22,12 @@ type Props = {
  * Parallax via CSS variables (no React re-render per mousemove).
  */
 export function HomeHero({ locale, heroUrl, role, intro, enterLabel, enterHref }: Props) {
-  const { play } = useSound()
   const [ready, setReady] = useState(false)
   const [entered, setEntered] = useState(false)
   const [boot, setBoot] = useState<'pending' | 'closed' | 'opening' | 'done'>('pending')
   const [reducedMotion, setReducedMotion] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
   const parallaxRef = useRef<HTMLDivElement>(null)
-  const bootSoundPlayed = useRef(false)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -70,11 +67,6 @@ export function HomeHero({ locale, heroUrl, role, intro, enterLabel, enterHref }
     const openTimer = window.setTimeout(() => {
       setBoot('opening')
       setReady(true)
-      // Boot sound only if audio already unlocked (prior gesture); never force
-      if (!bootSoundPlayed.current) {
-        bootSoundPlayed.current = true
-        play('boot-open')
-      }
     }, 280)
     const doneTimer = window.setTimeout(() => {
       setBoot('done')
@@ -91,7 +83,7 @@ export function HomeHero({ locale, heroUrl, role, intro, enterLabel, enterHref }
       window.clearTimeout(doneTimer)
       window.clearTimeout(enteredTimer)
     }
-  }, [play, reducedMotion])
+  }, [reducedMotion])
 
   // Parallax via CSS vars + rAF (INP-friendly)
   useEffect(() => {

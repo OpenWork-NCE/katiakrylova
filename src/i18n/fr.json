@@ -106,9 +106,5 @@
     "menu": "Menu",
     "close": "Fermer",
     "back": "← Retour"
-  },
-  "sound": {
-    "enable": "Activer le son",
-    "disable": "Couper le son"
   }
 }
