@@ -556,7 +556,12 @@
       ],
       "description": "“CINE PALACE” court-métrage de SEVERINE DE STREYKER.\nCiné Palace retrace la journée d’une strip-teaseuse dans un huis clos d’un cinéma spectacle comme il n’en existe plus beaucoup.\n\nCine Palace\nSéverine De Streyker\nBelgium / 2011 / Fiction / 14'18",
       "credits": [],
-      "externalLinks": [],
+      "externalLinks": [
+        {
+          "platform": "YouTube",
+          "url": "https://www.youtube.com/watch?v=noWSXB38NBw"
+        }
+      ],
       "missingFiles": [],
       "order": 18,
       "year": 2013,

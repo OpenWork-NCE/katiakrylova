@@ -111,6 +111,7 @@ const PROJECT_META = {
 const EXTERNAL_LINKS = {
   'alice-au-pays-des-ombres': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=NagZ3zRKrdo' }],
   casting: [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=bfdJ_oSxmFc' }],
+  'cine-palace': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=noWSXB38NBw' }],
   'hip-hop-de-rue': [
     { platform: 'YouTube', url: 'https://www.youtube.com/watch?v=QJZnqs8kB50' },
     {
