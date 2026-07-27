@@ -74,6 +74,7 @@ export default async function ProjectPage({ params }: Props) {
                 title={project.title}
                 priority
                 layout="contained"
+                posterUrl={cover}
               />
             ) : (
               <div className="project-detail__cover">
@@ -126,6 +127,7 @@ export default async function ProjectPage({ params }: Props) {
                   platform={link.platform ?? undefined}
                   title={`${project.title} — ${link.platform ?? 'video'}`}
                   layout="contained"
+                  posterUrl={cover}
                 />
                 {link.description ? (
                   <p className="project-detail__video-desc">{link.description}</p>

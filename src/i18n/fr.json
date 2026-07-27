@@ -48,6 +48,12 @@
     "filterShowMore": "+{count} plus",
     "filterShowLess": "Moins"
   },
+  "videoEmbed": {
+    "defaultTitle": "Vidéo du projet",
+    "restrictedKicker": "Restriction d’âge",
+    "restrictedMessage": "Cette vidéo est soumise à une restriction d’âge et ne peut pas être lue ici. Ouvrez-la sur YouTube pour la regarder.",
+    "openOnYoutube": "Ouvrir sur YouTube"
+  },
   "projectNav": {
     "prev": "← Précédent",
     "next": "Suivant →"
