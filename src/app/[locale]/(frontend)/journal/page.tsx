@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getJournal, getJournalEntries } from '@/lib/payload'
 import { getMediaUrl } from '@/lib/utils'
+import type { Media } from '@/payload-types'
 import { JournalListView, type JournalListItem } from '@/components/journal/JournalListView'
 
 const FALLBACK_BG = '/images/Fond News.jpg'
@@ -14,16 +15,20 @@ export default async function JournalPage({ params }: { params: Promise<{ locale
     getJournalEntries(loc),
     getJournal(loc),
   ])
-  /** CMS photo, sinon Fond News.jpg (même logique Contact / Portfolio catégorie) */
   const backgroundUrl = getMediaUrl(journal?.photo) ?? FALLBACK_BG
 
-  const list: JournalListItem[] = entries.map((e) => ({
-    id: e.id,
-    slug: e.slug,
-    title: e.title,
-    excerpt: e.excerpt,
-    createdAt: e.createdAt,
-  }))
+  const list: JournalListItem[] = entries.map((e) => {
+    const cover = e.coverImage
+    const coverMedia = typeof cover === 'object' && cover !== null ? (cover as Media) : null
+    return {
+      id: e.id,
+      slug: e.slug,
+      title: e.title,
+      excerpt: e.excerpt,
+      coverUrl: getMediaUrl(cover),
+      coverAlt: coverMedia?.alt?.trim() || e.title,
+    }
+  })
 
   return (
     <JournalListView

@@ -105,6 +105,8 @@ type GlobalsManifest = {
     excerpt: string
     coverImage: string
     content: string
+    /** Optional projects.slug for News → project CTA */
+    relatedProjectSlug?: string
   }>
 }
 
@@ -489,19 +491,50 @@ async function migrateProjects(payload: Awaited<ReturnType<typeof getPayload>>, 
   console.log(`✓ Projects: ${created} created, ${updated} updated, ${skipped} skipped`)
 }
 
+async function resolveRelatedProjectId(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  projectSlug?: string,
+): Promise<number | undefined> {
+  if (!projectSlug) return undefined
+  const project = await findBySlug(payload, 'projects', projectSlug)
+  return project?.id as number | undefined
+}
+
 async function migrateJournal(payload: Awaited<ReturnType<typeof getPayload>>, globals: GlobalsManifest) {
-  const entries =
+  type JournalManifestEntry = NonNullable<GlobalsManifest['journalEntries']>[number]
+  const entries: JournalManifestEntry[] =
     globals.journalEntries ??
-    (globals.journal ? [globals.journal] : [])
+    (globals.journal
+      ? [
+          {
+            title: globals.journal.title,
+            slug: globals.journal.slug,
+            excerpt: globals.journal.excerpt,
+            coverImage: globals.journal.coverImage,
+            content: globals.journal.content,
+          },
+        ]
+      : [])
 
   let created = 0
   let updated = 0
   let skipped = 0
 
   for (const j of entries) {
+    const coverId = await uploadMedia(
+      payload,
+      path.join(imagesRoot, j.coverImage),
+      j.title,
+      dryRun,
+    )
+    const relatedProjectId = await resolveRelatedProjectId(payload, j.relatedProjectSlug)
+    if (j.relatedProjectSlug && !relatedProjectId && !dryRun) {
+      console.warn(`  ⚠ Journal ${j.slug}: related project « ${j.relatedProjectSlug} » introuvable`)
+    }
+
     const existing = await findBySlug(payload, 'journal-entries', j.slug)
     if (existing) {
-      // Sync title / excerpt / rich-text from manifest (e.g. project links added to a news post)
+      // Sync title / excerpt / cover / project link / rich-text from manifest
       if (!dryRun) {
         await payload.update({
           collection: 'journal-entries',
@@ -510,6 +543,8 @@ async function migrateJournal(payload: Awaited<ReturnType<typeof getPayload>>, g
             title: j.title,
             excerpt: j.excerpt,
             content: textToLexical(j.content),
+            coverImage: coverId ?? undefined,
+            relatedProject: relatedProjectId ?? null,
           },
           locale: 'fr',
         })
@@ -520,13 +555,6 @@ async function migrateJournal(payload: Awaited<ReturnType<typeof getPayload>>, g
       continue
     }
 
-    const coverId = await uploadMedia(
-      payload,
-      path.join(imagesRoot, j.coverImage),
-      j.title,
-      dryRun,
-    )
-
     if (!dryRun) {
       await payload.create({
         collection: 'journal-entries',
@@ -536,6 +564,7 @@ async function migrateJournal(payload: Awaited<ReturnType<typeof getPayload>>, g
           excerpt: j.excerpt,
           content: textToLexical(j.content),
           coverImage: coverId ?? undefined,
+          relatedProject: relatedProjectId ?? undefined,
         },
         locale: 'fr',
       })

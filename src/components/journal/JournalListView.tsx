@@ -1,7 +1,9 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import '@/styles/journal-page.css'
 
 export type JournalListItem = {
@@ -9,7 +11,8 @@ export type JournalListItem = {
   slug: string
   title: string
   excerpt?: string | null
-  createdAt: string
+  coverUrl?: string | null
+  coverAlt?: string
 }
 
 type Props = {
@@ -20,11 +23,18 @@ type Props = {
   entries: JournalListItem[]
 }
 
-/** News — entrée + révélation liste (style Projets / À propos). */
+function padIndex(n: number, total: number) {
+  const width = Math.max(2, String(total).length)
+  return String(n).padStart(width, '0')
+}
+
+/** News — grille éditoriale type filmographie (sans dates). */
 export function JournalListView({ locale, backgroundUrl, title, emptyLabel, entries }: Props) {
+  const t = useTranslations('journal')
   const listRef = useRef<HTMLUListElement>(null)
   const [ready, setReady] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
+  const total = entries.length
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -81,24 +91,52 @@ export function JournalListView({ locale, backgroundUrl, title, emptyLabel, entr
       <div className="journal-page__vignette" aria-hidden />
 
       <div className="journal-page__content">
-        <h1 className="journal-page__title">{title}</h1>
+        <header className="journal-page__header">
+          <h1 className="journal-page__title">{title}</h1>
+          {total > 0 ? (
+            <p className="journal-page__count">
+              {padIndex(total, total)} · {t('listMeta')}
+            </p>
+          ) : null}
+        </header>
+
         {entries.length === 0 ? <p className="journal-page__empty">{emptyLabel}</p> : null}
+
         <ul ref={listRef} className="journal-page__list">
-          {entries.map((e) => (
-            <li key={e.id} data-journal-item className="journal-page__item">
-              <Link href={`/${locale}/journal/${e.slug}`} className="journal-page__link">
-                <p className="journal-page__date">
-                  {new Date(e.createdAt).toLocaleDateString(locale, {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                  })}
-                </p>
-                <h2 className="journal-page__entry-title">{e.title}</h2>
-                {e.excerpt ? <p className="journal-page__excerpt">{e.excerpt}</p> : null}
-              </Link>
-            </li>
-          ))}
+          {entries.map((e, i) => {
+            const n = padIndex(i + 1, total)
+            return (
+              <li key={e.id} data-journal-item className="journal-page__item">
+                <Link href={`/${locale}/journal/${e.slug}`} className="journal-page__row">
+                  <div
+                    className={`journal-page__still${e.coverUrl ? '' : ' journal-page__still--empty'}`}
+                    aria-hidden={!e.coverUrl}
+                  >
+                    {e.coverUrl ? (
+                      <Image
+                        src={e.coverUrl}
+                        alt={e.coverAlt || e.title}
+                        fill
+                        sizes="(max-width: 768px) 90vw, 380px"
+                        className="object-cover"
+                        priority={i < 3}
+                        quality={90}
+                      />
+                    ) : (
+                      <span className="journal-page__still-placeholder">{n}</span>
+                    )}
+                  </div>
+
+                  <div className="journal-page__copy">
+                    <span className="journal-page__index">{n}</span>
+                    <h2 className="journal-page__entry-title">{e.title}</h2>
+                    {e.excerpt ? <p className="journal-page__excerpt">{e.excerpt}</p> : null}
+                    <span className="journal-page__cta">{t('read')}</span>
+                  </div>
+                </Link>
+              </li>
+            )
+          })}
         </ul>
       </div>
     </div>

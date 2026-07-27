@@ -344,6 +344,10 @@ export interface JournalEntry {
     [k: string]: unknown;
   } | null;
   coverImage?: (number | null) | Media;
+  /**
+   * Bouton « Voir le projet » sur la fiche News (ex. Plus de lait, La petite faucheuse).
+   */
+  relatedProject?: (number | null) | Project;
   updatedAt: string;
   createdAt: string;
 }

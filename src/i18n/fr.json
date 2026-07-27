@@ -60,7 +60,10 @@
   "journal": {
     "title": "News",
     "empty": "Aucun article pour l'instant.",
-    "back": "← News"
+    "back": "← News",
+    "read": "Lire l'article →",
+    "listMeta": "Articles",
+    "viewProject": "Voir le projet →"
   },
   "makingOf": {
     "title": "Making Of",

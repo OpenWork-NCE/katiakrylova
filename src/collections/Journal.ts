@@ -17,6 +17,15 @@ export const Journal: CollectionConfig = {
     { name: 'excerpt', type: 'textarea', localized: true },
     { name: 'content', type: 'richText', localized: true },
     { name: 'coverImage', type: 'upload', relationTo: 'media' },
+    {
+      name: 'relatedProject',
+      type: 'relationship',
+      relationTo: 'projects',
+      label: 'Projet lié',
+      admin: {
+        description: 'Bouton « Voir le projet » sur la fiche News (ex. Plus de lait, La petite faucheuse).',
+      },
+    },
   ],
   timestamps: true,
 }

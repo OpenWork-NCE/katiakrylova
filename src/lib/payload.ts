@@ -98,6 +98,7 @@ export async function getJournalEntries(locale: Locale = 'fr') {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: 'journal-entries',
+    depth: 1,
     locale: locale === 'all' ? 'all' : locale,
     sort: '-createdAt',
     limit: 100,
@@ -110,7 +111,7 @@ export async function getJournalEntryBySlug(slug: string, locale: Locale = 'fr')
   const { docs } = await payload.find({
     collection: 'journal-entries',
     where: { slug: { equals: slug } },
-    depth: 1,
+    depth: 2,
     locale: locale === 'all' ? 'all' : locale,
     limit: 1,
   })
