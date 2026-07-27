@@ -106,5 +106,9 @@
     "menu": "Menu",
     "close": "Close",
     "back": "← Back"
+  },
+  "sound": {
+    "enable": "Enable sound",
+    "disable": "Mute sound"
   }
 }

@@ -1,0 +1,37 @@
+.sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.72;
+  transition:
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sound-toggle:hover,
+.sound-toggle:focus-visible {
+  opacity: 1;
+  color: var(--accent);
+  outline: none;
+}
+
+.sound-toggle:focus-visible {
+  outline: 1px solid rgba(139, 46, 46, 0.55);
+  outline-offset: 3px;
+}
+
+.sound-toggle--muted {
+  opacity: 0.5;
+}
+
+.sound-toggle__icon {
+  display: flex;
+  line-height: 0;
+}
