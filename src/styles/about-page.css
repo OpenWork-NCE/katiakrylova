@@ -194,8 +194,9 @@
 .about-page__vision {
   position: relative;
   z-index: 10;
-  /* hauteur adaptée au contenu — pas de faux plein écran vide avant le footer */
-  min-height: min(70dvh, 36rem);
+  /* cadre image 16:9 — hauteur = largeur × 9/16 */
+  width: 100%;
+  aspect-ratio: 16 / 9;
   margin-top: 0;
   display: grid;
   place-items: center;
@@ -305,12 +306,8 @@
     max-width: min(100%, 20rem);
   }
 
-  .about-page__vision {
-    min-height: 28rem;
-  }
-
   .about-page__vision-copy {
-    padding: 2.5rem 1rem;
+    padding: 1.75rem 1rem;
   }
 }
 
