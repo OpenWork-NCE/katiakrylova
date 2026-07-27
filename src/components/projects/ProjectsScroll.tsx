@@ -22,17 +22,19 @@ function padIndex(n: number, total: number) {
 export function ProjectsScroll({ projects, locale }: Props) {
   const t = useTranslations('projects')
   const listRef = useRef<HTMLUListElement>(null)
+  const headerRef = useRef<HTMLElement>(null)
   const total = projects.length
 
   useEffect(() => {
     const root = listRef.current
+    const header = headerRef.current
     if (!root) return
 
     const items = Array.from(root.querySelectorAll<HTMLElement>('[data-project-item]'))
-    if (items.length === 0) return
-
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
     if (reduced) {
+      header?.classList.add('projects-scroll__header--visible')
       items.forEach((el) => el.classList.add('projects-scroll__item--visible'))
       return
     }
@@ -40,16 +42,25 @@ export function ProjectsScroll({ projects, locale }: Props) {
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('projects-scroll__item--visible')
-            observer.unobserve(entry.target)
-          }
+          if (!entry.isIntersecting) continue
+          const el = entry.target as HTMLElement
+          el.classList.add(
+            el.dataset.projectItem !== undefined
+              ? 'projects-scroll__item--visible'
+              : 'projects-scroll__header--visible',
+          )
+          observer.unobserve(el)
         }
       },
-      { root: null, rootMargin: '0px 0px -6% 0px', threshold: 0.08 },
+      { root: null, rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
     )
 
-    items.forEach((el) => observer.observe(el))
+    if (header) observer.observe(header)
+    items.forEach((el, i) => {
+      el.style.setProperty('--reveal-delay', `${Math.min(i, 8) * 45}ms`)
+      observer.observe(el)
+    })
+
     return () => observer.disconnect()
   }, [projects])
 
@@ -59,7 +70,7 @@ export function ProjectsScroll({ projects, locale }: Props) {
 
       <div className="projects-scroll__filmography" id="filmographie">
         <div className="projects-scroll__inner">
-          <header className="projects-scroll__header">
+          <header ref={headerRef} className="projects-scroll__header">
             <h2 className="projects-scroll__title">{t('title')}</h2>
             <p className="projects-scroll__count">
               {padIndex(total, total)} · {t('filmographyMeta')}
@@ -89,6 +100,7 @@ export function ProjectsScroll({ projects, locale }: Props) {
                           sizes="(max-width: 768px) 90vw, 420px"
                           className="object-cover"
                           priority={i < 4}
+                          quality={90}
                         />
                       ) : (
                         <span className="projects-scroll__still-placeholder">—</span>

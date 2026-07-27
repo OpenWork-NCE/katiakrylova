@@ -1,25 +1,35 @@
-/* Projects — landing (même sombre unifié que News / Contact / About) */
+/* Projects — landing plein viewport, scroll document (pas de scroll imbriqué) */
 
 .projects-intro {
   position: relative;
+  /* 100vh du main (sous header pt-16) — en flux pour que la molette scrolle la page */
   min-height: calc(100dvh - 4rem);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem 1.25rem max(1.5rem, env(safe-area-inset-bottom, 0px));
-  overflow: hidden;
+  /* pas de overflow:hidden sur le conteneur de scroll : il piégeait la molette */
+  overflow: clip;
   background: var(--bg-primary);
+  isolation: isolate;
 }
 
 .projects-intro__bg {
   position: absolute;
-  inset: 0;
+  inset: -4%;
   z-index: 0;
   pointer-events: none;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   filter: brightness(0.58) contrast(1.05);
+  transform: scale(1.04);
+  transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+.projects-intro--ready .projects-intro__bg {
+  transform: scale(1);
 }
 
 .projects-intro__scrim {
@@ -46,13 +56,20 @@
 .projects-intro__inner {
   position: relative;
   z-index: 10;
-  /* plus large que 38rem — lecture centrée */
   width: min(100%, 52rem);
-  max-height: calc(100dvh - 6rem);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  /* PLUS de max-height / overflow-y : le document gère tout le scroll */
   text-align: center;
-  scrollbar-width: thin;
+  opacity: 0;
+  transform: translateY(1.1rem);
+  transition:
+    opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.projects-intro--ready .projects-intro__inner {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .projects-intro__title {
@@ -82,26 +99,86 @@
 .projects-intro__body p {
   margin: 0;
   color: rgba(245, 241, 234, 0.92);
+  opacity: 0;
+  transform: translateY(0.65rem);
+  transition:
+    opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.projects-intro--ready .projects-intro__body p {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.projects-intro--ready .projects-intro__body p:nth-child(1) {
+  transition-delay: 0.12s;
+}
+.projects-intro--ready .projects-intro__body p:nth-child(2) {
+  transition-delay: 0.22s;
+}
+.projects-intro--ready .projects-intro__body p:nth-child(3) {
+  transition-delay: 0.32s;
+}
+.projects-intro--ready .projects-intro__body p:nth-child(4) {
+  transition-delay: 0.42s;
+}
+.projects-intro--ready .projects-intro__body p:nth-child(5) {
+  transition-delay: 0.52s;
 }
 
 .projects-intro__hint {
   margin-top: 2rem;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
   font-family: var(--font-body);
   font-weight: var(--font-weight-bold);
   font-size: 0.65rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: rgba(245, 241, 234, 0.5);
-  animation: projects-intro-hint 2.2s ease-in-out infinite;
+  background: none;
+  border: 0;
+  padding: 0.35rem 0.5rem;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.55s;
+}
+
+.projects-intro--ready .projects-intro__hint {
+  opacity: 1;
+  animation: projects-intro-hint 2.2s ease-in-out 0.9s infinite;
+}
+
+.projects-intro__hint:hover,
+.projects-intro__hint:focus-visible {
+  color: var(--accent);
+  outline: none;
+}
+
+.projects-intro__hint-chevron {
+  display: block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  opacity: 0.75;
 }
 
 @keyframes projects-intro-hint {
   0%,
   100% {
     opacity: 0.45;
+    transform: translateY(0);
   }
   50% {
-    opacity: 0.85;
+    opacity: 0.9;
+    transform: translateY(0.28rem);
   }
 }
 
@@ -111,11 +188,10 @@
   }
 
   .projects-intro__inner {
-    width: min(100%, 56rem); /* max-w-4xl ≈ lecture large centrée */
+    width: min(100%, 56rem);
   }
 }
 
-/* Petits viewports / hauteur limitée */
 @media (max-width: 767px) {
   .projects-intro {
     padding: 1.25rem 1rem max(1.25rem, env(safe-area-inset-bottom, 0px));
@@ -124,7 +200,6 @@
   }
 
   .projects-intro__inner {
-    max-height: calc(100dvh - 5.5rem);
     width: 100%;
   }
 
@@ -162,7 +237,17 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .projects-intro__bg,
+  .projects-intro__inner,
+  .projects-intro__body p,
   .projects-intro__hint {
+    transition: none;
     animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .projects-intro__body p {
+    transition-delay: 0s;
   }
 }

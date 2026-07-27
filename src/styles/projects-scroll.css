@@ -1,4 +1,4 @@
-/* Projects — filmographie compacte (scroll vertical, fond noir)
+/* Projects — filmographie compacte (scroll vertical document, fond noir)
    Breakpoints alignés Tailwind codebase : md = 768px */
 
 .projects-scroll {
@@ -9,20 +9,32 @@
 .projects-scroll__filmography {
   position: relative;
   min-height: calc(100dvh - 4rem);
-  padding-bottom: max(4rem, env(safe-area-inset-bottom, 0px));
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+  /* ancre sous le header sticky (pt-16 = 4rem) */
+  scroll-margin-top: 4.5rem;
 }
 
 /* max-w-6xl + px-md (Container) */
 .projects-scroll__inner {
   max-width: 72rem;
   margin: 0 auto;
-  padding: 2.25rem 1rem 0; /* px-md = 16px */
+  padding: 2.25rem 1rem 0;
 }
 
 .projects-scroll__header {
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid rgba(245, 241, 234, 0.1);
+  opacity: 0;
+  transform: translateY(0.85rem);
+  transition:
+    opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.projects-scroll__header--visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .projects-scroll__title {
@@ -51,10 +63,11 @@
 
 .projects-scroll__item {
   opacity: 0;
-  transform: translateY(0.75rem);
+  transform: translateY(1.15rem);
   transition:
-    opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
 }
 
 .projects-scroll__item--visible {
@@ -72,7 +85,9 @@
   border-bottom: 1px solid rgba(245, 241, 234, 0.08);
   color: inherit;
   text-decoration: none;
-  transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .projects-scroll__row::before {
@@ -83,12 +98,12 @@
   bottom: 0.85rem;
   width: 2px;
   background: transparent;
-  transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .projects-scroll__row:hover,
 .projects-scroll__row:focus-visible {
-  background: rgba(245, 241, 234, 0.02);
+  background: rgba(245, 241, 234, 0.025);
 }
 
 .projects-scroll__row:hover::before,
@@ -123,17 +138,24 @@
     transparent 42%,
     transparent 100%
   );
+  opacity: 1;
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.projects-scroll__row:hover .projects-scroll__still::after,
+.projects-scroll__row:focus-visible .projects-scroll__still::after {
+  opacity: 0.55;
 }
 
 .projects-scroll__still img {
   object-fit: cover;
   object-position: center;
-  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .projects-scroll__row:hover .projects-scroll__still img,
 .projects-scroll__row:focus-visible .projects-scroll__still img {
-  transform: scale(1.04);
+  transform: scale(1.045);
 }
 
 .projects-scroll__still--empty {
@@ -186,7 +208,7 @@
   font-size: clamp(1.35rem, 3.2vw, 1.85rem);
   line-height: 1.15;
   color: var(--text-primary);
-  transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .projects-scroll__row:hover .projects-scroll__name,
@@ -221,17 +243,17 @@
   text-transform: uppercase;
   color: rgba(245, 241, 234, 0.55);
   transition:
-    color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .projects-scroll__row:hover .projects-scroll__cta,
 .projects-scroll__row:focus-visible .projects-scroll__cta {
   color: var(--accent);
-  transform: translateX(0.2rem);
+  transform: translateX(0.25rem);
 }
 
-/* md — still + texte côte à côte (still plus compact pour éviter overflow) */
+/* md — still + texte côte à côte */
 @media (min-width: 768px) {
   .projects-scroll__inner {
     max-width: 64rem;
@@ -286,6 +308,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .projects-scroll__header,
   .projects-scroll__item {
     opacity: 1;
     transform: none;
@@ -296,7 +319,8 @@
   .projects-scroll__cta,
   .projects-scroll__name,
   .projects-scroll__row,
-  .projects-scroll__row::before {
+  .projects-scroll__row::before,
+  .projects-scroll__still::after {
     transition: none;
   }
 
