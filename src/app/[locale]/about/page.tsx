@@ -2,11 +2,14 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { getAbout } from '@/lib/payload'
 import { getMediaUrl } from '@/lib/utils'
-import type { Media } from '@/payload-types'
 import { AboutView } from '@/components/about/AboutView'
 
-/** Fallback when CMS media has no width/height (Profile Picture.png = 600×746). */
-const PROFILE_FALLBACK = { width: 600, height: 746 }
+/** Static portrait — public/images/profilepicture.jpg (1125×1398). */
+const PROFILE_STATIC = {
+  url: '/images/profilepicture.jpg',
+  width: 1125,
+  height: 1398,
+} as const
 
 export const revalidate = 600
 
@@ -18,10 +21,9 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
     getAbout(locale as 'fr' | 'en'),
   ])
 
-  const profile = about?.profileImage
-  const profileUrl = getMediaUrl(profile, 'hd')
-  const profileMedia = typeof profile === 'object' && profile !== null ? (profile as Media) : null
-  const profileAlt = profileMedia?.alt?.trim() || t('title')
+  // Fixed portrait asset (public/images/profilepicture.jpg)
+  const profileUrl = PROFILE_STATIC.url
+  const profileAlt = t('title')
 
   /** Fond type page Projets — CMS `photo`, fallback public/images/maman.jpg */
   const backgroundUrl = getMediaUrl(about?.photo, 'hd') ?? '/images/maman.jpg'
@@ -33,8 +35,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       backgroundUrl={backgroundUrl}
       profileUrl={profileUrl}
       profileAlt={profileAlt}
-      profileWidth={profileMedia?.width ?? PROFILE_FALLBACK.width}
-      profileHeight={profileMedia?.height ?? PROFILE_FALLBACK.height}
+      profileWidth={PROFILE_STATIC.width}
+      profileHeight={PROFILE_STATIC.height}
       bio={about?.bio ? <RichText data={about.bio} /> : null}
       visionUrl={visionUrl}
       visionText={about?.visionText ?? null}

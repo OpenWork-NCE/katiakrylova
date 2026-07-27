@@ -146,7 +146,7 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
     'Hero Katia Krylova',
     dryRun,
   )
-  const aboutProfilePath = globals.about.profileImage ?? 'Profile Picture.png'
+  const aboutProfilePath = globals.about.profileImage ?? 'profilepicture.jpg'
   const aboutProfileId = await uploadMedia(
     payload,
     path.join(imagesRoot, aboutProfilePath),
