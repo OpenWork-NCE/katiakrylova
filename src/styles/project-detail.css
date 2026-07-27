@@ -1,0 +1,189 @@
+/* Fiche projet — rythme serré, sections conditionnelles, esprit cinéma */
+
+.project-detail {
+  position: relative;
+  background: var(--bg-primary);
+  padding-bottom: max(0px, env(safe-area-inset-bottom, 0px));
+}
+
+.project-detail__header {
+  padding: 1.75rem 0 0;
+}
+
+.project-detail__header-inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.project-detail__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.project-detail__back {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-detail__back:hover,
+.project-detail__back:focus-visible {
+  color: var(--accent);
+  outline: none;
+}
+
+.project-detail__platform {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.project-detail__hero {
+  margin: 0 auto;
+}
+
+.project-detail__cover {
+  position: relative;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: min(100%, 48rem);
+  overflow: hidden;
+  border: 1px solid rgba(245, 241, 234, 0.1);
+  background: var(--bg-secondary);
+}
+
+/* Bloc intro : titre + meta + description — collé au hero */
+.project-detail__intro {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.75rem 1rem 0;
+}
+
+.project-detail__title {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-weight: 500;
+  font-size: clamp(1.85rem, 6vw, 3.5rem);
+  line-height: 1.05;
+  color: var(--text-primary);
+}
+
+.project-detail__meta {
+  margin: 0.85rem 0 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.project-detail__desc {
+  margin: 1.25rem 0 0;
+  max-width: 40rem;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size: clamp(0.95rem, 2vw, 1.125rem);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+  white-space: pre-line;
+}
+
+/* Sections optionnelles — padding modéré, pas de py-2xl vide */
+.project-detail__block {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 0;
+}
+
+.project-detail__block--gallery {
+  padding-top: 2.25rem;
+}
+
+.project-detail__block--credits {
+  padding-top: 2rem;
+}
+
+.project-detail__block--videos {
+  padding-top: 2.25rem;
+  padding-bottom: 0.5rem;
+}
+
+.project-detail__block-title {
+  margin: 0 0 1.15rem;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.project-detail__videos {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.project-detail__video-item {
+  max-width: min(100%, 48rem);
+}
+
+.project-detail__video-desc {
+  margin: 0.85rem 0 0;
+  max-width: 40rem;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  white-space: pre-line;
+}
+
+.project-detail__video-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-detail__video-link:hover {
+  color: var(--accent);
+}
+
+@media (min-width: 768px) {
+  .project-detail__header {
+    padding-top: 2.25rem;
+  }
+
+  .project-detail__intro {
+    padding-top: 2rem;
+  }
+
+  .project-detail__block {
+    padding-top: 2.5rem;
+  }
+
+  .project-detail__block--videos {
+    padding-top: 2.75rem;
+  }
+
+  .project-detail__videos {
+    gap: 2.5rem;
+  }
+}

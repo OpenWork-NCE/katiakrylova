@@ -19,14 +19,25 @@ export function ProjectGallery({ images }: { images: Item[] }) {
 
   return (
     <>
-      <div className="columns-1 md:columns-2 lg:columns-3 gap-md">
+      <div className="columns-1 gap-sm md:columns-2 md:gap-md lg:columns-3">
         {slides.map((s, i) => (
           <button
             key={i}
-            onClick={() => { setIdx(i); setOpen(true) }}
-            className="mb-md block w-full break-inside-avoid hover:opacity-90 transition"
+            type="button"
+            onClick={() => {
+              setIdx(i)
+              setOpen(true)
+            }}
+            className="mb-sm block w-full break-inside-avoid border border-white/10 transition hover:opacity-90 md:mb-md"
           >
-            <Image src={s.src} alt={s.alt ?? ''} width={s.width ?? 1200} height={s.height ?? 800} className="w-full h-auto" />
+            <Image
+              src={s.src}
+              alt={s.alt ?? ''}
+              width={s.width ?? 1200}
+              height={s.height ?? 800}
+              className="h-auto w-full"
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
           </button>
         ))}
       </div>

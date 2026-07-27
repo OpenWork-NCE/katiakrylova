@@ -42,6 +42,7 @@ export const Projects: CollectionConfig = {
         'Animation',
         'Collaboration',
         'Film',
+        'Vidéo',
         'Montage',
         'Scénario',
         'Réalisation',

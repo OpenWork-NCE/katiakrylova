@@ -230,6 +230,7 @@ export interface Project {
     | 'Animation'
     | 'Collaboration'
     | 'Film'
+    | 'Vidéo'
     | 'Montage'
     | 'Scénario'
     | 'Réalisation'

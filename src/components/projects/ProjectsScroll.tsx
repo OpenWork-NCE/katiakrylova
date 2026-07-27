@@ -2,11 +2,16 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import type { Project } from '@/payload-types'
 import { formatProjectFormats, getMediaUrl } from '@/lib/utils'
 import { ProjectsLanding } from './ProjectsLanding'
+import {
+  ProjectsFilter,
+  filterProjects,
+  type ProjectsFilterState,
+} from './ProjectsFilter'
 import '@/styles/projects-scroll.css'
 
 type Props = {
@@ -23,7 +28,22 @@ export function ProjectsScroll({ projects, locale }: Props) {
   const t = useTranslations('projects')
   const listRef = useRef<HTMLUListElement>(null)
   const headerRef = useRef<HTMLElement>(null)
-  const total = projects.length
+  const [filterVisible, setFilterVisible] = useState(false)
+  const [filter, setFilter] = useState<ProjectsFilterState>({
+    query: '',
+    formats: [],
+    years: [],
+  })
+
+  const filtered = useMemo(() => filterProjects(projects, filter), [projects, filter])
+  const totalAll = projects.length
+  const total = filtered.length
+
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const timer = window.setTimeout(() => setFilterVisible(true), reduced ? 0 : 120)
+    return () => window.clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     const root = listRef.current
@@ -38,6 +58,9 @@ export function ProjectsScroll({ projects, locale }: Props) {
       items.forEach((el) => el.classList.add('projects-scroll__item--visible'))
       return
     }
+
+    // Reset visibility when the filtered set changes
+    items.forEach((el) => el.classList.remove('projects-scroll__item--visible'))
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -55,14 +78,16 @@ export function ProjectsScroll({ projects, locale }: Props) {
       { root: null, rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
     )
 
-    if (header) observer.observe(header)
+    if (header) {
+      header.classList.add('projects-scroll__header--visible')
+    }
     items.forEach((el, i) => {
-      el.style.setProperty('--reveal-delay', `${Math.min(i, 8) * 45}ms`)
+      el.style.setProperty('--reveal-delay', `${Math.min(i, 8) * 40}ms`)
       observer.observe(el)
     })
 
     return () => observer.disconnect()
-  }, [projects])
+  }, [filtered])
 
   return (
     <div className="projects-scroll">
@@ -73,61 +98,73 @@ export function ProjectsScroll({ projects, locale }: Props) {
           <header ref={headerRef} className="projects-scroll__header">
             <h2 className="projects-scroll__title">{t('title')}</h2>
             <p className="projects-scroll__count">
-              {padIndex(total, total)} · {t('filmographyMeta')}
+              {padIndex(totalAll, totalAll)} · {t('filmographyMeta')}
             </p>
           </header>
 
-          <ul ref={listRef} className="projects-scroll__list">
-            {projects.map((project, i) => {
-              const cover = getMediaUrl(project.coverImage)
-              const n = padIndex(i + 1, total)
+          <ProjectsFilter
+            projects={projects}
+            value={filter}
+            onChange={setFilter}
+            resultCount={total}
+            visible={filterVisible}
+          />
 
-              return (
-                <li key={project.id} data-project-item className="projects-scroll__item">
-                  <Link
-                    href={`/${locale}/projects/${project.slug}`}
-                    className="projects-scroll__row"
-                  >
-                    <div
-                      className={`projects-scroll__still${cover ? '' : ' projects-scroll__still--empty'}`}
-                      aria-hidden
+          {total === 0 ? (
+            <p className="projects-filter__empty">{t('filterEmpty')}</p>
+          ) : (
+            <ul ref={listRef} className="projects-scroll__list">
+              {filtered.map((project, i) => {
+                const cover = getMediaUrl(project.coverImage)
+                const n = padIndex(i + 1, total)
+
+                return (
+                  <li key={project.id} data-project-item className="projects-scroll__item">
+                    <Link
+                      href={`/${locale}/projects/${project.slug}`}
+                      className="projects-scroll__row"
                     >
-                      {cover ? (
-                        <Image
-                          src={cover}
-                          alt=""
-                          fill
-                          sizes="(max-width: 768px) 90vw, 420px"
-                          className="object-cover"
-                          priority={i < 4}
-                          quality={90}
-                        />
-                      ) : (
-                        <span className="projects-scroll__still-placeholder">—</span>
-                      )}
-                    </div>
-
-                    <div className="projects-scroll__copy">
-                      <div className="projects-scroll__meta">
-                        <span className="projects-scroll__index">{n}</span>
-                        <span className="projects-scroll__dot" aria-hidden>
-                          ·
-                        </span>
-                        <span>
-                          {formatProjectFormats(project.format)} · {project.year}
-                        </span>
+                      <div
+                        className={`projects-scroll__still${cover ? '' : ' projects-scroll__still--empty'}`}
+                        aria-hidden
+                      >
+                        {cover ? (
+                          <Image
+                            src={cover}
+                            alt=""
+                            fill
+                            sizes="(max-width: 768px) 90vw, 420px"
+                            className="object-cover"
+                            priority={i < 4}
+                            quality={90}
+                          />
+                        ) : (
+                          <span className="projects-scroll__still-placeholder">—</span>
+                        )}
                       </div>
-                      <h3 className="projects-scroll__name">{project.title}</h3>
-                      {project.description ? (
-                        <p className="projects-scroll__excerpt">{project.description}</p>
-                      ) : null}
-                      <span className="projects-scroll__cta">{t('viewProject')}</span>
-                    </div>
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
+
+                      <div className="projects-scroll__copy">
+                        <div className="projects-scroll__meta">
+                          <span className="projects-scroll__index">{n}</span>
+                          <span className="projects-scroll__dot" aria-hidden>
+                            ·
+                          </span>
+                          <span>
+                            {formatProjectFormats(project.format)} · {project.year}
+                          </span>
+                        </div>
+                        <h3 className="projects-scroll__name">{project.title}</h3>
+                        {project.description ? (
+                          <p className="projects-scroll__excerpt">{project.description}</p>
+                        ) : null}
+                        <span className="projects-scroll__cta">{t('viewProject')}</span>
+                      </div>
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
         </div>
       </div>
     </div>

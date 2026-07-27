@@ -488,7 +488,12 @@
       ],
       "description": "Prise de vues, photos de plateau, montage et étalonnage. Court métrage de Sébastien mélot.",
       "credits": [],
-      "externalLinks": [],
+      "externalLinks": [
+        {
+          "platform": "Vimeo",
+          "url": "https://vimeo.com/25497317"
+        }
+      ],
       "missingFiles": [],
       "order": 16,
       "year": 2013,
@@ -518,10 +523,6 @@
         {
           "platform": "YouTube",
           "url": "https://www.youtube.com/watch?v=ZAkgTis02Lw"
-        },
-        {
-          "platform": "Vimeo",
-          "url": "https://vimeo.com/26809851"
         },
         {
           "platform": "Vimeo",
@@ -563,6 +564,24 @@
         "Making Of",
         "Photos de plateau"
       ]
+    },
+    {
+      "slug": "le-de-d-or",
+      "title": "Le Dé D'Or",
+      "coverImage": "lededor.jpg",
+      "gallery": [],
+      "description": "Vidéo Performance autour de l'oeuvre de la plasticienne Sylvie Pichrist :\nLe dé d’or\n\nExtrait du texte énoncé par l’artiste durant sa performance\n«Point par point,\npique, pique les pas de ma mémoire\nAu loin\nJ’imagine\nUne aiguille …»",
+      "credits": [],
+      "externalLinks": [
+        {
+          "platform": "YouTube",
+          "url": "https://www.youtube.com/watch?v=PQtFtZBQvAU"
+        }
+      ],
+      "missingFiles": [],
+      "order": 19,
+      "year": 2013,
+      "format": ["Vidéo", "Montage"]
     }
   ]
 }

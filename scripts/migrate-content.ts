@@ -19,6 +19,7 @@ type ProjectFormat =
   | 'Animation'
   | 'Collaboration'
   | 'Film'
+  | 'Vidéo'
   | 'Montage'
   | 'Scénario'
   | 'Réalisation'

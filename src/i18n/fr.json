@@ -34,7 +34,19 @@
     "galleryLabel": "Projets",
     "filmographyMeta": "Titres",
     "backToProjects": "← Retour aux projets",
-    "videos": "Vidéos"
+    "videos": "Vidéos",
+    "searchPlaceholder": "Rechercher un projet…",
+    "searchAria": "Rechercher dans les projets",
+    "searchClear": "Effacer la recherche",
+    "filterFormats": "Formats",
+    "filterYears": "Années",
+    "filterAll": "Tous",
+    "filterReset": "Réinitialiser",
+    "filterResultOne": "titre",
+    "filterResultMany": "titres",
+    "filterEmpty": "Aucun projet ne correspond à votre recherche.",
+    "filterShowMore": "+{count} plus",
+    "filterShowLess": "Moins"
   },
   "projectNav": {
     "prev": "← Précédent",
