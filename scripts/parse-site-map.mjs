@@ -289,6 +289,8 @@ async function main() {
       phone: '+32(0)474 468 168',
       calComUrl: 'https://cal.com/katia-krylova',
       backgroundImage: 'Fonds Contact.jpg',
+      egoDuMoiUrl: 'https://katiafontaine.wixsite.com/ego-du-moi',
+      tarotDecrypteUrl: 'https://tarot-decrypte.be',
     },
     journalPage: {
       photo: 'Fond News.jpg',

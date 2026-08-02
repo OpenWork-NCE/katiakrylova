@@ -3,6 +3,15 @@
 import { useEffect, useState } from 'react'
 import '@/styles/contact-page.css'
 
+export type RelatedSite = {
+  label: string
+  href: string
+  /** Display hostname (e.g. tarot-decrypte.be) — signals external destination */
+  host?: string
+  visitLabel: string
+  ariaLabel: string
+}
+
 type Props = {
   backgroundUrl: string
   title: string
@@ -14,6 +23,8 @@ type Props = {
   vimeoUrl?: string | null
   instagramUrl?: string | null
   linkedinUrl?: string | null
+  relatedSitesHeading?: string
+  relatedSites?: RelatedSite[]
 }
 
 /** Contact — entrée cinématique (style Projets / À propos). */
@@ -28,6 +39,8 @@ export function ContactView({
   vimeoUrl,
   instagramUrl,
   linkedinUrl,
+  relatedSitesHeading,
+  relatedSites = [],
 }: Props) {
   const [ready, setReady] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
@@ -104,6 +117,41 @@ export function ContactView({
             ) : null}
           </div>
         </div>
+
+        {relatedSites.length > 0 ? (
+          <nav className="contact-page__related" aria-label={relatedSitesHeading}>
+            {relatedSitesHeading ? (
+              <p className="contact-page__related-heading">{relatedSitesHeading}</p>
+            ) : null}
+            <ul className="contact-page__related-list">
+              {relatedSites.map((site) => (
+                <li key={site.href}>
+                  <a
+                    href={site.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="contact-page__related-link"
+                    aria-label={site.ariaLabel}
+                  >
+                    <span className="contact-page__related-main">
+                      <span className="contact-page__related-name">{site.label}</span>
+                      {site.host ? (
+                        <span className="contact-page__related-host">{site.host}</span>
+                      ) : null}
+                    </span>
+                    <span className="contact-page__related-cta">
+                      <span className="contact-page__related-cta-label">{site.visitLabel}</span>
+                      <span className="contact-page__related-arrow" aria-hidden>
+                        ↗
+                      </span>
+                    </span>
+                    <span className="contact-page__related-rule" aria-hidden />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ) : null}
       </div>
     </div>
   )

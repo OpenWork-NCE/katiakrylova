@@ -12,12 +12,18 @@ export default async function JournalPage({ params }: { params: Promise<{ locale
   const { locale } = await params
   setRequestLocale(locale)
   const loc = locale as 'fr' | 'en'
+  // Entries are already newest-first (`sort: '-createdAt'` in getJournalEntries).
   const [t, entries, journal] = await Promise.all([
     getTranslations('journal'),
     getJournalEntries(loc),
     getJournal(loc),
   ])
-  const backgroundUrl = getMediaUrl(journal?.photo, 'hd') ?? FALLBACK_BG
+
+  // Background = cover of the most recent news (hd for full-bleed).
+  // Fallbacks: CMS journal photo → static Fond News (empty list / no cover).
+  const latestCoverUrl = entries[0] ? getMediaUrl(entries[0].coverImage, 'hd') : null
+  const backgroundUrl =
+    latestCoverUrl ?? getMediaUrl(journal?.photo, 'hd') ?? FALLBACK_BG
 
   const list: JournalListItem[] = entries.map((e) => {
     const cover = e.coverImage

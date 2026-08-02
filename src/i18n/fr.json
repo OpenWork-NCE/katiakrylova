@@ -93,7 +93,12 @@
     "intro": "Pour toute proposition, collaboration ou prise de rendez-vous :",
     "book": "Réserver un appel",
     "email": "Email",
-    "phone": "Tél"
+    "phone": "Tél",
+    "relatedSitesHeading": "Création jeux de cartes (tarot & imagination)",
+    "egoDuMoi": "Ego Du Moi",
+    "tarotDecrypte": "Le Tarot Décrypté",
+    "visitSite": "Visiter le site",
+    "visitSiteAria": "Visiter {label} (ouvre un nouvel onglet)"
   },
   "footer": {
     "built": "Site construit avec soin par Digital House Company"

@@ -23,5 +23,21 @@ export const Contact: GlobalConfig = {
     { name: 'instagramUrl', type: 'text' },
     { name: 'linkedinUrl', type: 'text' },
     { name: 'calComUrl', type: 'text', required: true },
+    {
+      name: 'egoDuMoiUrl',
+      type: 'text',
+      label: 'Ego Du Moi (URL)',
+      admin: {
+        description: 'Site connexe — création jeux de cartes (imagination).',
+      },
+    },
+    {
+      name: 'tarotDecrypteUrl',
+      type: 'text',
+      label: 'Le Tarot Décrypté (URL)',
+      admin: {
+        description: 'Site connexe — création jeux de cartes (tarot).',
+      },
+    },
   ],
 }

@@ -93,7 +93,12 @@
     "intro": "For any inquiry, collaboration or meeting:",
     "book": "Book a call",
     "email": "Email",
-    "phone": "Phone"
+    "phone": "Phone",
+    "relatedSitesHeading": "Card game creations (tarot & imagination)",
+    "egoDuMoi": "Ego Du Moi",
+    "tarotDecrypte": "Le Tarot Décrypté",
+    "visitSite": "Visit site",
+    "visitSiteAria": "Visit {label} (opens in a new tab)"
   },
   "footer": {
     "built": "Site crafted with care by Digital House Company"

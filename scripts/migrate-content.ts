@@ -89,6 +89,8 @@ type GlobalsManifest = {
     vimeoUrl?: string
     instagramUrl?: string
     linkedinUrl?: string
+    egoDuMoiUrl?: string
+    tarotDecrypteUrl?: string
   }
   /** Page liste Journal — fond CMS */
   journalPage?: { photo: string }
@@ -216,6 +218,8 @@ async function migrateGlobals(payload: Awaited<ReturnType<typeof getPayload>>, g
         vimeoUrl: globals.contact.vimeoUrl,
         instagramUrl: globals.contact.instagramUrl,
         linkedinUrl: globals.contact.linkedinUrl,
+        egoDuMoiUrl: globals.contact.egoDuMoiUrl,
+        tarotDecrypteUrl: globals.contact.tarotDecrypteUrl,
         backgroundImage: contactBgId ?? undefined,
       },
       locale: 'fr',

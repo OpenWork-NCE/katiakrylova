@@ -755,6 +755,14 @@ export interface Contact {
   instagramUrl?: string | null;
   linkedinUrl?: string | null;
   calComUrl: string;
+  /**
+   * Site connexe — création jeux de cartes (imagination).
+   */
+  egoDuMoiUrl?: string | null;
+  /**
+   * Site connexe — création jeux de cartes (tarot).
+   */
+  tarotDecrypteUrl?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -835,6 +843,8 @@ export interface ContactSelect<T extends boolean = true> {
   instagramUrl?: T;
   linkedinUrl?: T;
   calComUrl?: T;
+  egoDuMoiUrl?: T;
+  tarotDecrypteUrl?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

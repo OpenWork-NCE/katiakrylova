@@ -243,3 +243,33 @@ test('about keeps its two image sections isolated', async () => {
   assert.match(styles, /\.about-page__bg\s*\{[\s\S]*?background-size:\s*cover;/)
   assert.match(styles, /\.about-page__vision\s*\{[\s\S]*?margin-top:\s*0;/)
 })
+
+test('journal list page uses the latest news cover as background', async () => {
+  const page = await readFile('src/app/[locale]/(frontend)/journal/page.tsx', 'utf8')
+  const payloadLib = await readFile('src/lib/payload.ts', 'utf8')
+
+  assert.match(payloadLib, /sort:\s*'-createdAt'/)
+  assert.match(page, /getJournalEntries/)
+  assert.match(page, /entries\[0\]/)
+  assert.match(page, /getMediaUrl\(entries\[0\]\.coverImage,\s*'hd'\)/)
+  assert.match(page, /FALLBACK_BG/)
+  assert.match(page, /journal\?\.photo/)
+})
+
+test('contact globals include related card-game creation sites', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/globals-manifest.json', 'utf8'))
+  const contactGlobal = await readFile('src/globals/Contact.ts', 'utf8')
+  const view = await readFile('src/components/contact/ContactView.tsx', 'utf8')
+  const page = await readFile('src/app/[locale]/contact/page.tsx', 'utf8')
+  const fr = JSON.parse(await readFile('src/i18n/fr.json', 'utf8'))
+
+  assert.equal(manifest.contact.egoDuMoiUrl, 'https://katiafontaine.wixsite.com/ego-du-moi')
+  assert.equal(manifest.contact.tarotDecrypteUrl, 'https://tarot-decrypte.be')
+  assert.match(contactGlobal, /name:\s*'egoDuMoiUrl'/)
+  assert.match(contactGlobal, /name:\s*'tarotDecrypteUrl'/)
+  assert.match(view, /contact-page__related/)
+  assert.match(page, /relatedSitesHeading/)
+  assert.equal(fr.contact.relatedSitesHeading, 'Création jeux de cartes (tarot & imagination)')
+  assert.equal(fr.contact.egoDuMoi, 'Ego Du Moi')
+  assert.equal(fr.contact.tarotDecrypte, 'Le Tarot Décrypté')
+})
