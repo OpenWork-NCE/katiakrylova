@@ -25,7 +25,10 @@ type LexicalLinkNode = {
 
 type LexicalInline = LexicalTextNode | LexicalLinkNode
 
-function textNode(text: string): LexicalTextNode {
+/** Lexical text format flag: bold */
+const FORMAT_BOLD = 1
+
+function textNode(text: string, format = 0): LexicalTextNode {
   return {
     mode: 'normal',
     text,
@@ -33,10 +36,34 @@ function textNode(text: string): LexicalTextNode {
     version: 1,
     detail: 0,
     style: '',
+    ...(format ? { format } : {}),
   }
 }
 
-/** Parse markdown-style links: [label](url) */
+/** Parse markdown-style bold: **text** */
+function parseBoldSegments(text: string): LexicalTextNode[] {
+  if (!text) return []
+  const re = /\*\*(.+?)\*\*/g
+  const nodes: LexicalTextNode[] = []
+  let last = 0
+  let match: RegExpExecArray | null
+
+  while ((match = re.exec(text)) !== null) {
+    if (match.index > last) {
+      nodes.push(textNode(text.slice(last, match.index)))
+    }
+    nodes.push(textNode(match[1], FORMAT_BOLD))
+    last = match.index + match[0].length
+  }
+
+  if (last < text.length) {
+    nodes.push(textNode(text.slice(last)))
+  }
+
+  return nodes.length > 0 ? nodes : [textNode(text)]
+}
+
+/** Parse markdown-style links [label](url) and bold **text**. */
 function parseInline(paragraph: string): LexicalInline[] {
   const flat = paragraph.replace(/\n/g, ' ')
   const re = /\[([^\]]+)\]\(([^)]+)\)/g
@@ -47,7 +74,7 @@ function parseInline(paragraph: string): LexicalInline[] {
 
   while ((match = re.exec(flat)) !== null) {
     if (match.index > last) {
-      children.push(textNode(flat.slice(last, match.index)))
+      children.push(...parseBoldSegments(flat.slice(last, match.index)))
     }
     children.push({
       type: 'link',
@@ -61,13 +88,13 @@ function parseInline(paragraph: string): LexicalInline[] {
       format: '',
       indent: 0,
       direction: 'ltr',
-      children: [textNode(match[1])],
+      children: parseBoldSegments(match[1]),
     })
     last = match.index + match[0].length
   }
 
   if (last < flat.length) {
-    children.push(textNode(flat.slice(last)))
+    children.push(...parseBoldSegments(flat.slice(last)))
   }
 
   return children.length > 0 ? children : [textNode(flat)]

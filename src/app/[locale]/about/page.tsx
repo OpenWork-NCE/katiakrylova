@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { getAbout } from '@/lib/payload'
+import { ABOUT_BIO_EMPHASIS, emphasizePhrasesInLexical } from '@/lib/lexical-emphasize'
 import { getMediaUrl } from '@/lib/utils'
 import { AboutView } from '@/components/about/AboutView'
 
@@ -37,7 +38,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       profileAlt={profileAlt}
       profileWidth={PROFILE_STATIC.width}
       profileHeight={PROFILE_STATIC.height}
-      bio={about?.bio ? <RichText data={about.bio} /> : null}
+      bio={
+        about?.bio ? (
+          <RichText data={emphasizePhrasesInLexical(about.bio, ABOUT_BIO_EMPHASIS)} />
+        ) : null
+      }
       visionUrl={visionUrl}
       visionText={about?.visionText ?? null}
     />

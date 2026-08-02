@@ -244,6 +244,21 @@ test('about keeps its two image sections isolated', async () => {
   assert.match(styles, /\.about-page__vision\s*\{[\s\S]*?margin-top:\s*0;/)
 })
 
+test('about bio emphasizes tarot and ego titles in lexical + CSS', async () => {
+  const page = await readFile('src/app/[locale]/about/page.tsx', 'utf8')
+  const styles = await readFile('src/styles/about-page.css', 'utf8')
+  const helper = await readFile('src/lib/lexical-emphasize.ts', 'utf8')
+  const manifest = JSON.parse(await readFile('scripts/data/globals-manifest.json', 'utf8'))
+
+  assert.match(page, /emphasizePhrasesInLexical/)
+  assert.match(page, /ABOUT_BIO_EMPHASIS/)
+  assert.match(helper, /LE TAROT DÉCRYPTÉ/)
+  assert.match(helper, /L'EGO du MOI/)
+  assert.match(styles, /\.about-page__bio strong\s*\{[\s\S]*?color:\s*var\(--accent\)/)
+  assert.match(manifest.about.bio, /\*\*LE TAROT DÉCRYPTÉ\*\*/)
+  assert.match(manifest.about.bio, /\*\*L'EGO du MOI\*\*/)
+})
+
 test('journal list page uses the latest news cover as background', async () => {
   const page = await readFile('src/app/[locale]/(frontend)/journal/page.tsx', 'utf8')
   const payloadLib = await readFile('src/lib/payload.ts', 'utf8')
