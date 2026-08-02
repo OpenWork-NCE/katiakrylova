@@ -130,7 +130,7 @@
   color: var(--text-primary);
 }
 
-/* Manifeste — largeur un peu plus généreuse */
+/* Manifeste — largeur un peu plus généreuse, aligné à gauche (comme corpus projets) */
 .home-hero__intro {
   margin: 0 auto 2.5rem;
   max-width: min(100%, 40rem);
@@ -140,6 +140,7 @@
   line-height: 1.75;
   letter-spacing: 0.02em;
   color: rgba(245, 241, 234, 0.92);
+  text-align: left;
   text-wrap: pretty;
 }
 

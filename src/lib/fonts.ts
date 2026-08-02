@@ -1,8 +1,8 @@
-import { Kaushan_Script } from 'next/font/google'
+import { Architects_Daughter } from 'next/font/google'
 import localFont from 'next/font/local'
 
 /** Display / titles — self-hosted via next/font (no Google CSS @import waterfall). */
-export const fontHand = Kaushan_Script({
+export const fontHand = Architects_Daughter({
   weight: '400',
   subsets: ['latin'],
   display: 'swap',

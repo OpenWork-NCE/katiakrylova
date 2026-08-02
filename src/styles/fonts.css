@@ -2,13 +2,13 @@
   --font-weight-regular: 400;
   --font-weight-bold: 700;
   /* Fallbacks if next/font variables are unavailable (e.g. admin shell). */
-  --font-hand: 'Kaushan Script', 'Segoe Script', 'Apple Chancery', cursive;
+  --font-hand: 'Architects Daughter', 'Segoe Script', 'Apple Chancery', cursive;
   --font-body: 'Prestige Elite Std', 'Courier New', Courier, monospace;
 }
 
-/* Titres — Kaushan Script (variable set by next/font on <html>) */
+/* Titres — Architects Daughter (variable set by next/font on <html>) */
 .font-hand {
-  font-family: var(--font-hand), 'Kaushan Script', 'Segoe Script', 'Apple Chancery', cursive;
+  font-family: var(--font-hand), 'Architects Daughter', 'Segoe Script', 'Apple Chancery', cursive;
   font-weight: 400;
   font-style: normal;
   font-feature-settings: 'kern' 1;

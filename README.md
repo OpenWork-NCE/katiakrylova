@@ -71,7 +71,7 @@ Stratégie en place :
 - **Data cache** Payload via `unstable_cache` + tags invalidés par hooks CMS (`src/lib/cache.ts`, `src/lib/revalidate.ts`)
 - **Média dual** : listes/grilles → dérivés Payload (`card`/`hd`) ; **liseuse portfolio** et **lightbox projets** → **originaux** uniquement
 - **CDN** : `Cache-Control` long sur `/fonts/*` et `/images/*` ; `images.minimumCacheTTL` 7j ; AVIF/WebP
-- **Fonts** : `next/font` (Kaushan + Prestige Elite local), plus de `@import` Google
+- **Fonts** : `next/font` (Architects Daughter + Prestige Elite local), plus de `@import` Google
 
 ### Contrainte qualité
 Les œuvres en liseuse portfolio (`PortfolioViewer`) et les images en liseuse projets (`ImageLightbox`) restent en **qualité originale** (pas de recompression Next sur le stage principal).
