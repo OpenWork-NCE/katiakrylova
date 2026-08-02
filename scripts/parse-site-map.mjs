@@ -132,7 +132,11 @@ const EXTERNAL_LINKS = {
   'light-vador': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=YMdizVGkzMU' }],
   manacao: [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=oFjSNHDKm4Y' }],
   paphius: [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=S5_8AzISuqM' }],
+  'plus-de-lait': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=67XhPteM5ZI' }],
   'presentation-teresa-1': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=HrX-4HMQHuM' }],
+  'que-faire-avec-innuit-siniswichi': [
+    { platform: 'YouTube', url: 'https://www.youtube.com/watch?v=Dz-9MNOsOxc' },
+  ],
   'seconde-papillon': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=L0MMAVRswOY' }],
   strangers: [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=JnnRxKFuVlw' }],
   'teresa-viesti': [{ platform: 'YouTube', url: 'https://www.youtube.com/watch?v=O3ABvb6TfmQ' }],
@@ -146,6 +150,11 @@ const EXTERNAL_LINKS = {
         'YADEL by Kenan Gorgun - turkish subtitled version\nAfter five books written and published by major houses in Paris, and two screenplays I wrote for\nmovie director Taylan Barman, I felt it was time for me to shot my own work. The result is YADEL.\nShot with very little money, it looks like to everyone that it costed 3 times more. It didn\'t. It is a good\nexample of making more with less. Had a great crew. Very short schedule to shot it but many many\nlocations; some entire sequences didn\'t survive the editing room. I made this movie as a "carte de\nvisite", in order to start working on my projet SAD SUGAR (which is meant to be the first movie of a\nthree-movie serie.) I have connections in France and Belgium, producers I worked with, and look\nfor a main producer (the movie would be shot in Turkish and English…).',
     },
   ],
+}
+
+/** Filenames excluded from a project gallery (manifest + re-parse). */
+const GALLERY_EXCLUDES = {
+  'la-petite-faucheuse': ['IMG_2158.gif', 'IMG_2158-3.gif'],
 }
 
 function parseImagesSection(content) {
@@ -196,10 +205,12 @@ function parseProjectFile(slug, content) {
   const title = titleMatch ? titleMatch[1].trim() : slug
   const images = parseImagesSection(content)
   const cover = images.find((img) => img.role.includes('image principale') || img.role.includes('hero'))
+  const excluded = new Set(GALLERY_EXCLUDES[slug] ?? [])
   const gallery = images
     .filter((img) => img.role.includes('galerie') || img.role.includes('thumbnail'))
     .map((img) => img.localFile)
     .filter((f, idx, arr) => arr.indexOf(f) === idx)
+    .filter((f) => !excluded.has(f))
 
   const textStart = content.indexOf('## Contenu textuel')
   const textSection = textStart >= 0 ? content.slice(textStart) : ''

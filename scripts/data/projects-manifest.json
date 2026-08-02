@@ -136,7 +136,6 @@
       "title": "LA PETITE FAUCHEUSE",
       "coverImage": "1er-essai.gif",
       "gallery": [
-        "IMG_2158.gif",
         "1er-essai.gif",
         "IMG_2460.gif",
         "IMG_2244.gif",
@@ -404,7 +403,12 @@
       ],
       "description": "Le projet expérimental autour du personnage d’innuit siniswichi, double conceptuel de l’artiste Sylvain Paris, est mon premier court-métrage.\nJe rencontre un homme qui se prend pour un éléphant, il se présente à moi sous le\nnom d’innuit siniswichi, je tente dans cet essai de lui donner réalité ...",
       "credits": [],
-      "externalLinks": [],
+      "externalLinks": [
+        {
+          "platform": "YouTube",
+          "url": "https://www.youtube.com/watch?v=Dz-9MNOsOxc"
+        }
+      ],
       "missingFiles": [],
       "order": 13,
       "year": 2013,
@@ -599,7 +603,7 @@
       "externalLinks": [
         {
           "platform": "YouTube",
-          "url": "https://www.youtube.com/watch?v=yLD2ouEcqRU"
+          "url": "https://www.youtube.com/watch?v=67XhPteM5ZI"
         }
       ],
       "missingFiles": [],

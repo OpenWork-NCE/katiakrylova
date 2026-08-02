@@ -35,6 +35,30 @@ test('La Petite Faucheuse uses YouTube as its primary video', async () => {
   assert.equal(project.externalLinks[0].url, 'https://www.youtube.com/watch?v=VPh0IlIfUdw')
 })
 
+test('La Petite Faucheuse gallery excludes IMG_2158', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'la-petite-faucheuse')
+
+  assert.ok(!project.gallery.includes('IMG_2158.gif'))
+  assert.ok(!project.gallery.includes('IMG_2158-3.gif'))
+})
+
+test('Plus de lait uses the approved featured YouTube video', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'plus-de-lait')
+
+  assert.equal(project.externalLinks[0].platform, 'YouTube')
+  assert.equal(project.externalLinks[0].url, 'https://www.youtube.com/watch?v=67XhPteM5ZI')
+})
+
+test('Innuit uses the approved featured YouTube video', async () => {
+  const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
+  const project = manifest.projects.find((entry) => entry.slug === 'que-faire-avec-innuit-siniswichi')
+
+  assert.equal(project.externalLinks[0].platform, 'YouTube')
+  assert.equal(project.externalLinks[0].url, 'https://www.youtube.com/watch?v=Dz-9MNOsOxc')
+})
+
 test('La Petite Faucheuse contains approved formats and description', async () => {
   const manifest = JSON.parse(await readFile('scripts/data/projects-manifest.json', 'utf8'))
   const project = manifest.projects.find((entry) => entry.slug === 'la-petite-faucheuse')
@@ -205,7 +229,7 @@ test('about page renders the portrait first and the CMS vision section', async (
 
   assert.ok(view.indexOf('about-page__aside') < view.indexOf('about-page__bio'))
   assert.match(view, /about-page__vision/)
-  assert.match(styles, /\.about-page__bio\s*\{[\s\S]*?font-size: clamp\(0\.875rem, 2\.2vw, 1rem\);/)
+  assert.match(styles, /\.about-page__bio\s*\{[\s\S]*?font-size: clamp\(0\.8125rem, 2vw, 0\.9375rem\);/)
   assert.match(styles, /\.about-page__vision-copy\s*\{[\s\S]*?text-align: left;/)
 })
 
