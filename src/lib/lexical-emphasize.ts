@@ -1,10 +1,15 @@
 /** Lexical text format flag: bold (matches Payload / Lexical). */
 const FORMAT_BOLD = 1
 
+/**
+ * Minimal Lexical shape for tree walks.
+ * Text nodes use numeric bitflags for `format`; element roots use alignment strings.
+ */
 type LexicalNode = {
   type?: string
   text?: string
-  format?: number
+  /** Text: bitflags (number). Elements/root: alignment string. */
+  format?: number | string
   style?: string
   children?: LexicalNode[]
   [key: string]: unknown
@@ -13,6 +18,10 @@ type LexicalNode = {
 type LexicalDoc = {
   root?: LexicalNode
   [key: string]: unknown
+}
+
+function textFormatFlag(format: number | string | undefined): number {
+  return typeof format === 'number' ? format : 0
 }
 
 /**
@@ -40,18 +49,19 @@ function splitTextWithPhrases(node: LexicalNode, phrases: string[]): LexicalNode
   const { index, phrase } = earliest
   const before = text.slice(0, index)
   const after = text.slice(index + phrase.length)
+  const baseFormat = textFormatFlag(node.format)
   const nodes: LexicalNode[] = []
 
   if (before) {
-    nodes.push({ ...node, text: before, format: node.format ?? 0 })
+    nodes.push({ ...node, text: before, format: baseFormat })
   }
   nodes.push({
     ...node,
     text: phrase,
-    format: (node.format ?? 0) | FORMAT_BOLD,
+    format: baseFormat | FORMAT_BOLD,
   })
   if (after) {
-    nodes.push(...splitTextWithPhrases({ ...node, text: after, format: node.format ?? 0 }, phrases))
+    nodes.push(...splitTextWithPhrases({ ...node, text: after, format: baseFormat }, phrases))
   }
 
   return nodes
@@ -76,13 +86,16 @@ function processChildren(children: LexicalNode[], phrases: string[]): LexicalNod
 /**
  * Clone a Lexical document and mark given phrases as bold for RichText.
  * Safe no-op if data is missing or already formatted.
+ * Accepts any Payload richText value; preserves the input type for `<RichText data={...} />`.
  */
-export function emphasizePhrasesInLexical<T extends LexicalDoc | null | undefined>(
-  data: T,
-  phrases: readonly string[],
-): T {
-  if (!data?.root || phrases.length === 0) return data
-  const clone = structuredClone(data) as LexicalDoc
+export function emphasizePhrasesInLexical<T>(data: T, phrases: readonly string[]): T {
+  if (data == null || phrases.length === 0) return data
+  if (typeof data !== 'object' || !('root' in data)) return data
+
+  const source = data as LexicalDoc
+  if (!source.root) return data
+
+  const clone = structuredClone(source) as LexicalDoc
   if (!clone.root) return data
   if (Array.isArray(clone.root.children)) {
     clone.root = {
