@@ -1,25 +1,27 @@
-# Katia Krylova — Reference pour refonte
+# Katia Krylova — Archive de l’ancien site (référence migration)
 
-Site actuel : http://www.katiakrylova.com/ (pas de HTTPS valide)
+**Statut** : archive figée pour la refonte.  
+**Ancien site** : http://www.katiakrylova.com/ (WordPress, HTTPS non fiable).  
+**Site livré** : Next.js + Payload — voir le [README racine](../README.md) et [`docs/README.md`](../docs/README.md).
 
 ## Fichiers
 
 | Fichier | Usage |
 |---------|-------|
-| **INDEX.md** | Cartographie complète : navigation, chaque page avec ses images et vidéos |
-| **site-map/{slug}.md** | Fiche détaillée par page (images, rôle de chaque image, vidéos, texte, crédits) |
-| **images/** | 130 images HD téléchargées (34 MB) |
+| **INDEX.md** | Cartographie : navigation, chaque page avec images et vidéos |
+| **site-map/{slug}.md** | Fiche détaillée par page (images, rôle, vidéos, texte, crédits) |
+| **images/** | Images HD extraites (seed / comparaison) |
 
-## Résumé du site
+## Résumé de l’ancien site
 
-- **Type** : Portfolio de réalisatrice / artiste visuelle
-- **CMS actuel** : WordPress + thème "Producer"
-- **Pages** : 6 pages principales + 20 projets
-- **Contenu** : Films courts, projets artistiques, mode, danse
-- **Media** : Images + vidéos YouTube/Vimeo embarquées
+- **Type** : Portfolio de réalisatrice / artiste visuelle  
+- **CMS** : WordPress + thème « Producer »  
+- **Pages** : 6 pages principales + ~20 projets  
+- **Contenu** : Films courts, projets artistiques, mode, danse  
+- **Média** : Images + vidéos YouTube / Vimeo
 
-## Pour commencer la refonte
+## Lien avec le code actuel
 
-1. Ouvrir `INDEX.md` pour la vue d'ensemble
-2. Consulter `site-map/{slug}.md` pour le détail de chaque page
-3. Les images sont dans `images/` avec le nom référencé dans les fiches
+Les scripts `scripts/parse-site-map.mjs`, `extract-portfolio-manifest.mjs`, `copy-assets.mjs` et `migrate-content` s’appuient sur cette archive (et les manifests dans `scripts/data/`) pour peupler Payload.
+
+Ne pas éditer ces fiches comme source de vérité du site en production — le contenu live est dans le CMS (`/admin`) et les manifests versionnés.
