@@ -205,21 +205,25 @@ src/
 scripts/               Migration contenu + manifests
 public/images/         Assets statiques / seed
 previousWebsite/       Archive de l’ancien WordPress
-docs/superpowers/      Plans & specs de design (historique + livré)
+docs/                  Index doc (specs agent en local seulement, gitignorées)
 tests/                 Playwright e2e + petits tests unitaires
 ```
 
+Les dossiers agent (`.superpowers/`, `docs/superpowers/`, `terminals/`, etc.) sont **gitignorés** et ne partent pas sur le remote.
+
 ---
 
-## Documentation design
+## Documentation
 
-Voir [`docs/README.md`](docs/README.md) pour l’index des specs/plans et ce qui est **livré** vs **historique / non implémenté**.
+- Guide d’exploitation : ce README  
+- Index court : [`docs/README.md`](docs/README.md)  
+- Archive WordPress : [`previousWebsite/README.md`](previousWebsite/README.md)
 
 ---
 
 ## Performance
 
-- Stratégie détaillée : § cache ci-dessus + plan `docs/superpowers/plans/2026-07-27-performance-cache-optimization.md`  
+- Stratégie : § cache ci-dessus (`src/lib/cache.ts`, `revalidate.ts`, ISR 600)  
 - Lighthouse : à re-mesurer après déploiement (home, projects, portfolio catégorie, project detail — mobile + desktop)
 
 ---

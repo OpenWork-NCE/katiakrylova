@@ -1,14 +1,42 @@
+# Dependencies & build
 node_modules/
 .next/
+out/
+dist/
+*.tsbuildinfo
+
+# Env & secrets
 .env
 .env.local
 .env.*.local
+!.env.example
+
+# OS / IDE
 .DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs & reports
 *.log
 playwright-report/
 test-results/
-.vercel
-playwright/.cache/
 blob-report/
-*.tsbuildinfo
+playwright/.cache/
+.vercel
+
+# Agent / local tooling (ne pas publier)
+.superpowers/
+docs/superpowers/
+.firecrawl/
+agent-tools/
+terminals/
+.zenflow/
+.grok/
+.cursor/
+
+# Image editor junk / local scratch
 public/images/.comments/
+# Diff dump accidentel en racine (fichier "14")
+/14
