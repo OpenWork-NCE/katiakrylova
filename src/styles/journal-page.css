@@ -16,7 +16,8 @@
   z-index: 0;
   pointer-events: none;
   background-size: cover;
-  background-position: center;
+  /* Portrait affiche (Plus de lait) : ancrage bas pour garder l’échiquier / produits visibles */
+  background-position: center bottom;
   background-repeat: no-repeat;
   filter: brightness(0.58) contrast(1.05);
   transform: scale(1.05);
@@ -201,7 +202,8 @@
 
 .journal-page__still img {
   object-fit: cover;
-  object-position: center;
+  /* Covers portrait (ex. affiche Plus de lait) : privilégier le bas du cadre 16:9 */
+  object-position: center bottom;
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

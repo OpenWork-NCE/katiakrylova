@@ -4,7 +4,8 @@ import { getMediaUrl } from '@/lib/utils'
 import type { Media } from '@/payload-types'
 import { JournalListView, type JournalListItem } from '@/components/journal/JournalListView'
 
-const FALLBACK_BG = '/images/Fond News.jpg'
+/** Portrait poster — background-position is anchored bottom (see journal-page.css). */
+const FALLBACK_BG = '/images/Plus-de-lait-affiche.jpg'
 
 export const revalidate = 600
 
@@ -20,7 +21,7 @@ export default async function JournalPage({ params }: { params: Promise<{ locale
   ])
 
   // Background = cover of the most recent news (hd for full-bleed).
-  // Fallbacks: CMS journal photo → static Fond News (empty list / no cover).
+  // Fallbacks: CMS journal photo → static Plus de lait affiche (empty list / no cover).
   const latestCoverUrl = entries[0] ? getMediaUrl(entries[0].coverImage, 'hd') : null
   const backgroundUrl =
     latestCoverUrl ?? getMediaUrl(journal?.photo, 'hd') ?? FALLBACK_BG
